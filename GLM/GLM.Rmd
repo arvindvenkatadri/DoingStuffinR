@@ -1,0 +1,20 @@
+---
+title: "Generalized Linear Models"
+output: 
+  github_document:
+  html_document:
+    keep_md: true
+  html_notebook:
+    fig_caption: yes
+    number_sections: yes
+    theme: cerulean
+    toc: yes
+---
+
+# Introduction
+Following:1.<https://www.kdnuggets.com/2017/10/learn-generalized-linear-models-glm-r.html>
+and thereafter:
+
+2. <https://www.r-bloggers.com/how-to-perform-ordinal-logistic-regression-in-r/>
+
+
