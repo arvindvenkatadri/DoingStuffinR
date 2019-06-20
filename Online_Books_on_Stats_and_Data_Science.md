@@ -1,7 +1,5 @@
 Online Books on Data Science and Statistics
 ================
-Arvind Venkatadri
-20/06/2019
 
 # List of Books on Stats and Data Science
 
@@ -44,6 +42,32 @@ Arvind Venkatadri
     Robinson](https://www.tidytextmining.com/)
 
 12. [Univ of Cincinnatti Business Analytics R Programming Guide -
-    Bradely Boehmke](https://uc-r.github.io/)
+    Bradley Boehmke](https://uc-r.github.io/)
 
-13.
+13. [Interpretable Machine Learning - A Guide for Making Black Box
+    Models Explainable - Christoph
+    Molnar](https://christophm.github.io/interpretable-ml-book/)
+
+14. [Introduction to Data Science : Data Analysis and Prediction
+    Algorithms with R - Rafael A.
+    Irizarry](https://rafalab.github.io/dsbook/)
+
+15. [The tidyverse style guide Hadley
+    Wickham](https://style.tidyverse.org/)
+
+16. [Practical Regression and ANOVA with R - Julian
+    Farraway](https://cloud.r-project.org/doc/contrib/Faraway-PRA.pdf)
+
+## Blogs
+
+1.  [Susan Baert on
+    `dplyr`](https://suzanbaert.netlify.com/2018/01/dplyr-tutorial-1/)
+
+2.  [Gina Reynolds - The `Tidyverse` Flip
+    Book](https://evamaerey.github.io/tidyverse_in_action/tidyverse_in_action.html#1)
+
+3.  [Gina Reynolds - The `ggplot` Flip
+    Book](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html#1)
+
+4.  \[ A Gentle Guide to the Grammar of Graphics with ggplot2 - Garrick
+    Aden-Buie @grrrck \](<https://gadenbuie.github.io/gentle-ggplot2>)
