@@ -70,5 +70,4 @@ Online Books on Data Science and Statistics
 3.  [Gina Reynolds - The `ggplot` Flip
     Book](https://evamaerey.github.io/ggplot_flipbook/ggplot_flipbook_xaringan.html#1)
 
-4.  \[ A Gentle Guide to the Grammar of Graphics with ggplot2 - Garrick
-    Aden-Buie @grrrck \](<https://gadenbuie.github.io/gentle-ggplot2>)
+4.  [ A Gentle Guide to the Grammar of Graphics with ggplot2 - Garrick Aden-Buie](https://gadenbuie.github.io/gentle-ggplot2)
