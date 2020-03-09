@@ -1,8 +1,6 @@
 Online Books on Data Science and Statistics
 ================
 
-# List of Books on Stats and Data Science
-
 0.  [R for Data Science - Garrett Grolemund, Hadley
     Wickham](https://r4ds.had.co.nz/)
 
@@ -52,12 +50,15 @@ Online Books on Data Science and Statistics
     Algorithms with R - Rafael A.
     Irizarry](https://rafalab.github.io/dsbook/)
 
-15. [The tidyverse style guide Hadley
+15. [The tidyverse style guide - Hadley
     Wickham](https://style.tidyverse.org/)
 
 16. [Practical Regression and ANOVA with R - Julian
     Farraway](https://cloud.r-project.org/doc/contrib/Faraway-PRA.pdf)
 
+17. [R Cookbook - Winston Chang](http://www.cookbook-r.com/Graphs/)
+
+18. 
 ## Blogs
 
 1.  [Susan Baert on
