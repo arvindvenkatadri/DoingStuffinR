@@ -58,7 +58,7 @@ Online Books on Data Science and Statistics
 
 17. [R Cookbook - Winston Chang](http://www.cookbook-r.com/Graphs/)
 
-18. 
+18. [Statistical Thinking for the 21st Century - Russell A. Poldrack](http://statsthinking21.org/index.html)
 ## Blogs
 
 1.  [Susan Baert on
