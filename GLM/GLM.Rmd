@@ -1,20 +1,583 @@
 ---
 title: "Generalized Linear Models"
 output: 
-  github_document:
-  html_document:
-    keep_md: true
-  html_notebook:
-    fig_caption: yes
-    number_sections: yes
-    theme: cerulean
-    toc: yes
+  github_document: default
+  html_document: default
+  pdf_document:
+    latex_engine: xelatex
 ---
+```{r set up, message=FALSE,echo=FALSE,cache=TRUE}
+library(tidyverse)
+library(modelr)
+library(ggformula)
+library(plantuml) # for documentation
+library(DiagrammeR) # for documentation
+# updatePlantumlJar()
+```
+
 
 # Introduction
-Following:1.<https://www.kdnuggets.com/2017/10/learn-generalized-linear-models-glm-r.html>
+Following:  
+1. Wickham - Grolemund on [Models](https://r4ds.had.co.nz/model-basics.html)
+
+2.<https://www.kdnuggets.com/2017/10/learn-generalized-linear-models-glm-r.html>  
 and thereafter:
 
-2. <https://www.r-bloggers.com/how-to-perform-ordinal-logistic-regression-in-r/>
+3.<https://www.r-bloggers.com/how-to-perform-ordinal-logistic-regression-in-r/>  
+
+# Model Basics
+ - **Family of Models** - represents a general relationship or pattern between variables in your data
+ - **Fitted Model** finding a model from the family that is closest to your data; it is "best" according to some criteria. 
+
+```{r sim1}
+gf_point(data = sim1, y ~ x)
+
+# Trying models
+models <- tibble(a1 = runif(250, -20, 50),
+                 a2 = runif(250, -5,5))
+gf_point(y ~x, data = sim1) %>% 
+  gf_abline(intercept = ~a1, slope = ~a2, data = models,alpha = 0.3)
+```
+
+We can try to see how good any particular model is by the following:
+
+```{r seeing distances}
+# Choosing:
+
+slope <- 2.5
+intercept <- 1.5
+# Add predictions with this model
+sim1 <- sim1 %>% mutate(pred_y = intercept + slope * x)
+# Plot distances
+gf_jitter(y ~ x,width = 0.1, data = sim1) %>%
+  gf_abline(
+    intercept = ~ intercept,
+    slope = ~ slope,
+    color = "blue", data = sim1) %>% 
+  gf_point(pred_y ~ x, data = sim1,color = "red") %>%
+  gf_segment(pred_y + y ~ x + x, data = sim1)
+```
+
+
+```{r compute distances}
+# Compute distances
+model1 <- function(a,data){
+  a[1] + a[2]* data$x
+}
+
+model1(c(intercept, slope), sim1)
+
+# Distance measure of the MODEL
+measure_distance <- function(mod,data){
+  diff <- data$y - model1(mod, data)
+  sqrt(mean(diff^2))
+}
+measure_distance(c(intercept,slope), sim1)
+```
+
+
+```{r Using purrr}
+
+# using `purrr` to compute distance measures for all 250 models
+# we need to fix the distance computation into a helper function specifically for our data.
+# `measure_distance` also has a data frame to be passed as a parameter, which we cannot do with our `purrr` command.
+sim1_dist <- function(a1,a2){
+  measure_distance(c(a1,a2),sim1)
+}
+
+models <- models %>% 
+  mutate(dist = purrr::map2_dbl(a1,a2,sim1_dist))
+models
+```
+
+
+Now we can plot the 10 best models by ranking the `models` by the `dist` parameter. 
+
+```{r plotting the 10 best}
+gf_point(y~x, color = "grey30",data = sim1) %>% 
+  gf_abline(intercept = ~ a1,slope = ~ a2, color = ~ dist, data = filter(models, rank(dist) <= 10))
+```
+
+We can also see a scatter plot of the **parameters** `a1` and `a2`
+```{r plotting the parameters}
+gf_point( a1~ a2, data = filter(models, rank(dist)<=10), size = 4, color = "red") %>% 
+  gf_point(a1 ~ a2, color = ~ -dist,data = models)
+```
+
+There could be a systematic search for models, by using a grid of points in the `model space`:
+```{r Exploring the Model Space}
+grid <- expand.grid(a1 = seq(-5, 10, length = 25),
+                    a2 = seq(1.5,2.5,length = 25)) %>% 
+  mutate(dist = purrr::map2_dbl(a1, a2, sim1_dist))
+
+gf_point(a2 ~a1, data = filter(grid, rank(dist) <=10), color = "red", size = 4) %>% 
+  gf_point(a2~a1, color = ~-dist, data = grid)
+```
+
+Aside: The Relationship between plotting the model parameter space and plotting models on the variable space is like the relationship between the Mandelbrot fractal and the Julia fractals. 
+
+Overlaying these 10 best models on the original data:
+
+```{r Plotting the 10 best}
+gf_point( y ~ x, data = sim1) %>% 
+  gf_abline(intercept = ~a1, slope = ~ a2, color = ~ dist, data = filter(grid, rank(dist)<=10))
+```
+
+Rather than search through ever finer grids, we can use optimization in R to find the "best" model parameters `a1`, and `a2`.
+
+```{r Optimum Models}
+best <- optim(par = c(0,0),fn = measure_distance, data = sim1)
+best
+sim_mod <- lm(y~x, data = sim1)
+sim_mod
+```
+
+## Adding Predictions
+
+We can add a `grid` of data points to cover exactly the range of the variables we have in our dataset. 
+
+```{r Add Predictions}
+grid <- modelr::data_grid(data = sim1, x)
+grid
+
+# Add Predictions
+grid <- grid %>% add_predictions(model = sim_mod, var = "pred")
+grid
+
+# Plot this
+gf_point(y~x, data = sim1) %>% 
+  gf_line(pred~x,data = grid,color = "red", size = 2)
+
+```
+
+We can add residuals to the original data frame using `modelr`
+
+```{r residuals}
+sim1 <- sim1 %>% add_residuals(model = sim_mod)
+sim1
+
+# Plotting the residuals
+gf_point(data = sim1, resid ~ x) %>% gf_hline(yintercept = ~ 0)
+gf_density(data = sim1, ~ resid)
+
+```
+
+Frequency spread of the residuals looks reasonable. No regular pattern "left over" in the residuals. 
+
+
+# Model Families
+The `model_matrix()` function:
+>It takes a data frame and a formula and returns a tibble that defines the model equation: each column in the output is associated with one coefficient in the model, the function is always `y = a_1 * out1 + a_2 * out_2`.
+
+## Categorical Variables
+
+We use the `sim2` dataset to explore this. 
+```{r Categorical Independent Variables}
+
+sim2 %>% gf_point(y~x)
+
+# Model fitting
+mod2 <- lm(y~x, data = sim2)
+
+grid <- sim2 %>% data_grid(x) %>% add_predictions(mod2)
+grid
+
+# Plot the model on the data
+gf_point(y~x, data = sim2) %>% 
+  gf_point(pred~x,data = grid, color = "red",size = 4)
+```
+With a categorical variable for `x`, we predict the `mean` value for each category with our model.
+
+
+## Interaction: Continuous and Categorical variable
+
+```{r Interaction Continuous and Categorical Variables}
+sim3
+
+gf_point(y~x1, data = sim3, color = ~x2)
+```
+
+We can fit two kinds of models: with and without interactions
+
+```{r Two kinds of models}
+mod1 = lm(y ~ x1 + x2, data = sim3)
+mod2 = lm(y ~ x1 * x2, data = sim3)
+
+# Use data_grid
+grid <- sim3 %>% data_grid(x1,x2) %>% gather_predictions(mod1,mod2)
+grid
+```
+
+```{r Visualising both models}
+sim3 %>% 
+  gf_point(y ~ x1, color = ~x2, data = sim3) %>% 
+  gf_line(pred ~ x1 | model, data = grid)
+
+```
+
+Recall the discussion in Chester Ismay's [`Modern Dive`](www.modern.dive.com). `mod1` uses the same `slope` for both models and only varies the `intercept`, whereas `mod2` varies both model parameters. 
+
+We can check which model is better by plotting residuals. 
+```{r Residuals: Interation or not}
+sim3 %>% gather_residuals(mod1, mod2) %>% 
+  gf_point(resid ~ x1|model ~ x2, color = ~x2, data = sim3)
+```
+`mod2` residuals have no pattern and look random. `mod1` residuals do have patterns, especially for category `b`.
+
+## Interaction: Two Continuous Variables
+
+As in the last section we can explore two kinds of models, with and wthout interaction.
+```{r Continuous independent Variables with Interaction}
+sim4
+
+mod1 <- lm( y ~ x1 + x2, data = sim4)
+mod2 <- lm( y ~ x1 * x2, data = sim4)
+
+# Visualisation
+grid <- sim4 %>% 
+  data_grid(x1 = seq_range(x1,n = 5,pretty = TRUE), 
+            x2 = seq_range(x2, 5,pretty = TRUE)) %>% 
+  gather_predictions(mod1, mod2)
+# seq_range is a modelr command, to generate n numbers spaced over the range of a variable. 
+grid
+
+# Visualisation
+gf_tile(x2 ~ x1 | model, fill = ~ pred, data = grid )
+```
+
+Can't see much difference there....
+
+```{r Different way}
+gf_line(pred ~ x1 | model, color =  ~ x2, group = ~ x2, data = grid) %>% gf_refine(scale_color_distiller(palette = 7))
+
+gf_line(pred ~ x2 |~ model, color = ~ x1, group = ~ x1, data = grid)
+```
+
+Let's look at the residuals...
+```{r Residuals for Continuous interacting variables}
+sim4 %>% 
+  gather_residuals(mod1, mod2) %>% 
+  gf_point(resid ~ x1|model ~ x2, color = ~x2, data = sim4)
+
+# What plot can we use to show which model is better?
+sim4 %>% 
+  gather_residuals(mod1, mod2) %>% 
+  gf_point(mean(abs(resid))~ x1 | model ~ x2, color = ~ x2, data = .)
+# NEEDS MORE IMAGINATION AND MORE WORK!!
+  
+```
+
+## Transformation while Modelling
+
+Data variables can also be algebraically transformed while putting them into the model. Actual arithmetic operators like `+` and `*` should be wrapped in `I()` to ensure that they are interpreted correctly. It is always good to check with `model_matrix` what the model is doing, so that we know what we are getting. 
+> Note we can do the modelling itself inside the ` model_matrix` command!
+
+```{r Transformations in Models}
+df <- tribble(~y, ~x, 1,1,2,2,3,3)
+
+model_matrix(df, y ~ x^2 + x)
+# This uses the Wilkinson-Rogers Notation !!
+
+model_matrix(df, y ~ I(x^2) + x)
+# Can also use I(x^2 + x)
+```
+
+There are many transformations possible Using Taylor's series is one way
+```{r Taylor series}
+model_matrix(df, y ~ poly(x, 2))
+```
+
+`poly` fits the data well within the range; outside, when it is extrapolating, it may may shoot off to infinity. 
+In this case it is better to use `natural splines`, which is somewhat better, though it still makes errors outside the data range. 
+
+```{r Splines}
+library(splines)
+model_matrix(df, y ~ ns(x, 2))
+```
+
+Let us model `nonlinear data`. 
+
+```{r Modelling nonlinear data}
+sim5 <- tibble(x = seq(0, 3.5 * pi, length = 50),
+               y = 4 * sin(x) + rnorm(length(x)))
+gf_point(y ~ x, data = sim5)
+
+# We can fit multiple models to this data
+mod1 <- lm(y ~ ns(x, 1), data = sim5)
+mod2 <- lm(y ~ ns(x, 2), data = sim5)
+mod3 <- lm(y ~ ns(x, 3), data = sim5)
+mod4 <- lm(y ~ ns(x, 4), data = sim5)
+mod5 <- lm(y ~ ns(x, 5), data = sim5)
+
+grid <- sim5 %>% 
+  data_grid(x = seq_range(x,n = 50,expand = 0.1)) %>% 
+  gather_predictions(mod1,mod2,mod3,mod4,mod5, .pred = "y")
+
+# Plotting the 5 models
+ gf_point(data = sim5, y ~ x) %>% 
+   gf_line(data = grid, y ~ x | model, color = ~model) 
+ 
+```
+> Notice that the extrapolation outside the range of the data is clearly bad. This is the downside to approximating a function with a polynomial. But this is a very real problem with every model: the model can never tell you if the behaviour is true when you start extrapolating outside the range of the data that you have seen. You must rely on theory and science.
+
+
+## Other Model Families
+
+1. ** Generalised Linear models:** `stats::glm()` extend linear models to `count` or `binary` response variables. Use a different metric for distance.
+
+2. ** Generalised Additive Models:** `mgcv::gam()` can use arbitrary smooth modelling functions like ` y ~ s(x)`. `gam()` will estimate the function. (Rather like the regression software I used earlier.) 
+
+3. ** Penalised Linear Models:** `glmnet::glmnet()` Adds a penalty vector in `parameter space` corresponding to distance of that vector from the origin. Tends to make models generalise better to new datasets from the `population`. 
+
+4. ** Robust Linear Models:** `MASS::rlm()` tweaks the distance metric to down-weight data points that are far away, i.e. outliers. Less sensitive to outliers, but not so good when there are *no outliers*.
+
+5. ** Trees:** Fit piece-wise linear models to smaller and smaller pieces of data ( like a **Lindenmayer fractal**). Work best when used in aggregate models like `randomForest::randomForest()` and **gradient boost** `xgboost::xgboost()`.
+
+
+# Model Building
+
+Principle: 
+
+1) Breaking up data into `patterns + residuals`, using a model. 
+2) Replacing the response variables with residuals in stage n and reapplying the modelling
+3) "Know when to stop".
+
+```{r Building the Model}
+library(tidyverse)
+library(modelr)
+options(na.action  = na.warn) # Warns if there is missing data in the datset used for modelling.
+
+library(nycflights13)
+library(lubridate)
+```
+## Why are low quality diamonds more expensive?
+
+This is true from the following graph:
+```{r Low Quality Diamonds}
+gf_boxplot(price ~ cut, data = diamonds)
+gf_boxplot(price ~ color, data = diamonds)
+gf_boxplot(price ~ clarity, data = diamonds)
+```
+
+`J` is the worst colour of a diamond, `IS1` corresponds to "inclusions" that are visible to the naked eye.
+
+There is a confounding variable that makes lower quality diamonds more pricey; it is `weight`. Lower quality diamonds tend to be bigger in `carat` size.
+
+```{r weight confounds us}
+gf_point(price ~ carat, data = diamonds)
+```
+
+Umm, not very educational....I don't understand why the text uses this plot to motivate the modelling. Isn't this next one better, if what you want to say is:
+>Lower quality diamonds tend to be bigger in (`carat`) size.
+
+I wonder.
+
+```{r carat vs cut}
+gf_boxplot(carat ~ cut, data = diamonds)
+```
+
+So the lower quality cuts tend to be larger! Hence, lower quality diamonds cost more, because of the confounding `carat` variable.
+
+
+We want to "separate out the effect of carat" on price.
+
+So:
+1. We focus on diamonds that are smaller than 2.5 carats
+2. Log-transform carat and price variables. 
+
+```{r Preparing Data}
+diamonds2 <- diamonds %>% filter(carat<=2.5) %>% 
+  mutate(lprice = log2(price), lcarat = log2(carat))
+
+gf_hex(lprice ~ lcarat, bins = 50,data = diamonds2)
+```
+
+There's a strong linear pattern so we can fit a linear model.
+```{r Linear model for diamonds}
+mod_diamond <- lm( lprice ~ lcarat, data = diamonds2)
+
+grid <- diamonds2 %>% 
+  data_grid(carat = seq_range(carat, 20)) %>% 
+  mutate(lcarat = log2(carat)) %>% 
+  add_predictions(model = mod_diamond, var = "lprice") %>% 
+  mutate(price = 2 ^ lprice)
+
+# Overlay model on data
+gf_hex(price ~ carat, bins = 50, data = diamonds2) %>% 
+  gf_line(price ~ carat, color = "red", data = grid)
+```
+
+So there are large diamonds that are actually low cost. 
+
+Let's add residuals and plot them.
+```{r diamonds residuals}
+diamonds2 <- diamonds2 %>% 
+  add_residuals(model = mod_diamond, var = "lresid")
+
+gf_hex(lresid ~ lcarat, bins = 50, data = diamonds2)
+```
+
+## Stage 2 : Modelling with residuals
+```{r Modelling with residuals}
+gf_boxplot(lresid ~ cut, data = diamonds2, title = "Price increases with Quality", subtitle = "After accounting for size")
+gf_boxplot(lresid ~ clarity, data = diamonds2, title = "Price increases with Clariity", subtitle = "After accounting for size")
+gf_boxplot(lresid ~ color, data = diamonds2, title = "Price increases with Color Quality", subtitle = "After accounting for size", caption = "Note: J < I < H < G < F < E < D")
+```
+
+Having accounted for the (confounding) effect of `carat` size, we see the more expected patterns:
+
+- Price increases with Cut Quality
+- Price increases with Clarity
+- Price increases with Color quality
+
+
+## A More Complicated Model
+
+We can now move the effects we have observed already, right into the model to see what is left.
+
+```{r}
+mod_diamond2 <- lm(lprice ~ lcarat + color + cut + clarity, data = diamonds2)
+
+grid <- diamonds2 %>% 
+  data_grid(cut, .model = mod_diamond2) %>% 
+  add_predictions(model = mod_diamond2)
+grid
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+A Generalized Linear Model (GLM/GLZ) helps represent the dependent variable as a linear combination of independent variables.
+ In its simplest form, a linear model specifies the (linear) relationship between a dependent (or response) variable Y, and a set of predictor variables, the X's, so that
+
+$$
+Y = b_0 + b_1X_1 + b_2X_2 + ... + b_kX_k  + e
+$$ 
+
+In the GLZs, the model is assumed to be:
+$$
+Y = g (b_0 + b_1X_1 + b_2X_2 + ... + b_kX_k )+ e
+$$
+The `inverse` of the funtion `g(...)`, say f(...)` is called the `link function`, so that:
+
+$$
+f(\mu_Y)= b_0 + b_1X_1 + b_2X_2 + ... + b_kX_k
+$$
+
+
+GLZs work when :
+
+a) the dependent variable has a discrete/multinomial distribution. The distribution of the dependent or response variable can be (explicitly) non-normal, and does not have to be continuous, i.e., it can be binomial, multinomial, or ordinal multinomial (i.e., contain information on ranks only); 
+
+b) the relationship between   dependent and independent variable (i.e. the `link function`) is inherently nonlinear, or a power relationship, for example. 
+
+## Types of `link functions` and distributions of `y` dependent variables
+
+Various link functions can be chosen based on the assumbned distributions of the y dependent variable:
+
+```{r `link` function types, echo=FALSE, fig.height=5, fig.width=6}
+plot(
+plantuml("
+  @startmindmap
++ `link` functions
+++ Normal, Gamma, Inverse Normal, Poisson
++++ Identity
+++++ `f(z) = z`
++++ Log 
+++++ f(z) = log(z)
++++ Power f(z) = z^a
+++ Binomial, Ordinal Multinomial
++++ Logit `f(z) = log(z/(1-z))
++++ Probit `f(z) = invnorm(z)
++++ Complementary log-log `f(z) = log(-log(1-z))
++++ Log-log `f(z) = log(-log(z))
+-- Multinomial
+--- Generalized logit 
+---- f(z1|z2...zc) = log(x1/(1-z1-.....-zc)) where model has `c+1` categories
+@endmindmap"))
+```
+# CocaCola Sales Data Exploration
+
+```{r EDA}
+# Temperature vs CocaCola sales
+cola <- read_csv("./cola.csv")
+penalty <- read_csv("./penalty.csv")
+
+str(cola)
+gf_point(Cola ~ Temperature, data = cola)
+```
+
+## Linear Model Fitting
+```{r Linear model}
+
+model =lm(data = cola, Cola ~ Temperature)
+gf_point(Cola ~ Temperature, data = cola) %>% 
+  gf_abline(intercept = ~model$coefficients[1],
+            slope = ~model$coefficients[2],data = cola)
+
+#Calculate RMSE
+PredCola <- predict(model, cola)
+RMSE <- modelr::rmse(model, cola)
+##
+model
+RMSE
+```
+
+The linear `model` is clearly inadequate and makes faulty predictions. We try to use a `log-linear` model next, since the `Cola` sales figure seems to have an exponential relationship with `Temperature`. We see that:
+$$Cola = a * b ^ {Temperature} ....Eqn(1)$$
+
+> Such growth models depict a variety of real life situations and can be modeled using log-linear regression.  Apart from exponential relationship, log transformation on (the) dependent variable is also used when dependent variable follows: 
+a) log-normal distribution - log-normal distribution is distribution of a random variable whose log follows normal distribution. Thus, taking log of a log-normal random variable makes the variable normally distributed and fit for linear regression.  
+b) Poisson distribution - Poisson distribution is the distribution of random variable that results from a Poisson experiment. For example, the number of successes or failures in a time period T follows Poisson distribution.  
+
+Taking `log` on both sides of Eqn.1:
+
+$$log(Cola) = log(a) + Temperature * log(b)$$
+
+## Log Model Fitting
+We transform the data using log and then fit a linear model to the `log-transformed` variables
+
+```{r Log-Linear Model}
+cola <- cola %>% mutate(logCola = log(Cola))
+
+logmodel <- lm(logCola ~ Temperature, data = cola)
+logmodel
+
+# Plots
+gf_point(data = cola, logCola~Temperature) %>% 
+  gf_abline(intercept = ~logmodel$coefficients[1],slope = ~logmodel$coefficients[2])
+
+# Predictions and RMSE
+PredLogCola <- predict(logmodel,cola)
+RMSElog <- modelr::rmse(logmodel, cola)
+
+PredLogCola
+RMSElog
+
+```
+Hence the log-linear model is:
+
+$$ log(Cola_i) = -0.909 + 0.172 * log(Temperature_i) $$
+
+```{r}
+str(PredLogCola)
+gf_col(data = PredLogCola,value ~ row_number(PredLogCola))
+```
+
+
 
 
