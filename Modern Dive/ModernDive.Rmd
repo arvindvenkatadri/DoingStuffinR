@@ -1,0 +1,2380 @@
+---
+title: "ModernDive"
+author: "Arvind Venkatadri"
+date: "31/05/2019"
+output:
+  github_document: default
+  pdf_document:
+    toc: yes
+    latex_engine: xelatex
+  prettydoc::html_pretty:
+    highlight: github
+    theme: cayman
+  html_document:
+    df_print: default #kable/tibble/paged
+    toc: yes
+    toc_depth: 4
+    toc_float: true
+    theme : darkly
+    number_sections: true
+    highlight: pygments
+---
+# Introduction
+Following in the footsteps of Chester Ismay's *ModernDive*. I will use `ggformula`, however, to create the graphs where needed. 
+
+```{r SetUp,echo=FALSE,message=FALSE}
+library(nycflights13)
+library(tidyverse)
+library(fivethirtyeight)
+library(tinytex)
+library(ggformula)
+library(knitr)
+library(moderndive)
+library(infer)
+library(ggplot2movies)
+library(broom)
+library(gapminder)
+library(ISLR)
+library(htmltools)
+library(kableExtra)
+library(formattable)
+library(skimr)
+```
+
+# Exploring Data
+## The `nycflights13` Package
+
+`flights`: Information on all 336,776 flights  
+`airlines`: A table matching airline names and their two letter IATA airline codes (also known as carrier codes) for 16 airline companies  
+`planes`: Information about each of 3,322 physical aircraft used.  
+`weather`: Hourly meteorological data for each of the three NYC airports. This data frame has 26,115 rows, roughly corresponding to the 365 × 24 × 3 = 26,280 possible hourly measurements one can observe at three locations over the course of a year.  
+`airports`: Airport names, codes, and locations for 1,458 destination airports.
+
+
+## Exploring `flights`
+
+```{r flights}
+flights
+head(flights)
+glimpse(flights)
+```
+
+## Exploring `airports`
+```{r airports}
+glimpse(airports)
+```
+
+## The 5NG - Five Named Graphs
+
+ModernDive uses mainly these graphs
+1. Scatter Plots
+2. Line Graphs
+3. Histograms
+4. Box Plots
+5. Bar Plots
+
+Some of these are appropriate for *quantitative* and some for *categorical* variables.
+
+### Scatter Plots
+
+1. `dep_delay` vs `arr_delay`
+
+We can plot this as 
+
+```{r Alaska-1}
+flights %>% 
+  filter(carrier == "AS") %>% 
+  gf_point(arr_delay~dep_delay, data = .,alpha = 0.2)
+```
+
+
+```{r Alaska-2}
+flights %>% 
+  filter(carrier == "AS") %>% 
+  gf_jitter(arr_delay~dep_delay, data = .,width = 30,height = 30)
+```
+
+### Line Graphs
+
+Line graphs are commonly used for `time series` plots
+We will try to get a sense of the `weather` dataset.
+
+Use a `gf_line` graph when the `x` variable has an **inherent ordering**. 
+
+```{r Weather}
+glimpse(weather)
+```
+
+We will look at the `temp` variable at *EWR* airport, between Jan 1 to Jan 15. 
+
+```{r EWR_weather in Jan}
+weather %>% 
+  filter(origin == "EWR", month == 1,day<=15) %>% 
+  gf_line(data = ., temp ~ time_hour)
+
+# If `time_hour` had not been available
+weather %>% 
+  filter(origin == "EWR", month == 1,day<=15) %>% 
+  gf_line(data = ., temp ~ (hour + 24*day))
+
+#LC3.13: Plot a time series of a variable other than temp for Newark Airport in the first 15 days of January 2013.
+weather %>% 
+  filter(origin == "EWR", month == 1,day<=15) %>% 
+  gf_line(data = ., humid ~ time_hour)
+```
+
+### Histograms
+```{r histograms}
+weather %>% 
+  gf_histogram(~temp,bins = 40, color = "white",fill = "steelblue")
+
+weather %>% 
+  gf_histogram(~temp|month,bins = 40)
+```
+### Boxplots
+```{r Fig 319 November temps,fig.align="centre"}
+weather %>% 
+  gf_boxplot(temp~factor(month),data = .,outlier.color = "red")
+```
+
+
+Boxplots look like a bunch of Buddhist prayer wheels.
+
+The trick with understanding boxplots is that the shape of the boxplots is based on **counts** of data and the thing itself is plotted on scales that show **amplitudes** of data. If a boxplot was plotted on a scale showing *counts* every boxplot would be symmetric.
+
+### Bar Plots
+
+This helps to visualize the distribution of a *categorical* variable. (No book had really stated this. Good on you, Chester Ismay!). This is a simpler task, as we are simply *counting* different categories, also known as *levels*, of a categorical variable. Depending upon whether the categorical variable is **pre-counted** or not, we choose a different type of bar plot.When the categorical variable whose distribution you want to visualize is:
+
+ - Is **not pre-counted** in your data frame: use `geom_bar()`.
+ - Is **pre-counted** in your data frame, use `geom_col()` with the y-position aesthetic mapped to the variable that has the counts.
+
+#### One Categorical Variable
+
+```{r Categorical variable `carrier`}
+gf_bar(data = flights, ~carrier) # uncounted
+
+flights_counted <- as_tibble(xtabs(data = flights, ~carrier)) # pre-counted table
+gf_col(n~carrier, data = flights_counted)
+```
+
+#### Two Categorical Variables
+
+We can use *stacked barplots* or a *dodged barplot* to view more than on categorical variable. 
+
+```{r Two categorical variable}
+gf_bar(data = flights, ~carrier, fill = ~origin) # stacked barplot
+
+gf_bar(data = flights, ~carrier, fill = ~origin, position = "dodge") # dodged barplot
+
+# Facetted Barplot
+gf_bar(data = flights, ~carrier|origin~., fill = ~origin)
+```
+
+*Dodged barplots* are more easy to understand and to compare numbers/counts. 
+
+Barplots are the preferred way of displaying the distribution of a categorical variable, or in other words the frequency with which the different categories called levels occur. They are easy to understand and make it easy to make comparisons across levels. 
+When trying to visualize two categorical variables, you have many options: stacked barplots, side-by-side barplots, and faceted barplots. Depending on what aspect of the joint distribution you are trying to emphasize, you will need to make a choice between these three types of barplots.
+
+
+# Data Wrangling
+
+`dplyr` functions:  
+- `filter()`  
+- `summarize()`  
+- `group_by()`  
+- `mutate()`  
+- `arrange()`  
+- `join()`  
+
+## `filter`
+```{r using `filter` on `nycflights13`}
+# Departed from JFK
+# Heading to Burlington VT or to Seattle, WA
+# Departed in October, November, December
+flights %>% 
+  filter(origin == "JFK" & (dest == "BTV" | dest == "SEA") & month >=10)
+
+# not BTV and not SEA
+flights %>% 
+  filter(origin == "JFK" & !(dest == "BTV" | dest == "SEA") & month >=10)
+#or
+flights %>% filter(origin == "JFK" & dest !="BTV" & dest !="SEA" & month >=10)
+
+# SEA, BTV, PDX, SFO, LAX
+flights %>% 
+  filter(origin == "JFK" & dest %in% c("BTV", "SFO", "LAX", "PDX", "SEA") & month >=10)
+```
+
+`filter` is the first of the verbs we should use in data wrangling, in order to clean the dataset and narrow the focus to the observations of interest. 
+
+I need to work on the `scoped` versions of the `dplyr` verbs. 
+Update: 24/04/2020: with `dplyr 1.0.0`, the `across()` function can be used in place of `scoped` verbs.
+
+## `summarise`
+```{r `summarise`}
+summary_temp<- 
+  weather %>% 
+  summarise(mean = mean(temp, na.rm = TRUE), sd = sd(temp, na.rm = TRUE), count = n())
+summary_temp
+```
+
+## `group_by`
+
+```{r `group-by`-1}
+weather %>% 
+  group_by(month) %>%
+  summarise(
+    mean_temp = mean(temp, na.rm = TRUE),
+    sd_temp = sd(temp, na.rm = TRUE),
+    count = n()
+  )
+```
+
+
+```{r `group-by`-2}
+flights %>% 
+  group_by(origin) %>% 
+  summarise(count = n())
+```
+
+### Grouping by more than one variable
+
+```{r `group-by`-3}
+by_origin_monthly <- 
+  weather %>% 
+  group_by(origin, month) %>% 
+  summarise(count = n())
+by_origin_monthly
+gf_col(by_origin_monthly,count~month, fill = ~origin, position = "dodge")
+```
+
+```{r Learning Check 4}
+#LC4.6: Mean and SD of temp for each day
+weather %>% 
+  group_by(month,day) %>% 
+  summarise(count = n(), mean_temp = mean(temp, na.rm = TRUE), sd_temp= sd(temp, na.rm = TRUE))
+
+#LC4.7 `group_by(month, origin)` vs `group_by(origin,month)`
+
+by_origin_monthly <- 
+  flights %>% 
+  group_by(origin, month) %>% 
+  summarise(count = n())
+by_origin_monthly
+
+by_month_origin <- 
+  flights %>% 
+  group_by(month,origin) %>% 
+  summarise(count = n())
+by_month_origin
+
+#LC4.8 n(flights) from each airport for each carrier
+flights %>% 
+  group_by(origin,carrier) %>% 
+  summarise(count = n())
+```
+
+## `mutate`
+As a rough rule of thumb, as long as you are not losing original information that you might need later, it’s acceptable practice to overwrite existing data frames.  So when creating new variables (columns) with `mutate`, we may safely overwrite the original data_frame.
+
+```{r mutate}
+weather <- 
+  weather %>% 
+  mutate(temp_in_c = (temp-32)/1.8)
+weather
+
+#Let’s compute average monthly temperatures in both °F and °C using the similar group_by() and summarize() code as in the previous section.
+
+weather %>% 
+  group_by(month) %>% 
+  summarise(mean_F = mean(temp, na.rm = TRUE), mean_C = mean(temp_in_c, na.rm = TRUE))
+
+#Let's see how many flights "gain" time.
+flights <- 
+  flights %>% 
+  mutate(gain = dep_delay - arr_delay)
+flights
+flights %>% 
+  summarise(
+  min = min(gain,na.rm = TRUE),
+  median = median(gain,na.rm = TRUE),
+  q3 = quantile(gain, 0.75, na.rm = TRUE),
+  max = max(gain,na.rm = TRUE),
+    mean = mean(gain,na.rm = TRUE),
+  sd = sd(gain,na.rm = TRUE)
+)
+gf_histogram(flights, ~gain,color = "white",bins = 20)
+```
+
+## `arrange`
+Sorting of rows in a `data_frame` based on *alphanumeric* values of some variable/column. 
+In other words, `arrange()` sorts in ascending order by default unless you override this default behavior by using `desc()`.
+
+```{r `arrange`}
+freq_dest <- 
+  flights %>% 
+  group_by(dest) %>% 
+  summarise(count = n())
+freq_dest
+
+freq_dest <- 
+  flights %>% 
+  group_by(dest) %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count))
+freq_dest
+
+```
+
+## `join`ing data_frames
+We can join datasets using various kinds of `join` operations. This is done using `key variables` to match values across data_frames. 
+
+
+```{r inner join 1}
+glimpse(airlines)
+
+#Getting `carrier` info into `flights`
+
+flights_joined <- 
+  flights %>% 
+  inner_join(airlines, by = "carrier")
+glimpse(flights)
+glimpse(flights_joined)
+```
+
+Say instead we are interested in the destinations of all domestic flights departing NYC in 2013 and ask yourself: 
+
+- “What cities are these airports in?”  
+- Is "ORD" Orlando?”  
+- "Where is "FLL"?  
+
+```{r inner join 2}
+glimpse(airports)
+flights_with_airport_names <- 
+  flights %>% inner_join(airports, by = c("dest" = "faa"))
+glimpse(flights_with_airport_names)
+
+named_dests <- 
+  flights_with_airport_names %>%
+  group_by(dest) %>% 
+  summarise(num_flights = n()) %>% 
+  arrange(desc(num_flights)) %>% 
+  inner_join(airports, by = c("dest"= "faa")) %>% 
+  rename(airport_name = "name")
+named_dests
+```
+
+### Using multiple `key` variables to `join`
+```{r multiple key variables}
+flights_weather_joined <- flights %>% 
+  inner_join(weather, by = c("year", "month", "day", "hour","origin"))
+flights_weather_joined
+```
+
+
+### LC4.20 Neat Problem
+Compute the available seat miles for each airline sorted in descending order. 
+
+```{r LC4.20 Neat problem}
+# compute the available seat miles for each airline sorted in descending order. 
+seatmiles <- flights %>% 
+  inner_join(airlines,by = "carrier") %>% 
+  inner_join(planes, by = "tailnum") %>% 
+# flights with NO tailnum did not operate !
+# check the following:
+# flights %>% filter(is.na(tailnum) & !is.na(dep_time))
+  select(carrier, name, distance, seats) %>% 
+  mutate(seatmiles = seats*distance) %>% 
+  group_by(carrier, name) %>% 
+  summarise(total_seat_miles_million = sum(seatmiles)/1000000) %>% 
+  arrange(desc(total_seat_miles_million))
+seatmiles
+```
+
+# Data Importing and **tidy** data
+
+```{r Data import}
+# "Levels" of democracy
+dem_score <- read_csv("https://moderndive.com/data/dem_score.csv")
+dem_score
+```
+
+In this `dem_score` data frame, the minimum value of `-10` corresponds to a highly autocratic nation whereas a value of `10` corresponds to a highly democratic nation.
+
+
+## Analysing `drinks` data from `fivethirtyeight`
+```{r drinks-538}
+drinks
+drinks_smaller <- drinks %>% 
+  filter(country %in% c("USA","China","Italy","Saudi Arabia")) %>% 
+  select(-total_litres_of_pure_alcohol) %>% 
+  rename(beer = beer_servings,
+         spirit = spirit_servings,
+         wine = wine_servings)
+drinks_smaller
+```
+
+This code below does not work...so we need to tidy the data
+
+```{r Code does not work}
+# gf_bar(drinks_smaller,~beer, fill = ~country,width = 7,position = "dodge") %>% 
+# gf_bar(drinks_smaller,~spirit, fill = ~country,width = 7,position = "dodge") %>% 
+# gf_bar(drinks_smaller,~wine, fill = ~country,width = 7,position = "dodge")
+
+# Can do this ordinary thing
+gf_point(beer~reorder(country,beer), data = drinks_smaller,xlab = "Country") %>% gf_refine(coord_flip())
+
+```
+
+
+
+So we need to `gather` this data into narrow form
+
+```{r gather first}
+drinks_smaller_tidy <- 
+  drinks_smaller %>% 
+  pivot_longer(., cols = c(beer,spirit,wine),
+    names_to = "type_of_drink",
+    values_to = "servings")
+drinks_smaller_tidy
+
+gf_col(drinks_smaller_tidy,servings ~ country, 
+       fill = ~ type_of_drink,color = "black",
+       position = "dodge")
+```
+
+So wide data is good for looking at and eyeballing; Narrow data is essential for plotting and not really good for looking at, with its repeated names in the key coloumn. 
+
+### Problem LC5.3
+```{r Problem LC5.3}
+airline_safety_smaller <- 
+  airline_safety %>% 
+  select(-c(incl_reg_subsidiaries,avail_seat_km_per_week))
+airline_safety_smaller
+# How to tidy up this dataset? Here is the old code:
+
+# airline_safety_smaller_tidy <- 
+#   airline_safety_smaller %>% 
+#   gather(key = "incident_type_years", # What to call the stacked up column headers
+#          value = "count", # What to call the stacked up the readings
+#          ... = -airline) # Where to (not) stack from !!
+
+# airline_safety_smaller_tidy
+
+# New code
+
+airline_safety_smaller_tidy <- 
+  airline_safety_smaller %>% 
+  pivot_longer(data = .,cols = c(-airline), 
+    names_to = "incident_type_years", 
+    values_to = "count")
+airline_safety_smaller_tidy
+
+
+gf_col(airline_safety_smaller_tidy,
+      count~airline,fill = ~incident_type_years,size = 8) %>% 
+  gf_refine(coord_flip()) %>% 
+  gf_theme(theme_minimal()) %>% 
+  gf_theme(axis.text.y = 
+             element_text(hjust = 1.0, color = "navy", size = 5),
+           legend.text = element_text(size = 8),
+           legend.title = element_text(size = 10),
+           legend.background = element_rect(fill = "grey"))
+
+# Can use `reorder` to plot these and get the Dustin Hoffman `Rain Man` plot. (Quantas has had no accidents)
+
+gf_col(airline_safety_smaller_tidy,
+      count ~ reorder(airline,count),fill = ~incident_type_years,size = 8, title = "Dustin Hoffman Rain Man plot", subtitle = "Quantas has had no accidents") %>% 
+  gf_refine(coord_flip()) %>% 
+  gf_theme(theme_minimal()) %>% 
+  gf_theme(axis.text.y = 
+             element_text(hjust = 1.0, color = "navy", size = 5),
+           legend.text = element_text(size = 8),
+           legend.title = element_text(size = 10),
+           legend.background = element_rect(fill = "grey"))
+```
+
+
+# Basic Regression
+The fundamental premise of data modeling is to make explicit the relationship between:  
+- an outcome variable y, also called a dependent variable and  
+- an explanatory/predictor variable x, also called an independent variable or *covariate*.
+
+*Linear Regression* is when y is numerical or quantitative; and x is either numerical or categorical.
+`x` is called the `independent` variable or also the `covariate`.
+
+## One numerical explanatory variable
+```{r Linear_Regression,message=FALSE}
+library(moderndive)
+library(skimr)
+library(gapminder)
+
+# We use `evals`, the teacher evaluation score dataset
+moderndive::evals
+
+evals_ch6 <- evals %>% 
+  select(score,bty_avg,age)
+glimpse(evals_ch6)
+
+evals_ch6 %>% select(score, bty_avg) %>% 
+  skim()
+```
+
+### Calculating correlations using `moderndive`
+```{r moderndive}
+evals_ch6 %>% 
+  get_correlation(score~bty_avg)
+gf_point(evals_ch6,score~bty_avg) %>% 
+  # Note that gf_jitter would reveal the overplotted points
+  gf_smooth(method = "lm")
+```
+
+Seems like a low-value positive correlation between the beauty score and the teaching score. 
+
+
+### Linear Model
+```{r Linear model}
+score_model <- lm(score ~ bty_avg, data = evals_ch6)
+
+# Regression Table from `moderndive`
+moderndive::get_regression_table(score_model)
+```
+The model seems to make the correlation value even more tepid. (0.067 compared with 0.187)
+
+
+### LC6.1,LC6.2 Teaching Score vs Age
+```{r Teaching Score vs Age}
+#LC6.1 - Exploration
+gf_point(evals_ch6,score~age) %>% 
+  gf_smooth(method = "lm")
+evals_ch6 %>% get_correlation(score ~age)
+
+#LC6.2 Model
+model_age <- lm(score~age, evals_ch6)
+get_regression_table(model_age)
+gf_point(evals_ch6,score ~ age) %>% 
+  gf_smooth(method = "lm",se = TRUE)
+
+
+```
+
+The `teaching score` is also slightly negatively correlated with`age`.
+
+### Observed and Fitted values, Residuals
+```{r Observed and fitted}
+score_model
+reg_points <- get_regression_points(score_model)
+reg_points
+
+# Trying to plot residuals: ggformula strangely does not work here
+# It will work if we use the `fomrula` interface for all parameters, even numerically declared ones such as intercepts and slopes
+
+gf_jitter(data = evals_ch6,score ~ bty_avg,height = 0) %>%
+gf_abline(intercept = ~ 4.462, slope = ~ -0.006, color = "blue") %>%
+  gf_segment(score_hat + score ~ bty_avg + bty_avg, data = reg_points,color = "red")
+
+# Ha! Don't do the `tilde` thing for `ggplot`!!
+ggplot(evals_ch6, aes(x = bty_avg, y = score))+
+  geom_jitter(height = 0)+
+  geom_abline(intercept = 4.462, slope = -0.006, color = "blue")+
+  geom_segment(aes(y = score_hat,yend = score, x = bty_avg, xend = bty_avg), data = reg_points,color = "red")
+```
+
+## One *Categorical* Explanatory variable
+
+In this section, we’ll use the `gapminder` dataset to explore differences in life expectancy in two ways:
+
+    1. Differences between continents: Are there significant differences in life expectancy, on average, between the five continents of the world: Africa, the Americas, Asia, Europe, and Oceania?
+    
+    2. Differences within continents: How does life expectancy vary within the world’s five continents? For example, is the spread of life expectancy among the countries of Africa larger than the spread of life expectancy among the countries of Asia? ( This is called verbatim text in RMarkdown, achieved with indentation of 4 spaces)
+
+### Gapminder
+
+```{r Gapminder EDA-1}
+# Exploratory Data Analysis
+library(gapminder)
+gapminder2007 <- gapminder %>%  filter(year == "2007") %>% select(country, continent, lifeExp, gdpPercap)
+glimpse(gapminder2007)
+
+#Further Explorations 1
+gapminder2007 %>% skim()
+gf_histogram(data = gapminder2007,~lifeExp)
+```
+
+`lifeExp` is negatively skewed: there are many countries who have lower-than-mean Life Expectancy.
+
+```{r Gapminder EDA-2}
+median(gapminder2007$lifeExp)
+
+gapminder2007 %>% group_by(continent) %>% 
+  summarise(mean = mean(lifeExp), median = median(lifeExp), sd = sd(lifeExp), n = n())
+
+#Visualise this
+gapminder2007 %>% gf_histogram(~lifeExp|continent, ylab = "Number of Countries",xlab = "Life Expectancy in years")
+
+gf_boxplot(data = gapminder2007, lifeExp~continent, title = " Life Expectancy per Continent compared to Worldwide") %>% 
+  gf_hline(yintercept = ~ median(gapminder2007$lifeExp),color = "blue")
+
+gapminder2007 %>% filter(lifeExp<=50) # Hard life, guys!
+```
+
+### LC6.3 Gapminder `gdpPercap` vs `continent`
+```{r GDP vs Continent Gapminder}
+
+#Histogram
+gf_histogram(~gdpPercap, data = gapminder2007)
+
+#Boxplot
+gf_boxplot(data = gapminder2007,gdpPercap~continent)
+# fivenumbers for gdpPercap
+gapminder2007 %>% group_by(continent) %>% 
+  summarise(mean = mean(gdpPercap), median = median(gdpPercap),n = n())
+
+gapminder2007 %>% filter(gdpPercap>=45000) # Rich guys!
+```
+
+### Linear Regression with one `categorical` explanatory variable
+
+```{r Linear model categorical explanatory variable}
+lifeExp_model <- lm(lifeExp ~ continent, data = gapminder2007)
+get_regression_table(lifeExp_model)
+```
+
+The model equation becomes
+
+$$
+\widehat{lifeExp} =
+b_0 +b_{Amer}* 1_{Amer}(x) + b_{Asia} * 1_{Asia}(y)\\
++b_{Europe} * 1_{Europe}(z) + b_{Oceania} * 1_{Oceania}(p)
+$$
+
+$$
+where\\
+\pmb{b_0} = intercept\\
+\pmb{b_{Amer}} = Modelling \ Coefficient \ for \ American \ countries \ etc.\\
+\pmb{1_{Amer}}(x) = Binary\ Categorical\ Variable\ to\\ indicate\ if\ a\ country\ is\ in\ the\ Americas\ etc.\  
+$$
+ 
+Since `Africa` was alphabetically the first of the continents, it becomes the baseline and hence the intercept is `mean(lifeExp)@Africa)`. We can change this using the `forcats` package, for example. The `$1_{Asia}$` coefficients are binary, and take values `1` or `0` depending on whether the selected country is in that continent.
+     
+
+### LC6.4 Gapminder2007 gdpPercap vs continent
+
+```{r LC6.3}
+# From LC6.3 above
+#Histogram
+gf_histogram(~gdpPercap, data = gapminder2007)
+
+#Boxplot
+gf_boxplot(data = gapminder2007,gdpPercap~continent)
+
+# Model
+gdp_model <- lm(gdpPercap ~ continent, data = gapminder2007)
+get_regression_table(gdp_model)
+```
+
+
+# Multiple Regression
+```{r Multiple regression 1}
+library(ISLR)
+```
+
+We will use the `Credit` dataset from the book `ISLR` to demonstrate multiple regression with:
+
+    A numerical outcome variable y, in this case credit card `Balance`.
+    Two explanatory variables:
+    - A first numerical explanatory variable x1, in this case, their credit `Limit`.
+    - A second numerical explanatory variable x2, in this case, their `Income` (in thousands of dollars).
+    
+## Exploratory Data Analysis
+```{r EDA for multiple regression 1}
+# Look at the data
+ISLR::Credit %>% glimpse()
+Credit %>% 
+  select(Balance, Limit, Rating, Age, Income) %>% 
+  skim()
+
+# Can do this simultaneously too
+# `cor` takes two numerical vectors or takes a dataframe of numerical vectors for pairwise correlation
+Credit %>% 
+  select(Balance,Limit, Income) %>% 
+  cor()
+
+# Correlation Coefficients
+get_correlation(Balance ~ Limit, data = Credit)
+get_correlation(Balance ~ Income, data = Credit)
+
+```
+
+
+```{r EDA for multiple regression 2}
+# Balance vs Income
+gf_point(Balance ~ Income, data = Credit,title = "Balance is strongly correlated with Income") %>% 
+  gf_smooth(method = "lm")
+
+#Balance vs Limit
+gf_point(Balance ~ Limit, data = Credit,title = "Balance is also strongly correlated with limit") %>% 
+  gf_smooth(method = "lm")
+```
+
+The best fitting regression line with two explanatory variables will be a `plane`. We need to use `plotly` to plot the regression plane. 
+
+Note that `Income` and `Limit`, our explanatory variables, are also correlated, leading to the problem of `multicollinearity`.
+
+### Problem LC7.1 Balance vs Rating and Age
+```{r Balance vs Rating Age}
+
+#EDA
+# Look at the data
+Credit %>% 
+  select(Balance, Age, Rating) %>% 
+  glimpse()
+
+# Summary Statistics
+Credit %>% 
+  select(Balance, Age, Rating) %>% 
+  skim()
+Credit %>% 
+  select(Balance, Age, Rating) %>% 
+  cor()
+
+#Visualisations
+Credit %>% 
+  gf_point(Balance~Rating, data = Credit)
+Credit %>% 
+  gf_point(Balance~Age, data = Credit)
+```
+
+We find that `Balance` is not correlated with `Age` (0.1032) but has a very strong correlation with `Rating' (0.8636). So in this case a simple (linear) regression would suffice to model. 
+
+
+
+## Modelling
+
+```{r multiple regression model}
+Credit %>% 
+  select(Balance, Limit, Income) %>% 
+  cor()
+#
+Balance_model <- lm(Balance~Limit+Income, data = Credit)
+get_regression_table(Balance_model)
+```
+
+>However, recall that when considered separately, both `Limit` and `Income` had **positive** relationships with the outcome variable `Balance`. As card holders’ credit limits increased their credit card balances tended to increase as well, and a similar relationship held for incomes and balances. In the above multiple regression, however, the `slope` for `Income` is now `-7.66`, suggesting a **negative** relationship between income and credit card balance. What explains these contradictory results?
+
+>This is known as **Simpson’s Paradox**, a phenomenon in which a trend appears in several different groups of data but disappears or reverses when these groups are combined. We expand on this in Subsection 7.3.2 where we’ll look at the relationship between credit Limit and credit card balance but split by different income bracket groups.
+
+### Problem LC7.2 Balance vs Rating and Age - Model
+```{r LC7.2}
+
+# Recall that:
+Credit %>% 
+  select(Balance, Age, Rating) %>% 
+  cor()
+
+#Modelling:
+Balance_model2 <- lm(Balance ~ Rating + Age, data = Credit)
+get_regression_table(Balance_model2)
+```
+
+We had noted that `Age` was poorly correlated ( `0.1032`) with `Balance`. Here we see that in the model, `Age` is actually **negatively** correlated (`-2.351`) with `Balance`, while `Rating` is very strongly correlated with `Balance`. 
+This is another example of ** Simpson's Paradox** in action.
+
+
+### Observed and Fitted Values
+
+```{r Multiple Regression - Points}
+# We performed:
+# Balance_model <- lm(Balance ~ Limit + Income, data = Credit)
+
+regression_points <- get_regression_points(Balance_model)
+regression_points
+```
+
+## One `Numeric` and one `Categorical` Explanatory variable
+
+We use the Instructor eval data again.
+
+$$
+y = instructor\ score, numerical\ response\ variable \\
+x_1 = Age, numerical\ explanatory\ variable\\
+x_2 = Gender, categorical\ explanatory\ variable
+$$
+```{r Eval data again}
+evals_ch7 <- evals %>% select(score, gender, age)
+evals_ch7 %>% skim()
+evals_ch7 %>% glimpse()
+
+evals_ch7 %>% get_correlation(score ~ age)
+# evals_ch7 %>% get_correlation(score ~ gender) # does not work.
+
+gf_jitter(score ~ age, data = evals_ch7,color = ~ gender) %>% 
+  gf_smooth(method = "lm",title = "Graphs before Modelling")
+```
+
+### Multiple Regression - Parallel Slopes Model
+
+Putting a **`+`** between explanatory variables creates model with a single intercept, i.e. a parallel slopes model.
+
+```{r Multiple Regression - Parallel Slopes Model}
+score_model2 <- lm(score ~ age + gender, data = evals_ch7)
+get_regression_table(score_model2)
+```
+
+The model can be expressed as:
+$$
+\widehat{score} = b_0+b_{age}*age+b_{is-male}*1_{is-male}\\
+where\\
+1_{is-male}= \left\{\begin{matrix}
+=1\ person\ is\ male\\ 
+=0\ person\ is\ female
+\end{matrix}\right.
+$$
+
+$b_{is-male} = $ `r score_model2$coefficients["gendermale"]`.
+
+
+### Visualising the Model
+
+```{r Visualising the Model}
+gf_jitter(score ~ age, data = evals_ch7,color = ~gender,title = "Fitting a Parallel Slopes Model") %>% 
+  gf_abline(intercept = ~ 4.484, slope = ~ -0.009,color = ~ gender,data = filter(evals_ch7,gender == "male")) %>% 
+  gf_abline(intercept = ~ 4.484 + 0.191,slope = ~ -0.009,color = ~ gender,data = filter(evals_ch7,gender == "female"))
+```
+
+As before,   
+ - `females` are treated as baseline, since thus category appears before `males` alphabetically. 
+ - the intercepts (which in this case make no sense since no instructor can have an age of 0) are :  
+ 
+ -- for women: $b_0 = 4.484$  
+ -- for men: $b_0 +b_{male} = 4.484 + 0.191 = 4.675$
+ 
+Both men and women models have the same slope. In other words, in this model the associated `effect size` of `age` is the same for men and women. So for every increase of one year in `age`, there is on average an associated change of $b_{age} = -0.009$ (a decrease) in teaching `score`.
+  
+The two plots (before and after model) show that there may be an *interaction effect* between the two explanatory variables. So we next model that. 
+
+## Multiple Regression - Interaction Effects
+
+We model `interaction` between independent variables using the **`*`** symbol between them in the `lm` formula. 
+
+```{r Modelling Interaction}
+score_model3 <- lm(score ~ age * gender, data = evals_ch7)
+get_regression_table(score_model3)
+```
+
+This gives us a model as:
+$$
+\widehat{score} = b_0 + b_{age} * age + b_{male} * 1_{is-male}(x) +\\ b_{age,male} * age * 1_{is-male}(x)\\
+
+\widehat{score} = 4.883 -0.018 * age -0.446 * 1_{is-male}(x)\\ + 0.014 * age * 1_{is-male}(x)
+$$
+
+Hence the two models for the two genders become
+
+$$
+\widehat{score_{male}}\\
+= 4.883 -0.018*age - 0.446 +0.014 * age
+\\= 4.437 - 0.004 *  age
+$$
+
+$$
+\widehat{score_{female}} = 4.883 - 0.018*age
+$$
+
+So if we visualize this we get:
+
+```{r Visualising interaction effects}
+gf_point(score ~ age,data = evals_ch7,color = ~gender) %>%   
+  gf_abline(intercept = ~ 4.437, slope = ~ -0.004, color = ~ gender,data = filter(evals_ch7,gender == "male")) %>% 
+  gf_abline(intercept = ~ 4.883,slope = ~ -0.018, color = ~ gender, data = filter(evals_ch7,gender == "female"))
+```
+
+It can be seen that the `effect` of `age` on the teaching `scores` of female teachers is more harsh, compared to that of male teachers. Who said it was a fair world?
+
+We can also obtain the observed and fitted values and residuals:
+
+```{r Fitted values and residuals}
+regression_points <- get_regression_points(score_model3)
+regression_points
+```
+
+We can plot the residuals too:
+
+```{r Residuals with Multiple regression with Interaction}
+gf_jitter(score ~ age, data = regression_points, color = ~ gender) %>%
+  gf_point(score_hat ~ age, data = regression_points, color = ~ gender) %>%
+  gf_segment(score_hat + score ~ age + age, data = regression_points %>% filter(gender == "female")) %>%
+  gf_segment(score_hat + score ~ age + age, data = regression_points %>% filter(gender == "male")) %>%
+  gf_abline(
+    intercept = ~ 4.437,
+    slope = ~ -0.004,
+    color = "blue",
+    data = regression_points
+  ) %>%
+  gf_abline(
+    intercept = ~ 4.883,
+    slope = ~ -0.018,
+    color = "magenta",
+    data = regression_points
+  )
+```
+
+## Simpson's Paradox
+
+>We saw the two following seemingly contradictory results when studying the relationship between credit card balance, credit limit, and income. On the one hand, the right hand plot of Figure 7.1 suggested that credit card balance and income were positively related:
+
+```{r Simpson Paradox -1,fig.show="hold"}
+gf_point(Balance ~ Limit, data = Credit) %>% 
+  gf_smooth(method = "lm")
+gf_point(Balance~ Income, data = Credit)%>% 
+  gf_smooth(method = "lm")
+
+# However
+lm(Balance ~ Limit + Income, data = Credit) %>% 
+  get_regression_table()
+
+```
+ > On the other hand, the multiple regression in Table 7.3, suggested that when modeling credit card `Balance` as: $Balance = f(Limit,Income)$ credit limit has a negative relationship with balance, as evidenced by the slope of -7.66. How can this be?
+ 
+If we create the histogram of `Limit':
+
+```{r Analysing `income` }
+gf_histogram(~ Limit,binwidth = 200,data = Credit,color = "white") %>% 
+  gf_vline(xintercept = ~ quantile(x = Credit$Limit,probs = 0.25), color = "red", linetype = "dashed") %>% 
+  gf_vline(xintercept = ~ quantile(x = Credit$Limit,probs = 0.5), color = "red", linetype = "dashed") %>% 
+  gf_vline(xintercept = ~ quantile(x = Credit$Limit,probs = 0.75), color = "red", linetype = "dashed")
+``` 
+then we can split the income range into `low`, `medium-low`, `medium-high` and `high` brackets.
+
+We can then split the individuals into groups as per the above and then see if they, in their groups, have a positive correlation with Credit Card `Balance`. 
+
+```{r breaking up people based on `Limit`}
+Limit_quantiles <-  with(Credit, quantile(Limit, probs = c(0, 0.25, 0.5, 0.75,1)))
+Limit_quantiles
+Credit <-
+  Credit %>% mutate(Type = cut(
+    Limit,
+    breaks = Limit_quantiles,
+    labels = c("Low", "Medium_low", "Medium-high", "High"),
+    right = FALSE,
+    ordered_result = TRUE
+  ))
+Credit
+Credit %>% filter(is.na(Credit$Type)) 
+# Oops, there is atleast one datapoint that has NA for `Type`. Need to figure that out. 
+
+```
+
+And now to visualize
+```{r Simpsons Paradox}
+ gf_smooth(Balance~Income, data = Credit, method = "lm") %>% 
+gf_point(Balance ~Income,data = Credit %>% filter(!is.na(Type)), color = ~Type) %>% 
+  gf_smooth(Balance ~Income,data = Credit %>% filter(!is.na(Type)), color = ~Type,method = "lm")
+```
+
+As can be seen, if we split up the individuals into groups based on Income, then not all groups have a positive correlation with Balance, but the total group does!
+
+>Whereas in aggregate there is an overall positive relationship, when broken down we now see that for the low (red points), medium-low (green points), and medium-high (blue points) income bracket groups, the strong positive relationship between credit card balance and income disappears! Only for the high bracket does the relationship stay somewhat positive. In this example, credit limit is a **confounding variable** for credit card `Balance` and `Income`.
+
+
+###Experimenting for Simpson's Paradox
+
+```{r Experimenting for Simpson Paradox}
+n <- 50
+df <- tibble(x = seq(1,n,1), y = 0.2 * x - rnorm(n, mean = 0, sd = 16), z = sample(c("a","b", "c","d"),size = n, replace = TRUE))
+
+gf_smooth(y ~ x, data = df, method = "lm",color = "black") %>% 
+gf_point(y ~ x, color = ~ z, data = df) %>% 
+  gf_smooth(y ~ x, color = ~z, data = df,method = "lm")
+```
+Not quite a good demonstration, need to search the web.
+
+
+# Sampling
+
+`tactile_prop_red`: Dataset from `moderndive` , of Hand-sampling of a set of balls to record the proportion of red balls.
+
+```{r tactile prop red}
+tactile_prop_red
+
+gf_histogram(~prop_red,data = tactile_prop_red)
+```
+
+This is a `sampling activity` (like Shubha) and we can see `sampling variation` in the readings obtained by each pair of students. 
+
+## Virtual Sampling
+
+```{r Virtual Sampling}
+bowl #A mixture of red and white balls.
+virtual_shovel <- bowl %>% 
+  moderndive::rep_sample_n(size = 50)
+virtual_shovel
+
+virtual_shovel %>% 
+  mutate(is_red = (color == "red")) %>%
+  summarize(prop_red = mean(is_red))
+
+# Can also do
+virtual_shovel %>% 
+  summarise(num_red = sum(color == "red")) %>%
+  mutate(prop_red = num_red/50)
+```
+
+## Repeated Virtual Sampling
+
+We can repeat the sampling more than once.
+
+```{r Repeated Virtual Sampling -1}
+virtual_samples <- bowl %>% 
+  rep_sample_n(size = 50, reps = 33,replace = TRUE)
+virtual_samples
+# Weird that it shows `20` as the max `replicate`. However `tail(virtual_samples) shows things correctly. 
+```
+
+>Observe that while the first `50` rows of replicate are equal to 1, the next `50` rows of replicate are equal to 2. This is telling us that the first `50` rows correspond to the first sample of `50` balls while the next 50 correspond to the second sample of `50` balls. This pattern continues for all reps = `33` replicates and thus virtual_samples has `33 × 50 = 1650` rows.
+
+
+```{r Repeated Virtual Sampling -2}
+virtual_prop_red <- 
+  virtual_samples %>% 
+  group_by(replicate) %>%
+  summarise(prop_red = sum(color == "red")/50)
+virtual_prop_red # OK! HERE there are 33 rows! But weird!
+
+# Visualisation
+virtual_prop_red %>% 
+  gf_histogram(~prop_red)
+```
+
+We can do this a 1000 times:
+
+### One Thousand Replicates
+
+```{r One or Ten Thousand virtual shovels}
+virtual_samples <- 
+  rep_sample_n(bowl,size = 50, reps = 1000)
+
+virtual_samples %>% 
+  summarise(num_red = sum(color == "red"), n = n(), prop_red = num_red/n) %>% 
+  gf_histogram(~ prop_red,color = "white",binwidth = 0.01)
+```
+
+### Varying shovel size !
+
+> Let’s use rep_sample_n() with size = 25, size = 50, and size = 100, while keeping the number of repeated/replicated samples at 1000:
+ - Virtually use the appropriate shovel to generate 1000 samples with size balls.
+  - Compute the resulting 1000 replicated of the proportion of the shovel’s balls that are red.
+  - Visualize the distribution of these 1000 proportion red using a histogram.
+   - Then compare the three resulting histograms.
+
+```{r Varying the Shovel Size}
+# Shovel 25
+n = 25
+virtual_samples_25 <- bowl %>% 
+  rep_sample_n(size = n,reps = 1000,replace = TRUE) %>% 
+  summarise(num_red = sum(color == "red"), count = n(), prop_red = num_red/count)
+sd_25 <- sd(virtual_samples_25$prop_red)
+  gf_histogram(~prop_red, data = virtual_samples_25,color = "white",binwidth = 0.02, boundary = 0.4)
+  
+# Shovel 50
+n = 50
+virtual_samples_50 <- bowl %>% 
+  rep_sample_n(size = n,reps = 1000,replace = TRUE) %>% 
+  summarise(num_red = sum(color == "red"), count = n(), prop_red = num_red/count)
+sd_50 <- sd(virtual_samples_50$prop_red)
+  gf_histogram(~prop_red, data = virtual_samples_50,color = "white",binwidth = 0.02, boundary = 0.4)
+  
+# Shovel 100
+n = 100
+virtual_samples_100 <- bowl %>% 
+  rep_sample_n(size = n,reps = 1000,replace = TRUE) %>% 
+  summarise(num_red = sum(color == "red"), count = n(), prop_red = num_red/count)
+sd_100 <- sd(virtual_samples_100$prop_red)
+  gf_histogram(~prop_red, data = virtual_samples_100,color = "white",binwidth = 0.02, boundary = 0.4)
+
+  
+sd_25;sd_50;sd_100
+
+```
+
+Can we plot the three histograms one on top of the other?
+```{r Overlaid histograms}
+gf_histogram(
+  ~ prop_red,
+  data = virtual_samples_25,
+  fill = "grey50",
+  color = "white",
+  binwidth = 0.02
+) %>%
+  gf_histogram(
+    ~ prop_red,
+    data = virtual_samples_50,
+    fill = "salmon",
+    color = "white",
+    binwidth = 0.02
+  ) %>%
+  gf_histogram(
+    ~ prop_red,
+    data = virtual_samples_100,
+    fill = "dodgerblue",
+    color = "white",
+    binwidth = 0.02
+  )
+  
+```
+
+>So as the number of slots in the shovel increased, this standard deviation decreased. These types of standard deviations have another special name: **standard errors**; they quantify the effect of sampling variation induced on our estimates.
+
+>However despite this sampling variation, our sample proportions $\hat p$ were always centered around the true population proportion. This is also known as having an **accurate estimate**.
+
+>In our simulations, as the sample size increases, the spread/variation of our sample proportions $\hat p$ around the true population proportion p decreases. You can observe this behavior as well in Figure 8.13. This is also known as having a more **precise estimate**.
+
+Look at ![Accuracy and Precision](https://d33wubrfki0l68.cloudfront.net/f4888889a26d4a0b28107d56fb92ee99ea54943a/20c16/images/accuracy_vs_precision.jpg)
+
+
+>Once again, let’s revisit the sampling paradigm:  
+-  If the sampling of a sample of size n is done at random, then
+ - the sample is unbiased and representative of the population of size N, thus
+ - any result based on the sample can generalize to the population, thus
+-  the point estimate is a “good guess” of the unknown population parameter, thus
+- instead of performing a census, we can infer about the population using sampling.
+
+>What we did was to demonstrate a very famous theorem, or mathematically proven truth, called the **Central Limit Theorem**. It loosely states that when sample means and sample proportions are based on larger and larger sample sizes, the sampling distribution of these two point estimates become more and more normally shaped and more and more narrow. 
+
+
+# Confidence Intervals
+
+TABLE 7.1: Scenarios of sampling for inference 
+ 
+ Scenario| Population parameter | Notation| Point estimate| Notation.
+ ---------|-------------------|-----------|---------------|-----------
+1 |	Population proportion |	p|	Sample proportion |	$\hat p$
+2 |	Population mean |	μ |Sample mean |	μ or $\hat x$
+3 |	Difference in population proportions |	p1−p2 |Difference in sample proportions |	$\hat p_1− \hat p_2$
+4 |	Difference in population means |	$μ_1 − μ_2$ |Difference in sample means | $x_1 -x_2$
+5 |	Population regression slope |	$β_1$|Sample regression slope |	$\hatβ_1$ or $b_1$
+6 |	Population regression intercept |	$β_0$| Sample regression intercept |	$\hat β_0$ or $b_0$
+7| Population Standard Deviation| $\sigma $| Sample Standard Deviation | $\hat \sigma $
+
+  In most cases, we don’t have the population values as we did with the bowl of balls. We only have a **single sample of data** from a larger population. We’d like to be able to make some reasonable guesses about population parameters using that single sample to create a range of plausible values for a population parameter. This *range* of plausible values is known as a **confidence interval** and will be the focus of this chapter. 
+
+And how do we use a *single sample* to get some idea of how other samples might vary in terms of their statistic values? One common way this is done is via a process known as **bootstrapping** that will be the focus of the beginning sections of this chapter.
+
+```{r Confidence Intervals, echo=FALSE, message=FALSE}
+library(infer)
+library(janitor)
+```
+
+## Population Stats: What we want to know
+
+```{r Population Stats: What we want to know}
+# Original Population
+# Visualise
+pennies %>% 
+  gf_histogram(~age_in_2011, color = "white", fill = "black", title = "Population")
+
+# Calculate
+pennies %>%
+  summarise(
+    mean = mean(age_in_2011),
+    median = median(age_in_2011),
+    sd = sd(age_in_2011)
+  )
+```
+
+`Pennies` is slightly right-skewed with `age_in_2011`. Mean is slightly to the right of the median. Quite some pennies that are >40 years old. 
+
+## Bootstrapping
+When we have *only one sample*, `pennies_sample`. We wish to find the mean age of all pennies minted in the US, based on this one sample. 
+
+```{r One Sample}
+pennies_sample <- sample_n(pennies, size = 50, replace = FALSE)
+pennies_sample
+```
+
+
+```{r Pennies_sample}
+#EDA
+pennies_sample %>% 
+gf_histogram(~ age_in_2011, bins = 10,color = "white", data = pennies_sample)
+# Roughly symmetric.
+
+# Calculate `sample mean`
+x_bar <- pennies_sample %>% 
+  summarise(mean(age_in_2011))
+x_bar
+```
+
+**Bootstrapping** is a method of generating fresh samples from an existing single sample, by sampling **with replacement** . *Sample size* with bootstrapping is the *same* as the that of the original sample.
+
+```{r Bootstrapping Pennies}
+
+# We generate one bootstrap sample from `pennies_sample`
+bootstrap_sample1 <- 
+  pennies_sample %>%
+  rep_sample_n(size = 40, replace = TRUE, reps = 1)
+bootstrap_sample1
+
+#Bootstrap Stat
+# We can calculate **bootstrap_statistics** for this sample.
+bootstrap_sample1 %>% 
+  summarise(stat = mean(age_in_2011))
+
+#Visualize this bootstrap sample
+gf_histogram(~age_in_2011, color = "white", bins = 20, data = bootstrap_sample1) %>% 
+  gf_vline(xintercept = ~ mean(bootstrap_sample1$age_in_2011), color = "red") %>% 
+  gf_vline(data = pennies, xintercept = ~ mean(pennies$age_in_2011), color = "green")
+
+# This doesn't work...weird behaviour of `ggformula`
+# gf_vline(xintercept = mean(age_in_2011), data = bootstrap_sample1)
+# Now it does: use the formula `~` symbol in front of all parameters. 
+```
+
+This mean (red line) is different from the sample mean we calculated earlier (green line). 
+
+This is another sample, one calculated using bootstrap, that we could *assume* comes from the **population** of interest. 
+
+```{r bootstrap_statistics}
+# More bootstrap samples
+six_bootstrap_samples <- 
+  pennies_sample %>%
+  rep_sample_n(size = 40,replace = TRUE, reps = 6)
+
+#Visualise
+gf_histogram(~ age_in_2011 | replicate, data = six_bootstrap_samples, color = "white",fill = "black") %>% 
+  gf_vline(data = six_bootstrap_samples, 
+           xintercept = ~mean(six_bootstrap_samples$age_in_2011), 
+           color = "red") %>% # Vline for the sample mean
+  gf_vline(data = pennies, 
+           xintercept = ~ mean(pennies$age_in_2011), # Note the `tilde`
+           color = "green") %>% # Vline for the overall bootstrap mean
+  gf_vline(data = (six_bootstrap_samples %>% 
+      group_by(replicate) %>% 
+      summarise(mean = mean(age_in_2011))),xintercept = ~ mean, color = "purple", linetype = "dashed") 
+# What a command I have cooked here! Shows the per-replicate sample-mean in a plot facetted by replicate!
+
+gf_histogram(~ age_in_2011, data = six_bootstrap_samples) %>% 
+  gf_vline(data = six_bootstrap_samples, 
+           xintercept = ~ mean(six_bootstrap_samples$age_in_2011), # tilde
+           color = "red") %>% 
+  gf_vline(data = pennies, 
+           xintercept = ~ mean(pennies$age_in_2011), # Note the `tilde`
+           color = "green")
+```
+
+```{r Replicate Stats - Mean}
+# Calculate six means
+six_bootstrap_samples %>% 
+  group_by(replicate) %>% 
+  summarise(stat = mean(age_in_2011))
+```
+
+## Using the `Infer` package
+
+We see that the calculated statistic `stat` varies from replicate to replicate and has a distribution of its own. So, instead of doing this just six times, we can replicate this a 1000 times or more, over and over and look at the distribution of 'stat`.
+
+We can do all this using `dplyr`-like verbs from the package `infer`.
+
+- uses the `pipe`
+
+So the `SAMPLING` flow with` infer` is:
+
+`specify(response ~ explanatory) %>% generate(reps) %>% calculate(stat) %>% visualise()`.
+
+### `specify`
+Chooses the variable which will be the focus of the statistical inference. We can `specify` which variable is `explanatory` and which is a `response`.
+
+```{r `infer` specify}
+pennies_sample %>% 
+  infer::specify(response = age_in_2011)
+
+# Or using `formula` notation as with `ggformula`, `y ~ x`
+pennies_sample %>% 
+  specify(age_in_2011 ~ NULL)
+```
+
+### Generate replicates using `generate()`
+
+```{r `generate` samples}
+thousand_bootstrap_samples <- 
+  pennies_sample %>%
+  specify(age_in_2011 ~ NULL) %>%
+  generate(size = 40,reps = 1000, type = "bootstrap")
+thousand_bootstrap_samples
+
+```
+
+### Calculating Sample Stats using `calculate()`
+
+This collapses the samples to one `mean` per replicate. 
+
+```{r Sample Stats using `calculate`}
+bootstrap_distribution <- pennies_sample %>% 
+  mutate(age_in_2011 = 2011 - year) %>% 
+  specify(age_in_2011 ~ NULL) %>% 
+  generate(size = 40, reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "mean")
+
+bootstrap_distribution # A thousand rows with means
+
+```
+
+### `Visualize`
+
+```{r visualize bootstrap distributions}
+# My way
+pennies_sample %>% 
+  mutate(age_in_2011 = 2011 - year) %>% 
+  specify(age_in_2011 ~ NULL) %>% 
+  generate(size = 40, reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "mean") %>% 
+  gf_histogram(~stat,color = "white", fill = "black",
+               title = "Bootstrap Distribution",
+               subtitle = "Plotted with ggformula")
+
+#Even better with `infer`! Cool !!!
+bootstrap_distribution %>% 
+  visualise()
+
+# In one command
+pennies_sample %>% 
+  specify(age_in_2011 ~ NULL) %>% 
+  generate(size = 40, reps = 1000,type = "bootstrap") %>% 
+  calculate(stat = "mean") %>% 
+  visualise()
+
+# Furthermore
+pennies_sample %>% 
+  specify(age_in_2011 ~ NULL) %>% 
+  generate(size = 40, reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "mean") %>% 
+  summarise(mean_of_means = mean(stat))
+
+# Compare Pop_mean with Bootstrap_mean
+pennies %>% 
+  summarise(mean = mean(age_in_2011), median = median(age_in_2011),sd = sd(age_in_2011))
+```
+
+
+### Confidence Intervals
+
+- give a set of *plausible values* for a parameter that has been estimated, depending upon confidence `levels` that are desired/specified.
+
+>the bootstrap distribution provides us a guess as to what the variability in different sample means may look like, only using the original sample as our guide. We can quantify this variability in the form of a **95% confidence interval** in a couple different ways.
+
+- Percentile method
+- Standard Error method when the (bootstrap) sampling distribution is normal
+   
+    
+```{r `CI` with `percentile`}
+
+# What we did earlier with `calculate()`:
+
+bootstrap_distribution <-
+  pennies_sample %>%
+  specify(age_in_2011 ~ NULL) %>%
+  generate(size = 40, reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+ 
+# Confidence Intervals - Percentile
+percentile_ci <- 
+  bootstrap_distribution %>% 
+  get_ci(level = 0.95,type = "percentile")
+percentile_ci
+
+#Visualise bootstrap percentile CIs
+bootstrap_distribution %>% 
+  visualise() + shade_confidence_interval(endpoints = percentile_ci)
+# Does NOT work with the pipe !!
+
+# A combination piped command does not work...
+# pennies_sample %>%
+#   specify(age_in_2011 ~ NULL) %>%
+#   generate(size = 40, reps = 1000, type = "bootstrap") %>%
+#   calculate(stat = "mean") %>% # bootstrap distribution
+#   get_ci(level = 0.95, type = "percentile") %>%
+#   visualise(endpoints = ., endpoints_color = "purple",direction = "between")
+# Does not work. Why? `Visualise` needs a distribution to plot; `get_ci` gives two numbers. That's why. 
+```
+
+`percentile` works with *any* sort of bootstrap distribution. 
+
+    If the bootstrap distribution is *close to symmetric and bell-shaped*, we can also use a shortcut formula for determining the lower and upper endpoints of the confidence interval. This is done by using the formula $\bar x ±(multiplier∗SE)$, where $\bar x$ is our original sample mean and `SE` stands for standard error and corresponds to the standard deviation of the bootstrap distribution. The value of multiplier here is the **appropriate percentile** of the **standard normal distribution**.
+
+
+```{r visualising CI with `se`}
+
+# So we can do the same using SE
+# We use this when the botstrap distribution is near-normal
+# Use normal percentiles to specify CI limits
+# setting type = "se" does this
+
+# recall that x_bar was the sample mean, mean(pennies_sample)
+# 
+se_ci <- bootstrap_distribution %>% 
+  get_ci(type = "se", point_estimate = x_bar)
+se_ci
+
+# Recall what we did with Calculate: `sample mean` x_bar and the bootstrap distribution
+# x_bar <- pennies_sample %>% summarise(mean(age_in_2011))
+# AND
+# bootstrap_distribution <- 
+#   pennies_sample %>% 
+#   specify(age_in_2011 ~ NULL) %>% 
+#   generate(size = 40, reps = 1000, type = "bootstrap") %>% 
+#   calculate(stat = "mean")
+
+bootstrap_distribution %>% 
+  visualise() + shade_confidence_interval(endpoints = se_ci)
+
+#Combined command does not work...why? Now we understand !
+# pennies_sample %>% 
+#   specify(age_in_2011 ~ NULL) %>%
+#   generate(reps = 1000, type = "bootstrap") %>%
+#   calculate(stat = "mean") %>%
+#   get_ci(type = "se",point_estimate = x_bar) %>%
+#   visualise(direction = "between")
+```
+
+### Comparing Sampling and Bootstrap means, medians
+    
+In **sampling** we assume we have access to the **population**. With `bootstrap`, we have just **one** sample to work with.
+   
+```{r Bootstrap vs Sampling -2}
+# "True" Sampling ( i.e. without replacement)
+# thousand_samples <- pennies %>% # Note the access to the population
+#   rep_sample_n(size = 40, reps = 1000, replace = FALSE)
+
+sampling_distribution <- pennies %>% 
+  # Note the access to the population
+  rep_sample_n(size = 40, reps = 1000, replace = FALSE) %>% 
+  group_by(replicate) %>% 
+  summarise(stat = mean(age_in_2011))
+sampling_distribution
+
+sampling_distribution %>% 
+  gf_histogram(~ stat, color = "white", fill = "salmon", bins = 10,title = "Sampling Distribution with ggformula")
+
+# And the final estimate
+final_sampling_calcs <- 
+sampling_distribution %>% 
+  summarise(mean = mean(stat), se = sd(stat))
+final_sampling_calcs
+```
+      
+    Note that this `sampling stat` i.e. `mean` is pretty closely matching that of the original population. This is an artifact of the **Central Limit Theorem**, of course. 
+    
+```{r Bootstrap vs Sampling - Comparing Distributions}
+# Sampling with Bootstrap
+# What we did earlier:
+# 
+# bootstrap_distribution <- 
+#   pennies_sample %>% 
+#   specify(age_in_2011 ~ NULL) %>% 
+#   generate(size = 40, reps = 1000, type = "bootstrap") %>% 
+#   calculate(stat = "mean")
+#   
+bootstrap_distribution %>% 
+  visualise(bins = 10, fill = "blue")
+# Calculate "se'
+final_bootstrap_calcs <- bootstrap_distribution %>% 
+  summarise(mean = mean(stat),se = sd(stat))
+
+results <- rbind(final_sampling_calcs,
+final_bootstrap_calcs)
+results
+```
+
+While the `se` are similar, the `means` are different when comparing `sampling` and `bootstrap`. Since the bootstrap distribution is *centered at the original sample mean*, it doesn’t necessarily provide a good estimate of the overall population mean μ. 
+    
+### Interpreting the Confidence Interval
+
+We saw the two sets of CIs, bootstrap and Sampling:
+
+```{r Two CIs}
+## Bootstrap
+## Let's try a new "single" sample:
+pennies_sample2 <- 
+  pennies %>% 
+  sample_n(size = 40)
+
+pennies_sample2 %>% 
+  specify(age_in_2011~ NULL) %>% 
+  generate(reps = 1000,type = "bootstrap") %>% 
+  calculate(stat = "mean") %>% 
+  get_ci()
+```
+
+This is *one set* of bootstrap_ci, and we see that the **population mean* falls within these limits. We want to know if this always happens. We can replicate this a 100 times and check if the `pop_mean` lies within the 100 bootstrap ci limits.
+
+Using the original "shovel" problem for red and white balls , we try to establish confidence intervals for the proportion of the red balls.
+```{r shovel revisited}
+tactile_shovel1 <- 
+  tibble(color =  c(rep("red",21), rep("white",29)))
+tactile_shovel1
+
+# Observed Statistic (see mosaic app note)
+p_hat <- 
+  tactile_shovel1 %>% 
+  specify(color ~ NULL, success = "red") %>% 
+  calculate(stat = "prop")
+p_hat
+
+# Bootstrap Samples
+bootstrap_props <- 
+  tactile_shovel1 %>% 
+  specify(color ~ NULL, success = "red") %>% 
+  generate(reps = 10000, type = "bootstrap") %>% 
+  calculate(stat = "prop")
+
+ci_bootstrap <- bootstrap_props %>% 
+  get_ci()
+ci_bootstrap
+bootstrap_props %>% 
+  visualise() + shade_confidence_interval(endpoints = ci_bootstrap)
+```
+
+> Since the resultant distribution is bell shaped ( on account of 10000 samples) we can choose either method for confidence interval calculation.
+
+```{r shovel CI}
+std_error_ci <- 
+  bootstrap_props %>% 
+  get_ci(level = 0.95, type = "se", point_estimate = p_hat)
+std_error_ci
+
+bootstrap_props %>% 
+  visualise() + shade_confidence_interval(endpoints = std_error_ci,endpoints_color = "green")
+``` 
+### Theory-based Confidence Intervals
+
+>To construct a theory-based confidence interval for p, the unknown true population proportion we
+- Collect a sample of size n  
+- Compute $\hatp$  
+- Compute the standard error, $se$
+- Compute `Margin of Error` `MoE` as `1.96*se`, for `95% Confidence Intervals`
+- Use $\hat p +/- MoE$ as estimates for our confidence intervals, provided we know that the distribution is bell shaped. 
+
+#### One Proportion
+
+```{r Using tactile_prop_red}
+tactile_prop_red
+# 33 replicates of 50 samples out of 2400 white+red balls.
+true_p <- 900/2400
+conf_ints <- 
+  tactile_prop_red %>%
+  rename(p_hat = prop_red) %>%
+  mutate(
+    se = sqrt(p_hat * (1 - p_hat) / 50),
+    MoE = 1.96 * se,
+    ci_lower = p_hat - MoE,
+    ci_upper = p_hat + MoE,
+    captured = if_else(true_p >= ci_lower &
+                         true_p <= ci_upper, TRUE, FALSE)
+  )
+
+conf_ints
+
+gf_segment(group + group ~ ci_lower + ci_upper,data = conf_ints, color = ~captured) %>% 
+  gf_point(group ~ p_hat,color = ~ captured,data = conf_ints) %>% 
+  gf_vline(xintercept = ~ true_p,color = "red")
+```
+
+We can also create the `tactile_prop_red` using simulation.
+
+```{r virtual sampling}
+virtual_samples <- 
+  bowl %>% 
+  rep_sample_n(size = 50,reps = 100) %>% 
+  group_by(replicate) %>% 
+  mutate(p_hat = mean(color == "red"),
+         se = sqrt(p_hat * (1 - p_hat) / 50),
+    MoE = 1.96 * se,
+    ci_lower = p_hat - MoE,
+    ci_upper = p_hat + MoE,
+    captured = if_else(true_p >= ci_lower &
+                         true_p <= ci_upper, TRUE, FALSE))
+
+virtual_samples %>% 
+  group_by(replicate) %>% 
+  filter(captured == TRUE) %>% 
+  nrow()/5000
+
+virtual_samples %>% 
+gf_point(replicate ~ p_hat,color = ~ captured,data = virtual_samples,xlab = "Proportion Red",ylab = "Replicate ID") %>% 
+gf_segment(replicate + replicate ~ ci_lower + ci_upper,data = virtual_samples, color = ~captured,size = 0.3) %>% 
+  gf_vline(xintercept = ~ true_p,color = "red")
+  
+```
+
+#### Comparing Two Proportions
+
+Is yawning contagious?
+```{r yawning}
+library(janitor)
+mythbusters_yawn
+
+# Using `janitor`
+mythbusters_yawn %>% 
+  tabyl(group,yawn) %>% 
+  adorn_percentages() %>% 
+  adorn_pct_formatting() %>% 
+  adorn_ns()
+```
+
+>In looking over this problem, we can make note of some important details to include in our infer pipeline:
+- We are calling a success having a yawn value of "yes".
+- Our response variable will always correspond to the variable used in the success so the response variable is yawn.
+- The explanatory variable is the other variable of interest here: group.
+
+>To summarize, we are looking to see the examine the relationship between yawning and whether or not the participant saw a seed yawn or not.
+
+```{r Analysis of Yawning}
+obs_diff <- 
+  mythbusters_yawn %>% 
+  specify(yawn ~ group,success = "yes") %>% 
+  calculate(stat = "diff in props",order = c("seed", "control"))
+obs_diff
+
+# Bootstrap Distribution
+# We should sample entire rows here since both the yawn and the group are vairables of interest in the model.
+
+bootstrap_distribution <- mythbusters_yawn %>% 
+  specify(yawn ~ group, success = "yes") %>% 
+  generate(reps = 1000) %>% 
+  calculate(stat = "diff in props", order = c("seed", "control"))
+bootstrap_distribution
+
+ci_myth <- bootstrap_distribution %>% 
+  get_ci(level = 0.95, type = "percentile")
+ci_myth
+bootstrap_distribution %>% 
+  visualise() + ## ALWAYS USE PLUS SIGN HERE !
+  shade_confidence_interval(endpoints = ci_myth, fill = "green", color = "green")
+```
+
+Since the Confidence Intervals include/straddle `0`, it is not possible to assert that yawning is contagious. 
+
+
+# Hypothesis Testing
+
+```{r Packages for Hypothesis Testing}
+library(ggplot2movies)
+library(broom)
+```
+
+Hypothesis testing may not always be needed; one must perform an EDA on the data first before considering a test. 
+
+## Flights NY to SFO and BOS
+Suppose we were interested in seeing if the air_time to SFO in San Francisco was statistically greater than the air_time to BOS in Boston.
+
+```{r NY to BOS and SFO}
+bos_sfo <- 
+  flights %>% 
+  na.omit() %>% 
+  filter(dest == "SFO" | dest == "BOS") %>% 
+  group_by(dest) %>% 
+  sample_n(100)
+# Note: sampling after grouping gives equal numbers of each group!
+
+bos_sfo_summary <- bos_sfo %>% 
+  group_by(dest) %>% 
+  summarise(mean_time = mean(air_time),
+            sd_time = sd(air_time), count = n())
+bos_sfo_summary
+```
+### Observations BOS vs SFO
+- Time to SFO is on average far higher than that to BOS
+- The `sd` is also very informative: 4 miles and 18 miles each. 
+
+### LC10.1
+If the sd(mean$time)| SFO had been say 200, we might have wanted to check if the time difference was really that high. And an SD of 100 would have been just OK, but either way we would have scaled the difference by the sd ( which one?) and decided if the difference was large in z-score terms. 
+
+```{r SFO vs BOS Boxplot}
+gf_boxplot(air_time ~ dest, data = bos_sfo)
+```
+
+So here clearly there is ** NO NEED** for Hypothesis testing. 
+
+>As you get more and more practice with hypothesis testing, you’ll be better able to determine in many cases whether or not the results will be statistically significant. There are circumstances where it is difficult to tell, but you should always try to make a guess FIRST about significance after you have completed your data exploration and before you actually begin the inferential techniques.
+
+## Basics of Hypothesis Testing
+
+Based on Allen Downey's article "There is only one test" <http://allendowney.blogspot.com/2016/06/there-is-still-only-one-test.html> we have the following diagram:
+
+![Hypothesis Testing](https://d33wubrfki0l68.cloudfront.net/c13657f5339f170a007f29a840739e0e10d55b32/a275c/images/ht.png)
+
+>Logic of hypothesis testing  
+ -  Take a random sample (or samples) from a population (or multiple populations)  
+ -  If the sample data are consistent with the null hypothesis, do not reject the null hypothesis.  
+  - If the sample data are inconsistent with the null hypothesis (in the direction of the alternative hypothesis), reject the null hypothesis and conclude that there is evidence the alternative hypothesis is true (based on the particular sample collected).  
+
+
+### Hyp Testing with `infer`
+
+`specify() -> hypothesize() -> generate() -> calculate() -> visualise()` is the flow for Hypothesis Testing using `infer`.
+
+### Comparing Two Means
+
+Null hypothesis : $H_0 : \mu_1 - \mu_2 = 0$  
+Alternative ( Research ) hypothesis: $H_a : \mu_1 -\mu2 * 0$
+where `* = < ≠ or >`.
+
+Using `ggplot2movies` we check if `Action` movies are rated higher on IMDB than `Romance` movies. 
+
+```{r Action vs Romance}
+movies_trimmed <- 
+  movies %>% 
+  select(title, year, rating, Romance, Action) %>% 
+# Romance and Action are binary Yes/No variables.
+  filter(!(Action == 1 & Romance == 1)) %>% 
+  mutate(genre = case_when(Action == 1 ~ "Action",
+                           Romance == 1 ~ "Romance")) %>% 
+  filter(!is.na(genre)) %>% 
+  select(-Romance, -Action)
+
+movies_trimmed
+# Note: This is the POPULATION !!!!
+```
+
+```{r EDA on the movies populatio -1}
+gf_boxplot(rating~genre, data = movies_trimmed)
+```
+Ratings for `Action` movies are more spread out.
+The `median` score for `Romance` is higher, though it also has more outliers at both extremes. 
+
+```{r EDA on movies population -2}
+gf_histogram(~ rating | genre ~ ., binwidth = 1, data = movies_trimmed, color = "white")
+```
+ 
+ In both the `flights` and `movies` examples, we had access to the population. Normally we have access only to a sample and need to `infer` population parameters using sample statistics. 
+ 
+### So, a sample
+
+Let's sample 34 each of action and romance movies. 
+
+```{r Movies}
+movie_genre_sample <- 
+  movies_trimmed %>% 
+  group_by(genre) %>% 
+  sample_n(34) %>% 
+  ungroup()
+```
+
+The `ungroup`ing was done so as to allow us to `permute` the values of `rating`. Without doing it, the data stays grouped and cannot be randomized. 
+
+```{r EDA for the sample}
+movie_genre_sample %>% 
+  gf_boxplot(rating ~ genre, fill = ~ genre)
+
+movie_genre_sample %>% 
+  gf_histogram(~ rating | genre ~.,binwidth = 1,color = "black",fill = ~ genre)
+```
+
+Boxplots show some difference in medians, but the histograms are not clear; the two genres also have different shaped distribution. 
+Let us calculate the stats for the sample:
+
+```{r Sample stats}
+summary_ratings <- 
+  movie_genre_sample %>% 
+  group_by(genre) %>% 
+  summarise(mean = mean(rating),
+            std_dev = sd(rating),
+            n = n())
+summary_ratings
+```
+
+### Hypothesis
+
+$H_0 : \mu_{Romance} - \mu_{Action} = 0 \\$  
+$H_a : \mu_{Romance} - \mu_{Action} ≠ 0$
+
+Note that Hypothesis is about the **population**. Always. No sense otherwise ;-D
+
+### Test Statistic
+
+We look for a difference in sample means, by group
+$\delta = \bar x_{Romance} - \bar x_{Action}$  
+
+### Observed `Effect`
+
+```{r}
+obs_diff <- 
+  movie_genre_sample %>% 
+  specify(rating ~ genre) %>% 
+  calculate(stat = "diff in means", order = c("Romance", "Action"))
+obs_diff
+```
+We need to now simulate and find out if such an `obs_diff` or higher could occur purely by chance (under $H_0$) with high enough probability ( > 0.05).
+
+We take the combined (34 + 34) set of movies, shuffle them (i.e. their genres) and split them into two, at random. If the population means are the same, then the difference in means between these two new subsets must also be very small. We can do this a 1000 times to check.
+
+This is called `permutation` or `randomization`.
+
+```{r Permutation - Randomization}
+generated_samples <- 
+  movie_genre_sample %>% 
+  specify(rating ~ genre) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 5000,type = "permute") 
+
+null_distribution_two_means <- 
+  generated_samples %>% 
+  calculate(stat = "diff in means", order = c("Romance", "Action"))
+ 
+null_distribution_two_means %>%  
+  visualise(obs_stat = obs_diff,direction = "both",bins = 100)
+
+p_value <- 
+  null_distribution_two_means %>% 
+  get_p_value(obs_stat = obs_diff,direction = "both")
+p_value
+```
+
+This p-value is very small and less than $\alpha = 0.05$. This is the probability of obtaining the obs_diff by chance, ASSUMING that Null Hypothesis is true. Hence we need to reject the null hypothesis and state that there is evidence that the mean ratings between Romance and Action movies are indeed different.
+
+In order to generate Confidence Intervals with the *single sample* we have, we turn to the bootstrap method again:
+
+```{r Bootstrap Confidence Intervals}
+
+percentile_ci_two_means <- 
+  movie_genre_sample %>% 
+  specify(rating ~ genre) %>% 
+  # hypothesize(null = "independence") %>%
+  generate(reps = 5000, type = "bootstrap") %>% 
+  calculate(stat = "diff in means", order = c("Romance", "Action")) %>% 
+  get_ci()
+percentile_ci_two_means
+```
+
+Hence the difference in *mean rating* between `Romance` and `Action` movies is between these two values with 95% probability.
+
+### Problem LC10.14
+Repeat the above inference using median rating instead of mean rating.
+
+```{r Inference using Median Rating}
+movie_genre_sample # same sample as before
+
+# EDA
+movie_genre_sample %>% 
+  gf_boxplot(rating ~ genre, fill = ~genre)
+#Stat
+obs_diff <- movie_genre_sample %>% 
+  specify(rating ~ genre) %>% 
+  calculate(stat = "diff in medians" , order = c("Romance", "Action"))
+obs_diff
+# Generate Samples
+samples <- movie_genre_sample %>% 
+  specify(rating ~ genre) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 1000, type = "permute") 
+
+# Null distribution
+null_dist <- samples %>% 
+  calculate(stat = "diff in medians", order = c("Romance", "Action"))
+
+#Visualise
+null_dist %>% visualise()
+
+# p_value and ci
+p_value <- null_dist %>% 
+  get_p_value(obs_stat = obs_diff,direction = "both")
+p_value
+
+ci <- 
+  movie_genre_sample %>% 
+  specify(rating~genre) %>% 
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "diff in medians", order = c("Romance", "Action")) %>% 
+  get_ci()
+ci
+```
+
+The difference in medians between the two groups is between 0.5 and 2.2 with 95% probability. The p-value is small enough for us to state that we can reject the null hypothesis and that there is indeed evidence for a difference in medians or rating between the two movie categories. 
+
+
+
+
+# Inference for Regression Coefficients
+
+In regression we compute a `slope` and `intercept` for a model between explanatory and response variables.
+
+We can use the idea of `permutation/randomization` to determine the null distribution and conduct a hypothesis test for the **population slope**.
+
+We will use the teacher evaluation dataset again. 
+
+```{r Inference for Regression with `evals`}
+evals %>% 
+  specify(score ~ bty_avg)
+
+# Observed Statistic
+obs_slope <- 
+  evals %>% 
+  specify(score ~ bty_avg) %>% 
+  calculate(stat = "slope")
+obs_slope
+```
+
+## Hypothesis
+
+$H_0: Null: Population\ Slope\ \beta_1 = 0$  
+$H_a: Alternative: Population\ Slope\ \beta_1 > 0$
+
+## Simulated Data
+
+>If β1=0, we said above that there is no relationship between the teaching and beauty scores. If there is no relationship, then any one of the teaching score values could have just as likely occurred with any of the other beauty score values instead of the one that it actually did fall with. We, therefore, have another example of permuting in our simulating of data under the null hypothesis.
+
+Earlier with the movies, we shuffled `rating` and `genre`. Here we equivalently shuffle `score` and `bty_avg`.
+
+```{r simulations}
+
+# Distribution *under* H0
+null_slope_dist <- 
+  evals %>% 
+  specify(score ~ bty_avg) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 10000, type = "permute") %>% 
+  calculate(stat = "slope")
+
+null_slope_dist %>% 
+  visualise() + 
+  shade_p_value(obs_stat = obs_slope,direction = "greater")
+
+p_value <- null_slope_dist %>% 
+  get_p_value(obs_stat = obs_slope,direction = "greater")
+p_value
+```
+
+Since `p-value` is very small, it means that the observed value is very improbable and unlikely to have occured merely by chance. Hence we can reject the null hypothesis and state there is a positive association between `beauty score` and `teaching score` in this dataset. 
+
+We can use bootstrapping to calculate how strong the `slope` is and with what confidence we can state that.
+### Bootstrapping for `slope`
+
+```{r Bootstrapping for Slope}
+bootstrap_slope_dist <- evals %>% 
+  specify(score ~ bty_avg) %>% 
+  generate(reps = 10000, type = "bootstrap") %>% 
+  calculate(stat = "slope")
+
+bootstrap_slope_dist %>% 
+  visualise(obs_stat = obs_slope)
+
+
+#Percentile Bootstrap Confidence Intervals
+percentile_slope_ci <- bootstrap_slope_dist %>% 
+  get_ci(level = 0.99,type = "percentile")
+percentile_slope_ci
+
+
+# Standard Error Confidence Intervals
+se_slope_ci <- bootstrap_slope_dist %>% 
+  get_ci(type = "se",point_estimate = obs_slope, level = 0.99)
+se_slope_ci
+```
+
+Since we have a large number of samples we have symmetric bell-shaped distributions for both bootstrap and se methods and hence the two CIs are very similar. 
+
+
+### Problem LC11.1
+Repeat the inference using `stat = "correlation"` in `calculate()`. 
+
+```{r LC11.1 Correlation instead of slope}
+# Observed Statistic
+obs_cor <- 
+  evals %>% 
+  specify(score ~ bty_avg) %>% 
+  calculate(stat = "correlation")
+obs_cor
+
+# Null Distribution
+null_dist_cor <- 
+  evals %>% 
+  specify(score ~ bty_avg) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 10000, type = "permute") %>% 
+  calculate(stat = "correlation")
+
+null_dist_cor %>% 
+  visualise(obs_stat = obs_cor,direction = "greater")
+
+p_value <- 
+  null_dist_cor %>% 
+  get_p_value(obs_stat = obs_cor,direction = "greater")
+p_value
+
+# CI wit bootstrap
+bootstrap_cor_dist <- 
+  evals %>% 
+  specify(score ~ bty_avg) %>% 
+  generate(reps = 10000, type = "bootstrap") %>% 
+  calculate(stat = "correlation") 
+
+bootstrap_cor_dist %>% visualise(obs_stat = obs_cor)
+
+percentile_ci_cor <- 
+  bootstrap_cor_dist %>% 
+  get_ci(level = 0.99)
+percentile_ci_cor
+
+
+# CI with Standard Error
+se_ci_cor <- 
+bootstrap_cor_dist %>%  
+  get_ci(type = "se", point_estimate = obs_cor)
+se_ci_cor
+```
+
+
+
+## Inference for Multiple Regression
+
+Here the response variable `score` was regressed against
+ - `age` a numerical explanatory variable  
+ - `gender` a categorical explanatory variable
+ 
+
+### Refresher !
+```{r No interaction model}
+
+evals_multiple <- 
+  evals %>% 
+  select(score, bty_avg, age, gender, ethnicity, language, rank)
+
+# Model with no interaction
+score_model_1 <- lm(score ~ gender + age, data = evals_multiple)
+score_model_1 %>% 
+  get_regression_table()
+
+# Model with Interaction
+score_model_2 <- lm(score ~ gender*age, data = evals_multiple)
+score_model_2 %>% 
+  get_regression_table()
+
+#Plots without interaction ( Note the use of `~` everywhere!!)
+evals_multiple %>% 
+  gf_point(score ~ age, color = ~ gender, data = evals_multiple) %>% 
+  gf_abline(data = filter(evals_multiple, gender == "male"), 
+            intercept = ~ 4.484+0.191, slope = ~ -0.009,color = ~gender) %>% 
+  gf_abline(data = filter(evals_multiple, gender == "female"), 
+            intercept = ~ 4.484, slope = ~ -0.009,color = ~ gender)
+
+# Plots with interaction
+evals_multiple %>% 
+  gf_point(score ~ age, color = ~ gender, data = evals_multiple) %>% 
+  gf_abline( intercept = ~ 4.883 - 0.446,slope =  ~ -0.018+0.014, color = ~gender, data = filter(evals_multiple, gender == "male")) %>% 
+  gf_abline( intercept = ~ 4.883,slope =  ~ -0.018, color = ~gender, data = filter(evals_multiple, gender == "female"))
+   
+```
+
+**Gothcha !!!!**
+
+
+ 
+### Residual Analysis
+ > Recall the residuals can be thought of as the error or the “lack-of-fit” between the observed value y and the fitted value ˆy on the blue regression line in Figure 6.6. Ideally when we fit a regression model, we’d like there to be no systematic pattern to these residuals.
+ 
+We investigate the residuals in this section. We can also decide based on that analysis if the model we have is too simple.
+
+#### Teacher Scores vs Beauty
+```{r residuals plot}
+evals_ch6 <- 
+  evals %>% 
+  select(score, bty_avg, age, gender)
+score_model <- lm(score ~ bty_avg, data = evals_ch6)
+
+score_model %>% 
+  get_regression_table()
+
+reg_points <- 
+  score_model %>% 
+  get_regression_points()
+
+# Plot residuals vs Explanatory covariate
+reg_points %>% 
+  gf_point(residual ~ bty_avg, xlab = "Beauty Score") %>% 
+  gf_hline(yintercept = ~ 0,color = "blue")
+
+reg_points %>% 
+  gf_histogram(~ residual,binwidth = 0.25, color = "white")
+mean(reg_points$residual)
+```
+
+Note that while mean(residuals) is zero, as it should be, there is a negative skew to the residuals. There are many small negative residuals, but relatively fewer, and therefore large positive residuals. So our model tends to underestimate the `score` those who have high scores. 
+
+We would really like our residuals to be **normally distributed**.
+
+#### Problem LC11.2 Teacher Scores vs Age
+`Score` vs `age`
+```{r LC11.2}
+score_model_age <- lm(score ~ age,data = evals)
+
+score_model %>% 
+  get_regression_table()
+
+reg_points <- score_model %>% 
+  get_regression_points() 
+reg_points
+
+reg_points%>% 
+  gf_histogram(~residual,binwidth = 0.25, color = "white")
+  
+```
+
+There is some negative skew again, as with the `bty_avg` explanatory variable. 
+
+#### Life Expectancy vs Continent with Gapminder Data
+
+```{r `Gapminder` residuals}
+lifeExp_model <- lm(data = gapminder2007, lifeExp ~ continent)
+
+lifeExp_model %>% get_regression_table()
+
+reg_points <- lifeExp_model %>% 
+  get_regression_points()
+
+reg_points %>% gf_jitter(residual~continent, height = 0.1,width = 0.1)
+
+# Note the outlier in Asia, with very low Life Expectancy. 
+
+reg_points %>% 
+  gf_histogram(~residual, binwidth = 5, color = "white")
+gapminder2007 %>% filter(continent == "Asia") %>% 
+  arrange(lifeExp) %>% 
+  gf_col(lifeExp ~ reorder(country, lifeExp),xlab = "Country", ylab = "Life Expectancy (years)") %>% 
+  gf_theme(coord_flip()) %>% 
+  gf_theme(axis.text.y = 
+             element_text(hjust = 1.0, color = "red", size = 6))
+```
+
+#### Problem LC11.3 GDP per Capita vs Continent with Gapminder
+- `gdpPercap` vs `continent` with `gapminder`  
+- All countries in 2007  
+
+```{r `gapminder` gdpPercap vs `continent`}
+gapminder2007
+gdp_model <- lm(gdpPercap ~ continent, data = gapminder2007)
+reg_points <- gdp_model %>% 
+  get_regression_points()
+reg_points
+
+# Plots
+gf_point(residual ~ continent, height = 0, width =  0.05,data = reg_points)
+gf_histogram(~residual, binwidth = 2000,color = "white",data = reg_points)
+
+gapminder2007 %>% arrange(gdpPercap)
+```
+
+There are a large number of residuals $y - \hat y$ just on the positive side of zero, which means these have been **underestimated** by the model. But since the absolute value of the residuals for these points is small, we may say that the model is adequate. 
+
+#### Credit Card Balance vs Limit and Income
+
+```{r Balance vs Limit , Income}
+Credit
+Credit <- 
+  Credit %>%  
+  select(Balance, Limit, Income, Rating, Age)
+
+# Fit the model
+Balance_model <- lm(data = Credit, Balance ~ Limit + Income)
+Balance_model %>% get_regression_table()
+reg_points <- Balance_model %>% get_regression_points()
+
+# Plots
+gf_point(data = reg_points, residual ~ Limit)
+gf_point(data = reg_points, residual ~ Income)
+gf_histogram(data = reg_points, ~residual,binwidth = 20, color = "white")
+```
+
+There appears to be a pattern to the residuals and the histogram is also right skewed. Hence there are many residuals that have a negative value and hence the model is **overestimating** the credit card `balance` by a large amount.
+
+### Problem LC11.4 Credit Card Balance vs Rating and Age
+Balance vs Rating and Age
+
+```{r Credit `Balance vs `Rating` and `Age`}
+model_balance_2 <- lm(Balance~ Rating + Age, data = Credit)
+
+model_balance_2 %>% get_regression_table()
+
+reg_points <- model_balance_2 %>% 
+  get_regression_points()
+reg_points
+
+# Plots
+gf_histogram(~residual, binwidths = 10, color = "white", data = reg_points)
+gf_point(residual~ Rating, data = reg_points)
+gf_point(residual~ Age, data = reg_points)
+
+```
+Histogram is near bell shaped and symmetric around zero, so model appears to be good there. 
+
+Residuals vs Age is also adequately randomly distributed. 
+
+Residuals vs Rating seems to have some patterns, where the residuals for those with higher rating is always negative, and those in the lower range have a consistently positive residual. Perhaps the model is not able to relate `Rating` and `Balance` in a linear manner. 
+
+#### Teacher Scores one last time
+
+```{r Scores vs Age and Gender}
+evals_ch7 <- evals %>% select(score, age, gender)
+score_model_2 <- lm(score ~ age + gender, data = evals_ch7)
+
+score_model_2 %>% get_regression_table()
+
+reg_points <- score_model_2 %>% 
+  get_regression_points()
+reg_points
+
+# Plots
+gf_histogram(~residual | gender, binwidth = 0.25, color = "white",data = reg_points)
+
+gf_point(residual ~ age | gender, data = reg_points)
+```
+Histograms for residual are skewed left for both genders, so the model is underestimating scores.
+
+Plot of residual vs age seems random enough.
+
+
+
+# Thinking with Data
+
+## Case Study 1: Seattle House Prices
+>The dataset consists 21,613 houses and 21 variables describing these houses; for a full list of these variables see the help file by running ?house_prices in the console. In this case study, we’ll create a model using multiple regression where:
+ - The outcome variable y is the sale `price` of houses  
+The two explanatory/predictor variables we’ll use are :
+- `x1` : house size `sqft_living`, as measured by square feet of living space, where 1 square foot is about 0.09 square meters.    
+- `x2`: house `condition`, a categorical variable with 5 levels where 1 indicates “poor” and 5 indicates “excellent.”  
+
+### EDA
+```{r EDA of House Prices -1}
+house_prices %>% skim()
+house_prices %>% glimpse()
+```
+```{r EDA -2}
+gf_bar(~condition, data = house_prices, title ="House Condition")
+gf_histogram(~price, color = "white", data = house_prices, title = "House Prices")
+gf_histogram(~sqft_living, data = house_prices, title = "House Size")
+```
+
+Most houses are `<5000 sqft`, valued at USD 2,000,000` or less and in grades `3/4/5`. Though there are outliers at upto USD 8,000,000. 
+
+```{r EDA -3}
+house_prices %>% 
+  summarise(mean_price = mean(price),
+            median_price = median(price),
+            sd_price = sd(price),
+            IQR_price = IQR(price))
+```
+Median is lower than mean, since this is a right skewed distribution
+
+```{r EDA -4}
+house_prices %>% 
+  summarise(mean_sqft_living = mean(sqft_living),
+            median_sqft_living = median(sqft_living),
+            sd_sqft_living = sd(sqft_living),
+            IQR_sqft_living = IQR(sqft_living))
+```
+
+```{r EDA -5}
+# price and sqft vs categorical variables such as condition
+
+house_prices <- 
+  house_prices %>% 
+  mutate(log10price = log10(price), log10size = log10(sqft_living))
+
+gf_point(log10price~log10size, color = ~condition, alpha = 0.1,data = house_prices,title = "House Prices in Seatle", subtitle = "Linear Model with Interaction", caption = "Sleepless also..") %>% 
+  gf_smooth(method = "lm")
+
+# Can also look at facetted plots. Choose one of these and own it, says Chester Ismay
+
+gf_point(log10price~log10size |condition, color = ~condition, alpha = 0.1,data = house_prices,title = "House Prices in Seatle", subtitle = "Linear Model with Interaction", caption = "Sleepless also...") %>% 
+  gf_smooth(method = "lm")
+```
+Houses with `condition = 5` have the steepest increase in `price` vs `size`.
+
+
+### Regression Modelling
+
+```{r Regression Modelling}
+price_interaction <- lm(log10price ~ log10size*condition, data = house_prices)
+price_interaction %>% get_regression_table()
+```
+
+Interpreting these models we have:
+
+$$ In\ general \\
+\widehat{log10price} = \beta_0 + \beta_1*log10size + \beta_2 * condition + \\  \beta_3 * log10size * condition \\\
+where\\
+condition\, is\, a\, binary\, variable
+$$
+Which can be separately written for each `condition` as
+$$
+\begin{cases}
+\widehat{log10price} 
+ & \text{=  3.33+                  0.69 * log10size }\ { if }\ Condition = 1 \\ 
+ & \text{= (3.33+0.047) + (0.69--0.024)*log10size}\ { if }\ Condition =2 \\ 
+ & \text{= (3.33--0.367) + (0.69+0.133)*log10size}\ { if }\ Condition=3 \\ 
+ & \text{= (3.33--0.398) + (0.69+0.146)*log10size}\ { if }\ Condition=4 \\ 
+ & \text{= (3.33--0.883) + (0.69 +0.310)*log10size}\ { if }\ Condition=5 
+\end{cases}
+$$
+
+### Making Predictions
+We want to predict the price for :
+House: Condition 5; Area = 1900sqft
+
+```{r Prediction}
+gf_point(log10price ~ log10size, color = ~ condition, alpha = 0.1,data = house_prices,title = "House Prices in Seattle", subtitle = "Linear Model with Interaction", caption = "Sleepless also..") %>% 
+  gf_smooth(method = "lm") %>% 
+  gf_vline(xintercept = ~ log10(1900),linetype = "dashed")
+
+# Using the Condition 5 model we have
+log10predprice <- (3.33 - 0.883) + (0.69 + 0.31)*log10(1900)
+log10predprice
+Predicted_Price = 10^(log10predprice)
+Predicted_Price
+```
+
+### Problem LC12.1 Housing Price vs Area - Parallel slope model
+We want to predict the price for :
+House: Condition 5; Area = 1900sqft
+
+```{r Problem LC12.1 -1}
+
+price_parallel_model <- lm(log10price ~ log10size + condition, data = house_prices)
+get_regression_table(price_parallel_model)
+```
+
+
+The parallel slope models are:
+$$
+\begin{cases}
+\widehat{log10price} 
+ & \text{=  2.882+0.837 * log10size }\ { if }\ Condition=1 \\ 
+ & \text{= (2.882--0.039) + 0.837 * log10size }\ { if }\ Condition=2 \\ 
+ & \text{= (2.882+0.032) + 0.837 * log10size }\ { if }\ Condition=3 \\ 
+ & \text{= (2.882+0.044) + 0.837 * log10size }\ { if }\ Condition=4 \\ 
+ & \text{= (2.882+0.096) + 0.837 * log10size }\ { if }\ Condition=5 
+\end{cases}
+$$
+```{r Problem LC12.1 -2}
+# We want to predict the price for :
+# House: Condition 5; Area = 1900sqft
+
+house_prices %>% 
+  gf_point(log10price ~ log10size, color = ~ condition, alpha = 0.2, title = "Seattle House Prices",subtitle = "Parallel Slope Regression Model") %>% 
+  gf_abline(intercept = ~ 2.882, slope = ~0.837, color = ~ condition, data = filter(house_prices, condition == "1")) %>% 
+  gf_abline(intercept = ~ (2.882-0.039), slope = ~0.837, color = ~ condition, data = filter(house_prices, condition == "2")) %>% 
+  gf_abline(intercept = ~ (2.882 + 0.032), slope = ~0.837, color = ~ condition, data = filter(house_prices, condition == "3")) %>% 
+  gf_abline(intercept = ~ (2.882 +0.044), slope = ~0.837, color = ~ condition, data = filter(house_prices, condition == "4")) %>%
+  gf_abline(intercept = ~ (2.882 + 0.096), slope = ~0.837, color = ~ condition, data = filter(house_prices, condition == "5")) %>% 
+  gf_vline(xintercept = ~ log10(1900), linetype = "dashed")
+
+# Using the Condition 5 model we have
+log10predprice <- (2.882+0.096) + (0.837)*log10(1900)
+Predicted_Price = 10^(log10predprice)
+Predicted_Price
+
+```
+
+
+
+
