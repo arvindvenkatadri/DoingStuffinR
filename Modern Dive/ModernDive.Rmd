@@ -3,13 +3,6 @@ title: "ModernDive"
 author: "Arvind Venkatadri"
 date: "31/05/2019"
 output:
-  github_document: default
-  pdf_document:
-    toc: yes
-    latex_engine: xelatex
-  prettydoc::html_pretty:
-    highlight: github
-    theme: cayman
   html_document:
     df_print: default #kable/tibble/paged
     toc: yes
@@ -18,6 +11,13 @@ output:
     theme : darkly
     number_sections: true
     highlight: pygments
+  pdf_document:
+    toc: yes
+    latex_engine: xelatex
+  github_document: default
+  prettydoc::html_pretty:
+    highlight: github
+    theme: cayman
 ---
 # Introduction
 Following in the footsteps of Chester Ismay's *ModernDive*. I will use `ggformula`, however, to create the graphs where needed. 
@@ -144,7 +144,7 @@ The trick with understanding boxplots is that the shape of the boxplots is based
 
 ### Bar Plots
 
-This helps to visualize the distribution of a *categorical* variable. (No book had really stated this. Good on you, Chester Ismay!). This is a simpler task, as we are simply *counting* different categories, also known as *levels*, of a categorical variable. Depending upon whether the categorical variable is **pre-counted** or not, we choose a different type of bar plot.When the categorical variable whose distribution you want to visualize is:
+This helps to visualize the distribution of a *categorical* variable. (No book had really stated this. Good on you, Chester Ismay!). This is a simpler task, as we are simply *counting* different categories, also known as *levels*, of a categorical variable. Depending upon whether the categorical variable is **pre-counted** or not, we choose a different type of bar plot. When the categorical variable whose distribution you want to visualize is:
 
  - Is **not pre-counted** in your data frame: use `geom_bar()`.
  - Is **pre-counted** in your data frame, use `geom_col()` with the y-position aesthetic mapped to the variable that has the counts.
@@ -152,10 +152,10 @@ This helps to visualize the distribution of a *categorical* variable. (No book h
 #### One Categorical Variable
 
 ```{r Categorical variable `carrier`}
-gf_bar(data = flights, ~carrier) # uncounted
+gf_bar(data = flights, ~ carrier) # uncounted
 
 flights_counted <- as_tibble(xtabs(data = flights, ~carrier)) # pre-counted table
-gf_col(n~carrier, data = flights_counted)
+gf_col(n ~ carrier, data = flights_counted)
 ```
 
 #### Two Categorical Variables
@@ -850,7 +850,7 @@ As before,
  -- for women: $b_0 = 4.484$  
  -- for men: $b_0 +b_{male} = 4.484 + 0.191 = 4.675$
  
-Both men and women models have the same slope. In other words, in this model the associated `effect size` of `age` is the same for men and women. So for every increase of one year in `age`, there is on average an associated change of $b_{age} = -0.009$ (a decrease) in teaching `score`.
+**Both men and women models have the same slope**. In other words, in this model the associated `effect size` of `age` is the same for men and women. So for every increase of one year in `age`, there is on average an associated change of $b_{age} = -0.009$ (a decrease) in teaching `score`.
   
 The two plots (before and after model) show that there may be an *interaction effect* between the two explanatory variables. So we next model that. 
 
@@ -1406,7 +1406,7 @@ bootstrap_distribution %>%
 ```{r visualising CI with `se`}
 
 # So we can do the same using SE
-# We use this when the botstrap distribution is near-normal
+# We use this when the bootstrap distribution is near-normal
 # Use normal percentiles to specify CI limits
 # setting type = "se" does this
 
@@ -1757,7 +1757,7 @@ Let's sample 34 each of action and romance movies.
 movie_genre_sample <- 
   movies_trimmed %>% 
   group_by(genre) %>% 
-  sample_n(34) %>% 
+  sample_n(34) %>% # 34 of each genre!
   ungroup()
 ```
 
@@ -1821,9 +1821,14 @@ generated_samples <-
 null_distribution_two_means <- 
   generated_samples %>% 
   calculate(stat = "diff in means", order = c("Romance", "Action"))
- 
+
+#deprecated command 
 null_distribution_two_means %>%  
   visualise(obs_stat = obs_diff,direction = "both",bins = 100)
+
+#latest and greatest command...things change before I can get used to them.;-()
+null_distribution_two_means %>%  
+  visualise() + shade_p_value(obs_stat = obs_diff,direction = "both")
 
 p_value <- 
   null_distribution_two_means %>% 
@@ -1831,7 +1836,7 @@ p_value <-
 p_value
 ```
 
-This p-value is very small and less than $\alpha = 0.05$. This is the probability of obtaining the obs_diff by chance, ASSUMING that Null Hypothesis is true. Hence we need to reject the null hypothesis and state that there is evidence that the mean ratings between Romance and Action movies are indeed different.
+This p-value is very small and less than $\alpha = 0.05$. This is the probability of obtaining the `obs_diff` by chance, ASSUMING that Null Hypothesis is true. Hence we need to reject the null hypothesis and state that there is evidence that the mean ratings between Romance and Action movies are indeed different.
 
 In order to generate Confidence Intervals with the *single sample* we have, we turn to the bootstrap method again:
 
@@ -1875,6 +1880,8 @@ null_dist <- samples %>%
 
 #Visualise
 null_dist %>% visualise()
+null_dist %>%  
+  visualise() + shade_p_value(obs_stat = obs_diff,direction = "both")
 
 # p_value and ci
 p_value <- null_dist %>% 
@@ -1957,7 +1964,7 @@ bootstrap_slope_dist <- evals %>%
   calculate(stat = "slope")
 
 bootstrap_slope_dist %>% 
-  visualise(obs_stat = obs_slope)
+  visualise() + shade_p_value(obs_stat = obs_slope,direction = "both")
 
 
 #Percentile Bootstrap Confidence Intervals
@@ -1978,7 +1985,7 @@ Since we have a large number of samples we have symmetric bell-shaped distributi
 ### Problem LC11.1
 Repeat the inference using `stat = "correlation"` in `calculate()`. 
 
-```{r LC11.1 Correlation instead of slope}
+```{r LC11.1 Correlation instead of slope -1}
 # Observed Statistic
 obs_cor <- 
   evals %>% 
@@ -1995,21 +2002,24 @@ null_dist_cor <-
   calculate(stat = "correlation")
 
 null_dist_cor %>% 
-  visualise(obs_stat = obs_cor,direction = "greater")
+  visualise() + shade_p_value(obs_stat = obs_cor,direction = "greater")
 
 p_value <- 
   null_dist_cor %>% 
   get_p_value(obs_stat = obs_cor,direction = "greater")
 p_value
+```
 
-# CI wit bootstrap
+# CI with bootstrap
+```{r LC11.1 Correlation instead of slope -2}
 bootstrap_cor_dist <- 
   evals %>% 
   specify(score ~ bty_avg) %>% 
   generate(reps = 10000, type = "bootstrap") %>% 
   calculate(stat = "correlation") 
 
-bootstrap_cor_dist %>% visualise(obs_stat = obs_cor)
+bootstrap_cor_dist %>% 
+  visualise() + shade_p_value(obs_stat = obs_cor, direction = "greater")
 
 percentile_ci_cor <- 
   bootstrap_cor_dist %>% 
@@ -2045,25 +2055,43 @@ score_model_1 <- lm(score ~ gender + age, data = evals_multiple)
 score_model_1 %>% 
   get_regression_table()
 
+
 # Model with Interaction
-score_model_2 <- lm(score ~ gender*age, data = evals_multiple)
+score_model_2 <- lm(score ~ gender * age, data = evals_multiple)
 score_model_2 %>% 
   get_regression_table()
 
-#Plots without interaction ( Note the use of `~` everywhere!!)
+
+#Plots without interaction ( Note the use of `~` everywhere!!) 
+#Somewhat clumsy code 
+# evals_multiple %>% 
+#   gf_point(score ~ age, color = ~ gender, data = evals_multiple, 
+#            title = "Plots without Interaction") %>% 
+#   gf_abline(data = filter(evals_multiple, gender == "male"), 
+#             intercept = ~ 4.484+0.191, slope = ~ -0.009,color = ~ gender) %>% 
+#   gf_abline(data = filter(evals_multiple, gender == "female"), 
+#             intercept = ~ 4.484, slope = ~ -0.009,color = ~ gender)
+
+# Another more elegant way
+library(modelr)
 evals_multiple %>% 
-  gf_point(score ~ age, color = ~ gender, data = evals_multiple) %>% 
-  gf_abline(data = filter(evals_multiple, gender == "male"), 
-            intercept = ~ 4.484+0.191, slope = ~ -0.009,color = ~gender) %>% 
-  gf_abline(data = filter(evals_multiple, gender == "female"), 
-            intercept = ~ 4.484, slope = ~ -0.009,color = ~ gender)
+     add_predictions(., score_model_1) %>% 
+     gf_point(score ~ age, color = ~ gender, title = "Plots without Interaction") %>% 
+     gf_line(pred ~ age, color = ~ gender)
 
 # Plots with interaction
-evals_multiple %>% 
-  gf_point(score ~ age, color = ~ gender, data = evals_multiple) %>% 
-  gf_abline( intercept = ~ 4.883 - 0.446,slope =  ~ -0.018+0.014, color = ~gender, data = filter(evals_multiple, gender == "male")) %>% 
-  gf_abline( intercept = ~ 4.883,slope =  ~ -0.018, color = ~gender, data = filter(evals_multiple, gender == "female"))
+# Clumsy Code
+# evals_multiple %>% 
+#   gf_point(score ~ age, color = ~ gender, data = evals_multiple, title = "Plots with Interaction") %>% 
+#   gf_abline( intercept = ~ 4.883 - 0.446,slope =  ~ -0.018+0.014, color = ~gender, data = filter(evals_multiple, gender == "male")) %>% 
+#   gf_abline( intercept = ~ 4.883,slope =  ~ -0.018, color = ~gender, data = filter(evals_multiple, gender == "female"))
    
+# Another more elegant way
+#library(modelr)
+evals_multiple %>% 
+     add_predictions(., score_model_2) %>% 
+     gf_point(score ~ age, color = ~ gender, title = "Plots with Interaction") %>% 
+     gf_line(pred ~ age, color = ~ gender)
 ```
 
 **Gothcha !!!!**
@@ -2071,7 +2099,7 @@ evals_multiple %>%
 
  
 ### Residual Analysis
- > Recall the residuals can be thought of as the error or the “lack-of-fit” between the observed value y and the fitted value ˆy on the blue regression line in Figure 6.6. Ideally when we fit a regression model, we’d like there to be no systematic pattern to these residuals.
+ > Recall the residuals can be thought of as the error or the “lack-of-fit” between the observed value y and the fitted value `ˆy` on the blue regression line in Figure 6.6. Ideally when we fit a regression model, we’d like there to be no systematic pattern to these residuals.
  
 We investigate the residuals in this section. We can also decide based on that analysis if the model we have is too simple.
 
@@ -2125,6 +2153,8 @@ There is some negative skew again, as with the `bty_avg` explanatory variable.
 #### Life Expectancy vs Continent with Gapminder Data
 
 ```{r `Gapminder` residuals}
+library(gapminder)
+gapminder2007 <- gapminder %>% filter(year == "2007")
 lifeExp_model <- lm(data = gapminder2007, lifeExp ~ continent)
 
 lifeExp_model %>% get_regression_table()
@@ -2346,13 +2376,13 @@ get_regression_table(price_parallel_model)
 
 The parallel slope models are:
 $$
+\widehat{log10price} =  
 \begin{cases}
-\widehat{log10price} 
- & \text{=  2.882+0.837 * log10size }\ { if }\ Condition=1 \\ 
- & \text{= (2.882--0.039) + 0.837 * log10size }\ { if }\ Condition=2 \\ 
- & \text{= (2.882+0.032) + 0.837 * log10size }\ { if }\ Condition=3 \\ 
- & \text{= (2.882+0.044) + 0.837 * log10size }\ { if }\ Condition=4 \\ 
- & \text{= (2.882+0.096) + 0.837 * log10size }\ { if }\ Condition=5 
+ & \text{   2.882 + 0.837 * log10size }\ { if }\ Condition=1 \\ 
+ & \text{ (2.882 -- 0.039) + 0.837 * log10size }\ { if }\ Condition=2 \\ 
+ & \text{ (2.882 + 0.032) + 0.837 * log10size }\ { if }\ Condition=3 \\ 
+ & \text{ (2.882 + 0.044) + 0.837 * log10size }\ { if }\ Condition=4 \\ 
+ & \text{ (2.882 + 0.096) + 0.837 * log10size }\ { if }\ Condition=5 
 \end{cases}
 $$
 ```{r Problem LC12.1 -2}

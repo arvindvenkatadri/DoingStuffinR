@@ -20,6 +20,7 @@ variables, the X’s, so that
 Y = b_0 + b_1X_1 + b_2X_2 + ... + b_kX_k  + e
 \]
 
+
 In the GLZs, the model is assumed to be: \[
 Y = g (b_0 + b_1X_1 + b_2X_2 + ... + b_kX_k )+ e
 \] The `inverse` of the funtion `g(...)`, say f(…)`is called the`link

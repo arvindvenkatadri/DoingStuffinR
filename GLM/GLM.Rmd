@@ -10,9 +10,11 @@ output:
 library(tidyverse)
 library(modelr)
 library(ggformula)
-library(plantuml) # for documentation
+#library(plantuml) # for documentation
 library(DiagrammeR) # for documentation
 # updatePlantumlJar()
+library(here)
+here::set_here()
 ```
 
 

@@ -30,66 +30,64 @@ flights
 ```
 
     ## # A tibble: 336,776 x 19
-    ##     year month   day dep_time sched_dep_time dep_delay arr_time
-    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
-    ##  1  2013     1     1      517            515         2      830
-    ##  2  2013     1     1      533            529         4      850
-    ##  3  2013     1     1      542            540         2      923
-    ##  4  2013     1     1      544            545        -1     1004
-    ##  5  2013     1     1      554            600        -6      812
-    ##  6  2013     1     1      554            558        -4      740
-    ##  7  2013     1     1      555            600        -5      913
-    ##  8  2013     1     1      557            600        -3      709
-    ##  9  2013     1     1      557            600        -3      838
-    ## 10  2013     1     1      558            600        -2      753
-    ## # … with 336,766 more rows, and 12 more variables: sched_arr_time <int>,
-    ## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
-    ## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
-    ## #   minute <dbl>, time_hour <dttm>
+    ##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+    ##  1  2013     1     1      517            515         2      830            819
+    ##  2  2013     1     1      533            529         4      850            830
+    ##  3  2013     1     1      542            540         2      923            850
+    ##  4  2013     1     1      544            545        -1     1004           1022
+    ##  5  2013     1     1      554            600        -6      812            837
+    ##  6  2013     1     1      554            558        -4      740            728
+    ##  7  2013     1     1      555            600        -5      913            854
+    ##  8  2013     1     1      557            600        -3      709            723
+    ##  9  2013     1     1      557            600        -3      838            846
+    ## 10  2013     1     1      558            600        -2      753            745
+    ## # … with 336,766 more rows, and 11 more variables: arr_delay <dbl>,
+    ## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+    ## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
 
 ``` r
 head(flights)
 ```
 
     ## # A tibble: 6 x 19
-    ##    year month   day dep_time sched_dep_time dep_delay arr_time
-    ##   <int> <int> <int>    <int>          <int>     <dbl>    <int>
-    ## 1  2013     1     1      517            515         2      830
-    ## 2  2013     1     1      533            529         4      850
-    ## 3  2013     1     1      542            540         2      923
-    ## 4  2013     1     1      544            545        -1     1004
-    ## 5  2013     1     1      554            600        -6      812
-    ## 6  2013     1     1      554            558        -4      740
-    ## # … with 12 more variables: sched_arr_time <int>, arr_delay <dbl>,
-    ## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
-    ## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>,
-    ## #   time_hour <dttm>
+    ##    year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+    ##   <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+    ## 1  2013     1     1      517            515         2      830            819
+    ## 2  2013     1     1      533            529         4      850            830
+    ## 3  2013     1     1      542            540         2      923            850
+    ## 4  2013     1     1      544            545        -1     1004           1022
+    ## 5  2013     1     1      554            600        -6      812            837
+    ## 6  2013     1     1      554            558        -4      740            728
+    ## # … with 11 more variables: arr_delay <dbl>, carrier <chr>, flight <int>,
+    ## #   tailnum <chr>, origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>,
+    ## #   hour <dbl>, minute <dbl>, time_hour <dttm>
 
 ``` r
 glimpse(flights)
 ```
 
-    ## Observations: 336,776
-    ## Variables: 19
-    ## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2…
-    ## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-    ## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-    ## $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 558,…
-    ## $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 600,…
-    ## $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2, …
-    ## $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 753…
-    ## $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 745…
-    ## $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -3,…
-    ## $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV", "…
-    ## $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79, …
-    ## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN",…
-    ## $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR", …
-    ## $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL", …
-    ## $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138, …
-    ## $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 944,…
-    ## $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6…
-    ## $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    ## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-0…
+    ## Rows: 336,776
+    ## Columns: 19
+    ## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, …
+    ## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 558, 558,…
+    ## $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 600, 600,…
+    ## $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2, -2, -…
+    ## $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 753, 849…
+    ## $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 745, 851…
+    ## $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -3, 7, -…
+    ## $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV", "B6", …
+    ## $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79, 301, …
+    ## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN", "N39…
+    ## $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR", "LGA"…
+    ## $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL", "IAD"…
+    ## $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138, 149, …
+    ## $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 944, 733,…
+    ## $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, …
+    ## $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, …
+    ## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-01 …
 
 ## Exploring `airports`
 
@@ -97,16 +95,16 @@ glimpse(flights)
 glimpse(airports)
 ```
 
-    ## Observations: 1,458
-    ## Variables: 8
-    ## $ faa   <chr> "04G", "06A", "06C", "06N", "09J", "0A9", "0G6", "0G7", "0…
-    ## $ name  <chr> "Lansdowne Airport", "Moton Field Municipal Airport", "Sch…
-    ## $ lat   <dbl> 41.13, 32.46, 41.99, 41.43, 31.07, 36.37, 41.47, 42.88, 39…
-    ## $ lon   <dbl> -80.62, -85.68, -88.10, -74.39, -81.43, -82.17, -84.51, -7…
-    ## $ alt   <int> 1044, 264, 801, 523, 11, 1593, 730, 492, 1000, 108, 409, 8…
-    ## $ tz    <dbl> -5, -6, -6, -5, -5, -5, -5, -5, -5, -8, -5, -6, -5, -5, -5…
-    ## $ dst   <chr> "A", "A", "A", "A", "A", "A", "A", "A", "U", "A", "A", "U"…
-    ## $ tzone <chr> "America/New_York", "America/Chicago", "America/Chicago", …
+    ## Rows: 1,458
+    ## Columns: 8
+    ## $ faa   <chr> "04G", "06A", "06C", "06N", "09J", "0A9", "0G6", "0G7", "0P2", …
+    ## $ name  <chr> "Lansdowne Airport", "Moton Field Municipal Airport", "Schaumbu…
+    ## $ lat   <dbl> 41.13, 32.46, 41.99, 41.43, 31.07, 36.37, 41.47, 42.88, 39.79, …
+    ## $ lon   <dbl> -80.62, -85.68, -88.10, -74.39, -81.43, -82.17, -84.51, -76.78,…
+    ## $ alt   <dbl> 1044, 264, 801, 523, 11, 1593, 730, 492, 1000, 108, 409, 875, 1…
+    ## $ tz    <dbl> -5, -6, -6, -5, -5, -5, -5, -5, -5, -8, -5, -6, -5, -5, -5, -5,…
+    ## $ dst   <chr> "A", "A", "A", "A", "A", "A", "A", "A", "U", "A", "A", "U", "A"…
+    ## $ tzone <chr> "America/New_York", "America/Chicago", "America/Chicago", "Amer…
 
 ## The 5NG - Five Named Graphs
 
@@ -154,23 +152,23 @@ ordering**.
 glimpse(weather)
 ```
 
-    ## Observations: 26,115
-    ## Variables: 15
-    ## $ origin     <chr> "EWR", "EWR", "EWR", "EWR", "EWR", "EWR", "EWR", "EWR…
-    ## $ year       <dbl> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013,…
-    ## $ month      <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    ## $ day        <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-    ## $ hour       <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17…
-    ## $ temp       <dbl> 39.02, 39.02, 39.02, 39.92, 39.02, 37.94, 39.02, 39.9…
-    ## $ dewp       <dbl> 26.06, 26.96, 28.04, 28.04, 28.04, 28.04, 28.04, 28.0…
-    ## $ humid      <dbl> 59.37, 61.63, 64.43, 62.21, 64.43, 67.21, 64.43, 62.2…
-    ## $ wind_dir   <dbl> 270, 250, 240, 250, 260, 240, 240, 250, 260, 260, 260…
-    ## $ wind_speed <dbl> 10.357, 8.055, 11.508, 12.659, 12.659, 11.508, 14.960…
-    ## $ wind_gust  <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N…
-    ## $ precip     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    ## $ pressure   <dbl> 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1013,…
-    ## $ visib      <dbl> 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 1…
-    ## $ time_hour  <dttm> 2013-01-01 01:00:00, 2013-01-01 02:00:00, 2013-01-01…
+    ## Rows: 26,115
+    ## Columns: 15
+    ## $ origin     <chr> "EWR", "EWR", "EWR", "EWR", "EWR", "EWR", "EWR", "EWR", "E…
+    ## $ year       <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013…
+    ## $ month      <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    ## $ day        <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+    ## $ hour       <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18,…
+    ## $ temp       <dbl> 39.02, 39.02, 39.02, 39.92, 39.02, 37.94, 39.02, 39.92, 39…
+    ## $ dewp       <dbl> 26.06, 26.96, 28.04, 28.04, 28.04, 28.04, 28.04, 28.04, 28…
+    ## $ humid      <dbl> 59.37, 61.63, 64.43, 62.21, 64.43, 67.21, 64.43, 62.21, 62…
+    ## $ wind_dir   <dbl> 270, 250, 240, 250, 260, 240, 240, 250, 260, 260, 260, 330…
+    ## $ wind_speed <dbl> 10.357, 8.055, 11.508, 12.659, 12.659, 11.508, 14.960, 10.…
+    ## $ wind_gust  <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 20…
+    ## $ precip     <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    ## $ pressure   <dbl> 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1012, 1013, 1012…
+    ## $ visib      <dbl> 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10…
+    ## $ time_hour  <dttm> 2013-01-01 01:00:00, 2013-01-01 02:00:00, 2013-01-01 03:0…
 
 We will look at the `temp` variable at *EWR* airport, between Jan 1 to
 Jan 15.
@@ -326,22 +324,21 @@ flights %>%
 ```
 
     ## # A tibble: 815 x 19
-    ##     year month   day dep_time sched_dep_time dep_delay arr_time
-    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
-    ##  1  2013    10     1      729            735        -6     1049
-    ##  2  2013    10     1      853            900        -7     1217
-    ##  3  2013    10     1      916            925        -9     1016
-    ##  4  2013    10     1     1216           1221        -5     1326
-    ##  5  2013    10     1     1452           1459        -7     1602
-    ##  6  2013    10     1     1459           1500        -1     1817
-    ##  7  2013    10     1     1754           1800        -6     2102
-    ##  8  2013    10     1     1825           1830        -5     2159
-    ##  9  2013    10     1     1925           1930        -5     2227
-    ## 10  2013    10     1     2238           2245        -7     2348
-    ## # … with 805 more rows, and 12 more variables: sched_arr_time <int>,
-    ## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
-    ## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
-    ## #   minute <dbl>, time_hour <dttm>
+    ##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+    ##  1  2013    10     1      729            735        -6     1049           1040
+    ##  2  2013    10     1      853            900        -7     1217           1157
+    ##  3  2013    10     1      916            925        -9     1016           1033
+    ##  4  2013    10     1     1216           1221        -5     1326           1328
+    ##  5  2013    10     1     1452           1459        -7     1602           1622
+    ##  6  2013    10     1     1459           1500        -1     1817           1829
+    ##  7  2013    10     1     1754           1800        -6     2102           2103
+    ##  8  2013    10     1     1825           1830        -5     2159           2150
+    ##  9  2013    10     1     1925           1930        -5     2227           2250
+    ## 10  2013    10     1     2238           2245        -7     2348           2353
+    ## # … with 805 more rows, and 11 more variables: arr_delay <dbl>, carrier <chr>,
+    ## #   flight <int>, tailnum <chr>, origin <chr>, dest <chr>, air_time <dbl>,
+    ## #   distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
 
 ``` r
 # not BTV and not SEA
@@ -350,22 +347,21 @@ flights %>%
 ```
 
     ## # A tibble: 26,184 x 19
-    ##     year month   day dep_time sched_dep_time dep_delay arr_time
-    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
-    ##  1  2013    10     1      536            545        -9      809
-    ##  2  2013    10     1      539            545        -6      917
-    ##  3  2013    10     1      544            550        -6      912
-    ##  4  2013    10     1      549            600       -11      653
-    ##  5  2013    10     1      553            600        -7      829
-    ##  6  2013    10     1      557            600        -3      851
-    ##  7  2013    10     1      606            615        -9      744
-    ##  8  2013    10     1      621            630        -9      822
-    ##  9  2013    10     1      627            630        -3      917
-    ## 10  2013    10     1      627            630        -3      809
-    ## # … with 26,174 more rows, and 12 more variables: sched_arr_time <int>,
-    ## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
-    ## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
-    ## #   minute <dbl>, time_hour <dttm>
+    ##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+    ##  1  2013    10     1      536            545        -9      809            855
+    ##  2  2013    10     1      539            545        -6      917            933
+    ##  3  2013    10     1      544            550        -6      912            932
+    ##  4  2013    10     1      549            600       -11      653            716
+    ##  5  2013    10     1      553            600        -7      829            856
+    ##  6  2013    10     1      557            600        -3      851            923
+    ##  7  2013    10     1      606            615        -9      744            811
+    ##  8  2013    10     1      621            630        -9      822            857
+    ##  9  2013    10     1      627            630        -3      917            922
+    ## 10  2013    10     1      627            630        -3      809            753
+    ## # … with 26,174 more rows, and 11 more variables: arr_delay <dbl>,
+    ## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+    ## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
 
 ``` r
 #or
@@ -373,22 +369,21 @@ flights %>% filter(origin == "JFK" & dest !="BTV" & dest !="SEA" & month >=10)
 ```
 
     ## # A tibble: 26,184 x 19
-    ##     year month   day dep_time sched_dep_time dep_delay arr_time
-    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
-    ##  1  2013    10     1      536            545        -9      809
-    ##  2  2013    10     1      539            545        -6      917
-    ##  3  2013    10     1      544            550        -6      912
-    ##  4  2013    10     1      549            600       -11      653
-    ##  5  2013    10     1      553            600        -7      829
-    ##  6  2013    10     1      557            600        -3      851
-    ##  7  2013    10     1      606            615        -9      744
-    ##  8  2013    10     1      621            630        -9      822
-    ##  9  2013    10     1      627            630        -3      917
-    ## 10  2013    10     1      627            630        -3      809
-    ## # … with 26,174 more rows, and 12 more variables: sched_arr_time <int>,
-    ## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
-    ## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
-    ## #   minute <dbl>, time_hour <dttm>
+    ##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+    ##  1  2013    10     1      536            545        -9      809            855
+    ##  2  2013    10     1      539            545        -6      917            933
+    ##  3  2013    10     1      544            550        -6      912            932
+    ##  4  2013    10     1      549            600       -11      653            716
+    ##  5  2013    10     1      553            600        -7      829            856
+    ##  6  2013    10     1      557            600        -3      851            923
+    ##  7  2013    10     1      606            615        -9      744            811
+    ##  8  2013    10     1      621            630        -9      822            857
+    ##  9  2013    10     1      627            630        -3      917            922
+    ## 10  2013    10     1      627            630        -3      809            753
+    ## # … with 26,174 more rows, and 11 more variables: arr_delay <dbl>,
+    ## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+    ## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
 
 ``` r
 # SEA, BTV, PDX, SFO, LAX
@@ -397,28 +392,29 @@ flights %>%
 ```
 
     ## # A tibble: 5,930 x 19
-    ##     year month   day dep_time sched_dep_time dep_delay arr_time
-    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
-    ##  1  2013    10     1      557            600        -3      851
-    ##  2  2013    10     1      627            630        -3      917
-    ##  3  2013    10     1      650            700       -10      929
-    ##  4  2013    10     1      657            700        -3      946
-    ##  5  2013    10     1      658            700        -2      941
-    ##  6  2013    10     1      658            700        -2      947
-    ##  7  2013    10     1      714            715        -1      949
-    ##  8  2013    10     1      729            735        -6     1049
-    ##  9  2013    10     1      739            740        -1     1028
-    ## 10  2013    10     1      739            745        -6     1032
-    ## # … with 5,920 more rows, and 12 more variables: sched_arr_time <int>,
-    ## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
-    ## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
-    ## #   minute <dbl>, time_hour <dttm>
+    ##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+    ##  1  2013    10     1      557            600        -3      851            923
+    ##  2  2013    10     1      627            630        -3      917            922
+    ##  3  2013    10     1      650            700       -10      929           1003
+    ##  4  2013    10     1      657            700        -3      946           1013
+    ##  5  2013    10     1      658            700        -2      941           1020
+    ##  6  2013    10     1      658            700        -2      947           1025
+    ##  7  2013    10     1      714            715        -1      949           1010
+    ##  8  2013    10     1      729            735        -6     1049           1040
+    ##  9  2013    10     1      739            740        -1     1028           1055
+    ## 10  2013    10     1      739            745        -6     1032           1100
+    ## # … with 5,920 more rows, and 11 more variables: arr_delay <dbl>,
+    ## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+    ## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>
 
 `filter` is the first of the verbs we should use in data wrangling, in
 order to clean the dataset and narrow the focus to the observations of
 interest.
 
-I need to work on the `scoped` versions of the `dplyr` verbs.
+I need to work on the `scoped` versions of the `dplyr` verbs. Update:
+24/04/2020: with `dplyr 1.0.0`, the `across()` function can be used in
+place of `scoped` verbs.
 
 ## `summarise`
 
@@ -437,7 +433,8 @@ summary_temp
 ## `group_by`
 
 ``` r
-weather %>% group_by(month) %>%
+weather %>% 
+  group_by(month) %>%
   summarise(
     mean_temp = mean(temp, na.rm = TRUE),
     sd_temp = sd(temp, na.rm = TRUE),
@@ -447,7 +444,7 @@ weather %>% group_by(month) %>%
 
     ## # A tibble: 12 x 4
     ##    month mean_temp sd_temp count
-    ##    <dbl>     <dbl>   <dbl> <int>
+    ##    <int>     <dbl>   <dbl> <int>
     ##  1     1      35.6   10.2   2226
     ##  2     2      34.3    6.98  2010
     ##  3     3      39.9    6.25  2227
@@ -487,7 +484,7 @@ by_origin_monthly
     ## # A tibble: 36 x 3
     ## # Groups:   origin [3]
     ##    origin month count
-    ##    <chr>  <dbl> <int>
+    ##    <chr>  <int> <int>
     ##  1 EWR        1   742
     ##  2 EWR        2   669
     ##  3 EWR        3   743
@@ -516,7 +513,7 @@ weather %>%
     ## # A tibble: 364 x 5
     ## # Groups:   month [12]
     ##    month   day count mean_temp sd_temp
-    ##    <dbl> <int> <int>     <dbl>   <dbl>
+    ##    <int> <int> <int>     <dbl>   <dbl>
     ##  1     1     1    67      37.0    4.00
     ##  2     1     2    72      28.7    3.45
     ##  3     1     3    72      30.0    2.58
@@ -618,7 +615,7 @@ weather
 
     ## # A tibble: 26,115 x 16
     ##    origin  year month   day  hour  temp  dewp humid wind_dir wind_speed
-    ##    <chr>  <dbl> <dbl> <int> <int> <dbl> <dbl> <dbl>    <dbl>      <dbl>
+    ##    <chr>  <int> <int> <int> <int> <dbl> <dbl> <dbl>    <dbl>      <dbl>
     ##  1 EWR     2013     1     1     1  39.0  26.1  59.4      270      10.4 
     ##  2 EWR     2013     1     1     2  39.0  27.0  61.6      250       8.06
     ##  3 EWR     2013     1     1     3  39.0  28.0  64.4      240      11.5 
@@ -629,9 +626,8 @@ weather
     ##  8 EWR     2013     1     1     8  39.9  28.0  62.2      250      10.4 
     ##  9 EWR     2013     1     1     9  39.9  28.0  62.2      260      15.0 
     ## 10 EWR     2013     1     1    10  41    28.0  59.6      260      13.8 
-    ## # … with 26,105 more rows, and 6 more variables: wind_gust <dbl>,
-    ## #   precip <dbl>, pressure <dbl>, visib <dbl>, time_hour <dttm>,
-    ## #   temp_in_c <dbl>
+    ## # … with 26,105 more rows, and 6 more variables: wind_gust <dbl>, precip <dbl>,
+    ## #   pressure <dbl>, visib <dbl>, time_hour <dttm>, temp_in_c <dbl>
 
 ``` r
 #Let’s compute average monthly temperatures in both °F and °C using the similar group_by() and summarize() code as in the previous section.
@@ -643,7 +639,7 @@ weather %>%
 
     ## # A tibble: 12 x 3
     ##    month mean_F mean_C
-    ##    <dbl>  <dbl>  <dbl>
+    ##    <int>  <dbl>  <dbl>
     ##  1     1   35.6   2.02
     ##  2     2   34.3   1.26
     ##  3     3   39.9   4.38
@@ -666,22 +662,22 @@ flights
 ```
 
     ## # A tibble: 336,776 x 20
-    ##     year month   day dep_time sched_dep_time dep_delay arr_time
-    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>
-    ##  1  2013     1     1      517            515         2      830
-    ##  2  2013     1     1      533            529         4      850
-    ##  3  2013     1     1      542            540         2      923
-    ##  4  2013     1     1      544            545        -1     1004
-    ##  5  2013     1     1      554            600        -6      812
-    ##  6  2013     1     1      554            558        -4      740
-    ##  7  2013     1     1      555            600        -5      913
-    ##  8  2013     1     1      557            600        -3      709
-    ##  9  2013     1     1      557            600        -3      838
-    ## 10  2013     1     1      558            600        -2      753
-    ## # … with 336,766 more rows, and 13 more variables: sched_arr_time <int>,
-    ## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
-    ## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
-    ## #   minute <dbl>, time_hour <dttm>, gain <dbl>
+    ##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+    ##  1  2013     1     1      517            515         2      830            819
+    ##  2  2013     1     1      533            529         4      850            830
+    ##  3  2013     1     1      542            540         2      923            850
+    ##  4  2013     1     1      544            545        -1     1004           1022
+    ##  5  2013     1     1      554            600        -6      812            837
+    ##  6  2013     1     1      554            558        -4      740            728
+    ##  7  2013     1     1      555            600        -5      913            854
+    ##  8  2013     1     1      557            600        -3      709            723
+    ##  9  2013     1     1      557            600        -3      838            846
+    ## 10  2013     1     1      558            600        -2      753            745
+    ## # … with 336,766 more rows, and 12 more variables: arr_delay <dbl>,
+    ## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+    ## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>, time_hour <dttm>,
+    ## #   gain <dbl>
 
 ``` r
 flights %>% 
@@ -770,10 +766,10 @@ done using `key variables` to match values across data\_frames.
 glimpse(airlines)
 ```
 
-    ## Observations: 16
-    ## Variables: 2
-    ## $ carrier <chr> "9E", "AA", "AS", "B6", "DL", "EV", "F9", "FL", "HA", "M…
-    ## $ name    <chr> "Endeavor Air Inc.", "American Airlines Inc.", "Alaska A…
+    ## Rows: 16
+    ## Columns: 2
+    ## $ carrier <chr> "9E", "AA", "AS", "B6", "DL", "EV", "F9", "FL", "HA", "MQ", "…
+    ## $ name    <chr> "Endeavor Air Inc.", "American Airlines Inc.", "Alaska Airlin…
 
 ``` r
 #Getting `carrier` info into `flights`
@@ -784,56 +780,56 @@ flights_joined <-
 glimpse(flights)
 ```
 
-    ## Observations: 336,776
-    ## Variables: 20
-    ## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2…
-    ## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-    ## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-    ## $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 558,…
-    ## $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 600,…
-    ## $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2, …
-    ## $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 753…
-    ## $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 745…
-    ## $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -3,…
-    ## $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV", "…
-    ## $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79, …
-    ## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN",…
-    ## $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR", …
-    ## $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL", …
-    ## $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138, …
-    ## $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 944,…
-    ## $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6…
-    ## $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    ## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-0…
-    ## $ gain           <dbl> -9, -16, -31, 17, 19, -16, -24, 11, 5, -10, 0, 1,…
+    ## Rows: 336,776
+    ## Columns: 20
+    ## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, …
+    ## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 558, 558,…
+    ## $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 600, 600,…
+    ## $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2, -2, -…
+    ## $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 753, 849…
+    ## $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 745, 851…
+    ## $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -3, 7, -…
+    ## $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV", "B6", …
+    ## $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79, 301, …
+    ## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN", "N39…
+    ## $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR", "LGA"…
+    ## $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL", "IAD"…
+    ## $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138, 149, …
+    ## $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 944, 733,…
+    ## $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, …
+    ## $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, …
+    ## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-01 …
+    ## $ gain           <dbl> -9, -16, -31, 17, 19, -16, -24, 11, 5, -10, 0, 1, -9, …
 
 ``` r
 glimpse(flights_joined)
 ```
 
-    ## Observations: 336,776
-    ## Variables: 21
-    ## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2…
-    ## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-    ## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-    ## $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 558,…
-    ## $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 600,…
-    ## $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2, …
-    ## $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 753…
-    ## $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 745…
-    ## $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -3,…
-    ## $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV", "…
-    ## $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79, …
-    ## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN",…
-    ## $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR", …
-    ## $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL", …
-    ## $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138, …
-    ## $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 944,…
-    ## $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6…
-    ## $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    ## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-0…
-    ## $ gain           <dbl> -9, -16, -31, 17, 19, -16, -24, 11, 5, -10, 0, 1,…
-    ## $ name           <chr> "United Air Lines Inc.", "United Air Lines Inc.",…
+    ## Rows: 336,776
+    ## Columns: 21
+    ## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, …
+    ## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ dep_time       <int> 517, 533, 542, 544, 554, 554, 555, 557, 557, 558, 558,…
+    ## $ sched_dep_time <int> 515, 529, 540, 545, 600, 558, 600, 600, 600, 600, 600,…
+    ## $ dep_delay      <dbl> 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2, -2, -…
+    ## $ arr_time       <int> 830, 850, 923, 1004, 812, 740, 913, 709, 838, 753, 849…
+    ## $ sched_arr_time <int> 819, 830, 850, 1022, 837, 728, 854, 723, 846, 745, 851…
+    ## $ arr_delay      <dbl> 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -3, 7, -…
+    ## $ carrier        <chr> "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV", "B6", …
+    ## $ flight         <int> 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79, 301, …
+    ## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N804JB", "N668DN", "N39…
+    ## $ origin         <chr> "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR", "LGA"…
+    ## $ dest           <chr> "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL", "IAD"…
+    ## $ air_time       <dbl> 227, 227, 160, 183, 116, 150, 158, 53, 140, 138, 149, …
+    ## $ distance       <dbl> 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 944, 733,…
+    ## $ hour           <dbl> 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, …
+    ## $ minute         <dbl> 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, …
+    ## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-01 …
+    ## $ gain           <dbl> -9, -16, -31, 17, 19, -16, -24, 11, 5, -10, 0, 1, -9, …
+    ## $ name           <chr> "United Air Lines Inc.", "United Air Lines Inc.", "Ame…
 
 Say instead we are interested in the destinations of all domestic
 flights departing NYC in 2013 and ask yourself:
@@ -848,16 +844,16 @@ flights departing NYC in 2013 and ask yourself:
 glimpse(airports)
 ```
 
-    ## Observations: 1,458
-    ## Variables: 8
-    ## $ faa   <chr> "04G", "06A", "06C", "06N", "09J", "0A9", "0G6", "0G7", "0…
-    ## $ name  <chr> "Lansdowne Airport", "Moton Field Municipal Airport", "Sch…
-    ## $ lat   <dbl> 41.13, 32.46, 41.99, 41.43, 31.07, 36.37, 41.47, 42.88, 39…
-    ## $ lon   <dbl> -80.62, -85.68, -88.10, -74.39, -81.43, -82.17, -84.51, -7…
-    ## $ alt   <int> 1044, 264, 801, 523, 11, 1593, 730, 492, 1000, 108, 409, 8…
-    ## $ tz    <dbl> -5, -6, -6, -5, -5, -5, -5, -5, -5, -8, -5, -6, -5, -5, -5…
-    ## $ dst   <chr> "A", "A", "A", "A", "A", "A", "A", "A", "U", "A", "A", "U"…
-    ## $ tzone <chr> "America/New_York", "America/Chicago", "America/Chicago", …
+    ## Rows: 1,458
+    ## Columns: 8
+    ## $ faa   <chr> "04G", "06A", "06C", "06N", "09J", "0A9", "0G6", "0G7", "0P2", …
+    ## $ name  <chr> "Lansdowne Airport", "Moton Field Municipal Airport", "Schaumbu…
+    ## $ lat   <dbl> 41.13, 32.46, 41.99, 41.43, 31.07, 36.37, 41.47, 42.88, 39.79, …
+    ## $ lon   <dbl> -80.62, -85.68, -88.10, -74.39, -81.43, -82.17, -84.51, -76.78,…
+    ## $ alt   <dbl> 1044, 264, 801, 523, 11, 1593, 730, 492, 1000, 108, 409, 875, 1…
+    ## $ tz    <dbl> -5, -6, -6, -5, -5, -5, -5, -5, -5, -8, -5, -6, -5, -5, -5, -5,…
+    ## $ dst   <chr> "A", "A", "A", "A", "A", "A", "A", "A", "U", "A", "A", "U", "A"…
+    ## $ tzone <chr> "America/New_York", "America/Chicago", "America/Chicago", "Amer…
 
 ``` r
 flights_with_airport_names <- 
@@ -865,35 +861,35 @@ flights_with_airport_names <-
 glimpse(flights_with_airport_names)
 ```
 
-    ## Observations: 329,174
-    ## Variables: 27
-    ## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2…
-    ## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-    ## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
-    ## $ dep_time       <int> 517, 533, 542, 554, 554, 555, 557, 557, 558, 558,…
-    ## $ sched_dep_time <int> 515, 529, 540, 600, 558, 600, 600, 600, 600, 600,…
-    ## $ dep_delay      <dbl> 2, 4, 2, -6, -4, -5, -3, -3, -2, -2, -2, -2, -2, …
-    ## $ arr_time       <int> 830, 850, 923, 812, 740, 913, 709, 838, 753, 849,…
-    ## $ sched_arr_time <int> 819, 830, 850, 837, 728, 854, 723, 846, 745, 851,…
-    ## $ arr_delay      <dbl> 11, 20, 33, -25, 12, 19, -14, -8, 8, -2, -3, 7, -…
-    ## $ carrier        <chr> "UA", "UA", "AA", "DL", "UA", "B6", "EV", "B6", "…
-    ## $ flight         <int> 1545, 1714, 1141, 461, 1696, 507, 5708, 79, 301, …
-    ## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N668DN", "N39463",…
-    ## $ origin         <chr> "EWR", "LGA", "JFK", "LGA", "EWR", "EWR", "LGA", …
-    ## $ dest           <chr> "IAH", "IAH", "MIA", "ATL", "ORD", "FLL", "IAD", …
-    ## $ air_time       <dbl> 227, 227, 160, 116, 150, 158, 53, 140, 138, 149, …
-    ## $ distance       <dbl> 1400, 1416, 1089, 762, 719, 1065, 229, 944, 733, …
-    ## $ hour           <dbl> 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6…
-    ## $ minute         <dbl> 15, 29, 40, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59,…
-    ## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-0…
-    ## $ gain           <dbl> -9, -16, -31, 19, -16, -24, 11, 5, -10, 0, 1, -9,…
-    ## $ name           <chr> "George Bush Intercontinental", "George Bush Inte…
-    ## $ lat            <dbl> 29.98, 29.98, 25.79, 33.64, 41.98, 26.07, 38.94, …
-    ## $ lon            <dbl> -95.34, -95.34, -80.29, -84.43, -87.90, -80.15, -…
-    ## $ alt            <int> 97, 97, 8, 1026, 668, 9, 313, 96, 668, 19, 26, 12…
-    ## $ tz             <dbl> -6, -6, -5, -5, -6, -5, -5, -5, -6, -5, -5, -8, -…
-    ## $ dst            <chr> "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",…
-    ## $ tzone          <chr> "America/Chicago", "America/Chicago", "America/Ne…
+    ## Rows: 329,174
+    ## Columns: 27
+    ## $ year           <int> 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, …
+    ## $ month          <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ day            <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+    ## $ dep_time       <int> 517, 533, 542, 554, 554, 555, 557, 557, 558, 558, 558,…
+    ## $ sched_dep_time <int> 515, 529, 540, 600, 558, 600, 600, 600, 600, 600, 600,…
+    ## $ dep_delay      <dbl> 2, 4, 2, -6, -4, -5, -3, -3, -2, -2, -2, -2, -2, -1, 0…
+    ## $ arr_time       <int> 830, 850, 923, 812, 740, 913, 709, 838, 753, 849, 853,…
+    ## $ sched_arr_time <int> 819, 830, 850, 837, 728, 854, 723, 846, 745, 851, 856,…
+    ## $ arr_delay      <dbl> 11, 20, 33, -25, 12, 19, -14, -8, 8, -2, -3, 7, -14, 3…
+    ## $ carrier        <chr> "UA", "UA", "AA", "DL", "UA", "B6", "EV", "B6", "AA", …
+    ## $ flight         <int> 1545, 1714, 1141, 461, 1696, 507, 5708, 79, 301, 49, 7…
+    ## $ tailnum        <chr> "N14228", "N24211", "N619AA", "N668DN", "N39463", "N51…
+    ## $ origin         <chr> "EWR", "LGA", "JFK", "LGA", "EWR", "EWR", "LGA", "JFK"…
+    ## $ dest           <chr> "IAH", "IAH", "MIA", "ATL", "ORD", "FLL", "IAD", "MCO"…
+    ## $ air_time       <dbl> 227, 227, 160, 116, 150, 158, 53, 140, 138, 149, 158, …
+    ## $ distance       <dbl> 1400, 1416, 1089, 762, 719, 1065, 229, 944, 733, 1028,…
+    ## $ hour           <dbl> 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, …
+    ## $ minute         <dbl> 15, 29, 40, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, 0, 0…
+    ## $ time_hour      <dttm> 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-01 …
+    ## $ gain           <dbl> -9, -16, -31, 19, -16, -24, 11, 5, -10, 0, 1, -9, 12, …
+    ## $ name           <chr> "George Bush Intercontinental", "George Bush Intercont…
+    ## $ lat            <dbl> 29.98, 29.98, 25.79, 33.64, 41.98, 26.07, 38.94, 28.43…
+    ## $ lon            <dbl> -95.34, -95.34, -80.29, -84.43, -87.90, -80.15, -77.46…
+    ## $ alt            <dbl> 97, 97, 8, 1026, 668, 9, 313, 96, 668, 19, 26, 126, 13…
+    ## $ tz             <dbl> -6, -6, -5, -5, -6, -5, -5, -5, -6, -5, -5, -8, -8, -6…
+    ## $ dst            <chr> "A", "A", "A", "A", "A", "A", "A", "A", "A", "A", "A",…
+    ## $ tzone          <chr> "America/Chicago", "America/Chicago", "America/New_Yor…
 
 ``` r
 named_dests <- 
@@ -907,18 +903,18 @@ named_dests
 ```
 
     ## # A tibble: 101 x 9
-    ##    dest  num_flights airport_name       lat    lon   alt    tz dst   tzone 
-    ##    <chr>       <int> <chr>            <dbl>  <dbl> <int> <dbl> <chr> <chr> 
-    ##  1 ORD         17283 Chicago Ohare I…  42.0  -87.9   668    -6 A     Ameri…
-    ##  2 ATL         17215 Hartsfield Jack…  33.6  -84.4  1026    -5 A     Ameri…
-    ##  3 LAX         16174 Los Angeles Intl  33.9 -118.    126    -8 A     Ameri…
-    ##  4 BOS         15508 General Edward …  42.4  -71.0    19    -5 A     Ameri…
-    ##  5 MCO         14082 Orlando Intl      28.4  -81.3    96    -5 A     Ameri…
-    ##  6 CLT         14064 Charlotte Dougl…  35.2  -80.9   748    -5 A     Ameri…
-    ##  7 SFO         13331 San Francisco I…  37.6 -122.     13    -8 A     Ameri…
-    ##  8 FLL         12055 Fort Lauderdale…  26.1  -80.2     9    -5 A     Ameri…
-    ##  9 MIA         11728 Miami Intl        25.8  -80.3     8    -5 A     Ameri…
-    ## 10 DCA          9705 Ronald Reagan W…  38.9  -77.0    15    -5 A     Ameri…
+    ##    dest  num_flights airport_name          lat    lon   alt    tz dst   tzone   
+    ##    <chr>       <int> <chr>               <dbl>  <dbl> <dbl> <dbl> <chr> <chr>   
+    ##  1 ORD         17283 Chicago Ohare Intl   42.0  -87.9   668    -6 A     America…
+    ##  2 ATL         17215 Hartsfield Jackson…  33.6  -84.4  1026    -5 A     America…
+    ##  3 LAX         16174 Los Angeles Intl     33.9 -118.    126    -8 A     America…
+    ##  4 BOS         15508 General Edward Law…  42.4  -71.0    19    -5 A     America…
+    ##  5 MCO         14082 Orlando Intl         28.4  -81.3    96    -5 A     America…
+    ##  6 CLT         14064 Charlotte Douglas …  35.2  -80.9   748    -5 A     America…
+    ##  7 SFO         13331 San Francisco Intl   37.6 -122.     13    -8 A     America…
+    ##  8 FLL         12055 Fort Lauderdale Ho…  26.1  -80.2     9    -5 A     America…
+    ##  9 MIA         11728 Miami Intl           25.8  -80.3     8    -5 A     America…
+    ## 10 DCA          9705 Ronald Reagan Wash…  38.9  -77.0    15    -5 A     America…
     ## # … with 91 more rows
 
 ### Using multiple `key` variables to `join`
@@ -930,25 +926,24 @@ flights_weather_joined
 ```
 
     ## # A tibble: 335,220 x 31
-    ##     year month   day dep_time sched_dep_time dep_delay arr_time
-    ##    <dbl> <dbl> <int>    <int>          <int>     <dbl>    <int>
-    ##  1  2013     1     1      517            515         2      830
-    ##  2  2013     1     1      533            529         4      850
-    ##  3  2013     1     1      542            540         2      923
-    ##  4  2013     1     1      544            545        -1     1004
-    ##  5  2013     1     1      554            600        -6      812
-    ##  6  2013     1     1      554            558        -4      740
-    ##  7  2013     1     1      555            600        -5      913
-    ##  8  2013     1     1      557            600        -3      709
-    ##  9  2013     1     1      557            600        -3      838
-    ## 10  2013     1     1      558            600        -2      753
-    ## # … with 335,210 more rows, and 24 more variables: sched_arr_time <int>,
-    ## #   arr_delay <dbl>, carrier <chr>, flight <int>, tailnum <chr>,
-    ## #   origin <chr>, dest <chr>, air_time <dbl>, distance <dbl>, hour <dbl>,
-    ## #   minute <dbl>, time_hour.x <dttm>, gain <dbl>, temp <dbl>, dewp <dbl>,
-    ## #   humid <dbl>, wind_dir <dbl>, wind_speed <dbl>, wind_gust <dbl>,
-    ## #   precip <dbl>, pressure <dbl>, visib <dbl>, time_hour.y <dttm>,
-    ## #   temp_in_c <dbl>
+    ##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+    ##    <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>
+    ##  1  2013     1     1      517            515         2      830            819
+    ##  2  2013     1     1      533            529         4      850            830
+    ##  3  2013     1     1      542            540         2      923            850
+    ##  4  2013     1     1      544            545        -1     1004           1022
+    ##  5  2013     1     1      554            600        -6      812            837
+    ##  6  2013     1     1      554            558        -4      740            728
+    ##  7  2013     1     1      555            600        -5      913            854
+    ##  8  2013     1     1      557            600        -3      709            723
+    ##  9  2013     1     1      557            600        -3      838            846
+    ## 10  2013     1     1      558            600        -2      753            745
+    ## # … with 335,210 more rows, and 23 more variables: arr_delay <dbl>,
+    ## #   carrier <chr>, flight <int>, tailnum <chr>, origin <chr>, dest <chr>,
+    ## #   air_time <dbl>, distance <dbl>, hour <dbl>, minute <dbl>,
+    ## #   time_hour.x <dttm>, gain <dbl>, temp <dbl>, dewp <dbl>, humid <dbl>,
+    ## #   wind_dir <dbl>, wind_speed <dbl>, wind_gust <dbl>, precip <dbl>,
+    ## #   pressure <dbl>, visib <dbl>, time_hour.y <dttm>, temp_in_c <dbl>
 
 ### LC4.20 Neat Problem
 
@@ -1018,18 +1013,18 @@ dem_score
 ```
 
     ## # A tibble: 96 x 10
-    ##    country   `1952` `1957` `1962` `1967` `1972` `1977` `1982` `1987` `1992`
-    ##    <chr>      <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
-    ##  1 Albania       -9     -9     -9     -9     -9     -9     -9     -9      5
-    ##  2 Argentina     -9     -1     -1     -9     -9     -9     -8      8      7
-    ##  3 Armenia       -9     -7     -7     -7     -7     -7     -7     -7      7
-    ##  4 Australia     10     10     10     10     10     10     10     10     10
-    ##  5 Austria       10     10     10     10     10     10     10     10     10
-    ##  6 Azerbaij…     -9     -7     -7     -7     -7     -7     -7     -7      1
-    ##  7 Belarus       -9     -7     -7     -7     -7     -7     -7     -7      7
-    ##  8 Belgium       10     10     10     10     10     10     10     10     10
-    ##  9 Bhutan       -10    -10    -10    -10    -10    -10    -10    -10    -10
-    ## 10 Bolivia       -4     -3     -3     -4     -7     -7      8      9      9
+    ##    country    `1952` `1957` `1962` `1967` `1972` `1977` `1982` `1987` `1992`
+    ##    <chr>       <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+    ##  1 Albania        -9     -9     -9     -9     -9     -9     -9     -9      5
+    ##  2 Argentina      -9     -1     -1     -9     -9     -9     -8      8      7
+    ##  3 Armenia        -9     -7     -7     -7     -7     -7     -7     -7      7
+    ##  4 Australia      10     10     10     10     10     10     10     10     10
+    ##  5 Austria        10     10     10     10     10     10     10     10     10
+    ##  6 Azerbaijan     -9     -7     -7     -7     -7     -7     -7     -7      1
+    ##  7 Belarus        -9     -7     -7     -7     -7     -7     -7     -7      7
+    ##  8 Belgium        10     10     10     10     10     10     10     10     10
+    ##  9 Bhutan        -10    -10    -10    -10    -10    -10    -10    -10    -10
+    ## 10 Bolivia        -4     -3     -3     -4     -7     -7      8      9      9
     ## # … with 86 more rows
 
 In this `dem_score` data frame, the minimum value of `-10` corresponds
@@ -1043,18 +1038,18 @@ drinks
 ```
 
     ## # A tibble: 193 x 5
-    ##    country   beer_servings spirit_servings wine_servings total_litres_of_p…
-    ##    <chr>             <int>           <int>         <int>              <dbl>
-    ##  1 Afghanis…             0               0             0                0  
-    ##  2 Albania              89             132            54                4.9
-    ##  3 Algeria              25               0            14                0.7
-    ##  4 Andorra             245             138           312               12.4
-    ##  5 Angola              217              57            45                5.9
-    ##  6 Antigua …           102             128            45                4.9
-    ##  7 Argentina           193              25           221                8.3
-    ##  8 Armenia              21             179            11                3.8
-    ##  9 Australia           261              72           212               10.4
-    ## 10 Austria             279              75           191                9.7
+    ##    country      beer_servings spirit_servings wine_servings total_litres_of_pur…
+    ##    <chr>                <int>           <int>         <int>                <dbl>
+    ##  1 Afghanistan              0               0             0                  0  
+    ##  2 Albania                 89             132            54                  4.9
+    ##  3 Algeria                 25               0            14                  0.7
+    ##  4 Andorra                245             138           312                 12.4
+    ##  5 Angola                 217              57            45                  5.9
+    ##  6 Antigua & B…           102             128            45                  4.9
+    ##  7 Argentina              193              25           221                  8.3
+    ##  8 Armenia                 21             179            11                  3.8
+    ##  9 Australia              261              72           212                 10.4
+    ## 10 Austria                279              75           191                  9.7
     ## # … with 183 more rows
 
 ``` r
@@ -1094,12 +1089,9 @@ So we need to `gather` this data into narrow form
 ``` r
 drinks_smaller_tidy <- 
   drinks_smaller %>% 
-  gather(key = type_of_drink,
-# key contains column names of the original data frame that you want to tidy. 
-value = servings,
-# take columns names and values from these columns
-... = c(beer,spirit,wine)
-)
+  pivot_longer(., cols = c(beer,spirit,wine),
+    names_to = "type_of_drink",
+    values_to = "servings")
 drinks_smaller_tidy
 ```
 
@@ -1107,16 +1099,16 @@ drinks_smaller_tidy
     ##    country      type_of_drink servings
     ##    <chr>        <chr>            <int>
     ##  1 China        beer                79
-    ##  2 Italy        beer                85
-    ##  3 Saudi Arabia beer                 0
-    ##  4 USA          beer               249
-    ##  5 China        spirit             192
-    ##  6 Italy        spirit              42
-    ##  7 Saudi Arabia spirit               5
-    ##  8 USA          spirit             158
-    ##  9 China        wine                 8
-    ## 10 Italy        wine               237
-    ## 11 Saudi Arabia wine                 0
+    ##  2 China        spirit             192
+    ##  3 China        wine                 8
+    ##  4 Italy        beer                85
+    ##  5 Italy        spirit              42
+    ##  6 Italy        wine               237
+    ##  7 Saudi Arabia beer                 0
+    ##  8 Saudi Arabia spirit               5
+    ##  9 Saudi Arabia wine                 0
+    ## 10 USA          beer               249
+    ## 11 USA          spirit             158
     ## 12 USA          wine                84
 
 ``` r
@@ -1141,46 +1133,55 @@ airline_safety_smaller
 ```
 
     ## # A tibble: 56 x 7
-    ##    airline incidents_85_99 fatal_accidents… fatalities_85_99
-    ##    <chr>             <int>            <int>            <int>
-    ##  1 Aer Li…               2                0                0
-    ##  2 Aerofl…              76               14              128
-    ##  3 Aeroli…               6                0                0
-    ##  4 Aerome…               3                1               64
-    ##  5 Air Ca…               2                0                0
-    ##  6 Air Fr…              14                4               79
-    ##  7 Air In…               2                1              329
-    ##  8 Air Ne…               3                0                0
-    ##  9 Alaska…               5                0                0
-    ## 10 Alital…               7                2               50
-    ## # … with 46 more rows, and 3 more variables: incidents_00_14 <int>,
-    ## #   fatal_accidents_00_14 <int>, fatalities_00_14 <int>
+    ##    airline incidents_85_99 fatal_accidents… fatalities_85_99 incidents_00_14
+    ##    <chr>             <int>            <int>            <int>           <int>
+    ##  1 Aer Li…               2                0                0               0
+    ##  2 Aerofl…              76               14              128               6
+    ##  3 Aeroli…               6                0                0               1
+    ##  4 Aerome…               3                1               64               5
+    ##  5 Air Ca…               2                0                0               2
+    ##  6 Air Fr…              14                4               79               6
+    ##  7 Air In…               2                1              329               4
+    ##  8 Air Ne…               3                0                0               5
+    ##  9 Alaska…               5                0                0               5
+    ## 10 Alital…               7                2               50               4
+    ## # … with 46 more rows, and 2 more variables: fatal_accidents_00_14 <int>,
+    ## #   fatalities_00_14 <int>
 
 ``` r
-# How to tidy up this dataset?
+# How to tidy up this dataset? Here is the old code:
+
+# airline_safety_smaller_tidy <- 
+#   airline_safety_smaller %>% 
+#   gather(key = "incident_type_years", # What to call the stacked up column headers
+#          value = "count", # What to call the stacked up the readings
+#          ... = -airline) # Where to (not) stack from !!
+
+# airline_safety_smaller_tidy
+
+# New code
 
 airline_safety_smaller_tidy <- 
   airline_safety_smaller %>% 
-  gather(key = "incident_type_years", # What to call the stacked up column headers
-         value = "count", # What to call the stacked up the readings
-         ... = -airline) # Where to (not) stack from !!
-
+  pivot_longer(data = .,cols = c(-airline), 
+    names_to = "incident_type_years", 
+    values_to = "count")
 airline_safety_smaller_tidy
 ```
 
     ## # A tibble: 336 x 3
-    ##    airline               incident_type_years count
-    ##    <chr>                 <chr>               <int>
-    ##  1 Aer Lingus            incidents_85_99         2
-    ##  2 Aeroflot              incidents_85_99        76
-    ##  3 Aerolineas Argentinas incidents_85_99         6
-    ##  4 Aeromexico            incidents_85_99         3
-    ##  5 Air Canada            incidents_85_99         2
-    ##  6 Air France            incidents_85_99        14
-    ##  7 Air India             incidents_85_99         2
-    ##  8 Air New Zealand       incidents_85_99         3
-    ##  9 Alaska Airlines       incidents_85_99         5
-    ## 10 Alitalia              incidents_85_99         7
+    ##    airline    incident_type_years   count
+    ##    <chr>      <chr>                 <int>
+    ##  1 Aer Lingus incidents_85_99           2
+    ##  2 Aer Lingus fatal_accidents_85_99     0
+    ##  3 Aer Lingus fatalities_85_99          0
+    ##  4 Aer Lingus incidents_00_14           0
+    ##  5 Aer Lingus fatal_accidents_00_14     0
+    ##  6 Aer Lingus fatalities_00_14          0
+    ##  7 Aeroflot   incidents_85_99          76
+    ##  8 Aeroflot   fatal_accidents_85_99    14
+    ##  9 Aeroflot   fatalities_85_99        128
+    ## 10 Aeroflot   incidents_00_14           6
     ## # … with 326 more rows
 
 ``` r
@@ -1236,19 +1237,19 @@ library(gapminder)
 moderndive::evals
 ```
 
-    ## # A tibble: 463 x 13
-    ##       ID score   age bty_avg gender ethnicity language rank  pic_outfit
-    ##    <int> <dbl> <int>   <dbl> <fct>  <fct>     <fct>    <fct> <fct>     
-    ##  1     1   4.7    36    5    female minority  english  tenu… not formal
-    ##  2     2   4.1    36    5    female minority  english  tenu… not formal
-    ##  3     3   3.9    36    5    female minority  english  tenu… not formal
-    ##  4     4   4.8    36    5    female minority  english  tenu… not formal
-    ##  5     5   4.6    59    3    male   not mino… english  tenu… not formal
-    ##  6     6   4.3    59    3    male   not mino… english  tenu… not formal
-    ##  7     7   2.8    59    3    male   not mino… english  tenu… not formal
-    ##  8     8   4.1    51    3.33 male   not mino… english  tenu… not formal
-    ##  9     9   3.4    51    3.33 male   not mino… english  tenu… not formal
-    ## 10    10   4.5    40    3.17 female not mino… english  tenu… not formal
+    ## # A tibble: 463 x 14
+    ##       ID prof_ID score   age bty_avg gender ethnicity language rank  pic_outfit
+    ##    <int>   <int> <dbl> <int>   <dbl> <fct>  <fct>     <fct>    <fct> <fct>     
+    ##  1     1       1   4.7    36    5    female minority  english  tenu… not formal
+    ##  2     2       1   4.1    36    5    female minority  english  tenu… not formal
+    ##  3     3       1   3.9    36    5    female minority  english  tenu… not formal
+    ##  4     4       1   4.8    36    5    female minority  english  tenu… not formal
+    ##  5     5       2   4.6    59    3    male   not mino… english  tenu… not formal
+    ##  6     6       2   4.3    59    3    male   not mino… english  tenu… not formal
+    ##  7     7       2   2.8    59    3    male   not mino… english  tenu… not formal
+    ##  8     8       3   4.1    51    3.33 male   not mino… english  tenu… not formal
+    ##  9     9       3   3.4    51    3.33 male   not mino… english  tenu… not formal
+    ## 10    10       4   4.5    40    3.17 female not mino… english  tenu… not formal
     ## # … with 453 more rows, and 4 more variables: pic_color <fct>,
     ## #   cls_did_eval <int>, cls_students <int>, cls_level <fct>
 
@@ -1258,25 +1259,393 @@ evals_ch6 <- evals %>%
 glimpse(evals_ch6)
 ```
 
-    ## Observations: 463
-    ## Variables: 3
-    ## $ score   <dbl> 4.7, 4.1, 3.9, 4.8, 4.6, 4.3, 2.8, 4.1, 3.4, 4.5, 3.8, 4…
-    ## $ bty_avg <dbl> 5.000, 5.000, 5.000, 5.000, 3.000, 3.000, 3.000, 3.333, …
-    ## $ age     <int> 36, 36, 36, 36, 59, 59, 59, 51, 51, 40, 40, 40, 40, 40, …
+    ## Rows: 463
+    ## Columns: 3
+    ## $ score   <dbl> 4.7, 4.1, 3.9, 4.8, 4.6, 4.3, 2.8, 4.1, 3.4, 4.5, 3.8, 4.5, 4…
+    ## $ bty_avg <dbl> 5.000, 5.000, 5.000, 5.000, 3.000, 3.000, 3.000, 3.333, 3.333…
+    ## $ age     <int> 36, 36, 36, 36, 59, 59, 59, 51, 51, 40, 40, 40, 40, 40, 40, 4…
 
 ``` r
 evals_ch6 %>% select(score, bty_avg) %>% 
   skim()
 ```
 
-    ## Skim summary statistics
-    ##  n obs: 463 
-    ##  n variables: 2 
-    ## 
-    ## ── Variable type:numeric ─────────────────────────────────────────────────────────────────
-    ##  variable missing complete   n mean   sd   p0  p25  p50 p75 p100     hist
-    ##   bty_avg       0      463 463 4.42 1.53 1.67 3.17 4.33 5.5 8.17 ▂▅▅▇▃▃▂▁
-    ##     score       0      463 463 4.17 0.54 2.3  3.8  4.3  4.6 5    ▁▁▂▃▅▇▇▆
+<table style='width: auto;'
+        class='table table-condensed'>
+
+<caption>
+
+Data summary
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+Name
+
+</td>
+
+<td style="text-align:left;">
+
+Piped data
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of rows
+
+</td>
+
+<td style="text-align:left;">
+
+463
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of columns
+
+</td>
+
+<td style="text-align:left;">
+
+2
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Column type frequency:
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+numeric
+
+</td>
+
+<td style="text-align:left;">
+
+2
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Group variables
+
+</td>
+
+<td style="text-align:left;">
+
+None
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: numeric**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:right;">
+
+mean
+
+</th>
+
+<th style="text-align:right;">
+
+sd
+
+</th>
+
+<th style="text-align:right;">
+
+p0
+
+</th>
+
+<th style="text-align:right;">
+
+p25
+
+</th>
+
+<th style="text-align:right;">
+
+p50
+
+</th>
+
+<th style="text-align:right;">
+
+p75
+
+</th>
+
+<th style="text-align:right;">
+
+p100
+
+</th>
+
+<th style="text-align:left;">
+
+hist
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+score
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+4.17
+
+</td>
+
+<td style="text-align:right;">
+
+0.54
+
+</td>
+
+<td style="text-align:right;">
+
+2.30
+
+</td>
+
+<td style="text-align:right;">
+
+3.80
+
+</td>
+
+<td style="text-align:right;">
+
+4.30
+
+</td>
+
+<td style="text-align:right;">
+
+4.6
+
+</td>
+
+<td style="text-align:right;">
+
+5.00
+
+</td>
+
+<td style="text-align:left;">
+
+▁▁▅▇▇
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+bty\_avg
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+4.42
+
+</td>
+
+<td style="text-align:right;">
+
+1.53
+
+</td>
+
+<td style="text-align:right;">
+
+1.67
+
+</td>
+
+<td style="text-align:right;">
+
+3.17
+
+</td>
+
+<td style="text-align:right;">
+
+4.33
+
+</td>
+
+<td style="text-align:right;">
+
+5.5
+
+</td>
+
+<td style="text-align:right;">
+
+8.17
+
+</td>
+
+<td style="text-align:left;">
+
+▃▇▇▃▂
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ### Calculating correlations using `moderndive`
 
@@ -1286,9 +1655,9 @@ evals_ch6 %>%
 ```
 
     ## # A tibble: 1 x 1
-    ##   correlation
-    ##         <dbl>
-    ## 1       0.187
+    ##     cor
+    ##   <dbl>
+    ## 1 0.187
 
 ``` r
 gf_point(evals_ch6,score~bty_avg) %>% 
@@ -1334,9 +1703,9 @@ evals_ch6 %>% get_correlation(score ~age)
 ```
 
     ## # A tibble: 1 x 1
-    ##   correlation
-    ##         <dbl>
-    ## 1      -0.107
+    ##      cor
+    ##    <dbl>
+    ## 1 -0.107
 
 ``` r
 #LC6.2 Model
@@ -1417,12 +1786,18 @@ ggplot(evals_ch6, aes(x = bty_avg, y = score))+
 ## One *Categorical* Explanatory variable
 
 In this section, we’ll use the `gapminder` dataset to explore
-differences in life expectancy in two
-    ways:
+differences in life expectancy in two ways:
 
-    1. Differences between continents: Are there significant differences in life expectancy, on average, between the five continents of the world: Africa, the Americas, Asia, Europe, and Oceania?
+1.  Differences between continents: Are there significant differences in
+    life expectancy, on average, between the five continents of the
+    world: Africa, the Americas, Asia, Europe, and Oceania?
     
-    2. Differences within continents: How does life expectancy vary within the world’s five continents? For example, is the spread of life expectancy among the countries of Africa larger than the spread of life expectancy among the countries of Asia? ( This is called verbatim text in RMarkdown, achieved with indentation of 4 spaces)
+    2.  Differences within continents: How does life expectancy vary
+        within the world’s five continents? For example, is the spread
+        of life expectancy among the countries of Africa larger than the
+        spread of life expectancy among the countries of Asia? ( This is
+        called verbatim text in RMarkdown, achieved with indentation of
+        4 spaces)
 
 ### Gapminder
 
@@ -1433,37 +1808,544 @@ gapminder2007 <- gapminder %>%  filter(year == "2007") %>% select(country, conti
 glimpse(gapminder2007)
 ```
 
-    ## Observations: 142
-    ## Variables: 4
-    ## $ country   <fct> Afghanistan, Albania, Algeria, Angola, Argentina, Aust…
-    ## $ continent <fct> Asia, Europe, Africa, Africa, Americas, Oceania, Europ…
-    ## $ lifeExp   <dbl> 43.83, 76.42, 72.30, 42.73, 75.32, 81.23, 79.83, 75.64…
-    ## $ gdpPercap <dbl> 974.6, 5937.0, 6223.4, 4797.2, 12779.4, 34435.4, 36126…
+    ## Rows: 142
+    ## Columns: 4
+    ## $ country   <fct> Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
+    ## $ continent <fct> Asia, Europe, Africa, Africa, Americas, Oceania, Europe, As…
+    ## $ lifeExp   <dbl> 43.83, 76.42, 72.30, 42.73, 75.32, 81.23, 79.83, 75.64, 64.…
+    ## $ gdpPercap <dbl> 974.6, 5937.0, 6223.4, 4797.2, 12779.4, 34435.4, 36126.5, 2…
 
 ``` r
 #Further Explorations 1
 gapminder2007 %>% skim()
 ```
 
-    ## Skim summary statistics
-    ##  n obs: 142 
-    ##  n variables: 4 
-    ## 
-    ## ── Variable type:factor ──────────────────────────────────────────────────────────────────
-    ##   variable missing complete   n n_unique
-    ##  continent       0      142 142        5
-    ##    country       0      142 142      142
-    ##                          top_counts ordered
-    ##  Afr: 52, Asi: 33, Eur: 30, Ame: 25   FALSE
-    ##      Afg: 1, Alb: 1, Alg: 1, Ang: 1   FALSE
-    ## 
-    ## ── Variable type:numeric ─────────────────────────────────────────────────────────────────
-    ##   variable missing complete   n     mean       sd     p0     p25     p50
-    ##  gdpPercap       0      142 142 11680.07 12859.94 277.55 1624.84 6124.37
-    ##    lifeExp       0      142 142    67.01    12.07  39.61   57.16   71.94
-    ##       p75     p100     hist
-    ##  18008.84 49357.19 ▇▃▁▁▁▁▁▁
-    ##     76.41    82.6  ▂▂▂▂▂▃▇▇
+<table style='width: auto;'
+        class='table table-condensed'>
+
+<caption>
+
+Data summary
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+Name
+
+</td>
+
+<td style="text-align:left;">
+
+Piped data
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of rows
+
+</td>
+
+<td style="text-align:left;">
+
+142
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of columns
+
+</td>
+
+<td style="text-align:left;">
+
+4
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Column type frequency:
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+factor
+
+</td>
+
+<td style="text-align:left;">
+
+2
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+numeric
+
+</td>
+
+<td style="text-align:left;">
+
+2
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Group variables
+
+</td>
+
+<td style="text-align:left;">
+
+None
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: factor**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:left;">
+
+ordered
+
+</th>
+
+<th style="text-align:right;">
+
+n\_unique
+
+</th>
+
+<th style="text-align:left;">
+
+top\_counts
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+country
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:right;">
+
+142
+
+</td>
+
+<td style="text-align:left;">
+
+Afg: 1, Alb: 1, Alg: 1, Ang: 1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+continent
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+<td style="text-align:left;">
+
+Afr: 52, Asi: 33, Eur: 30, Ame: 25
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: numeric**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:right;">
+
+mean
+
+</th>
+
+<th style="text-align:right;">
+
+sd
+
+</th>
+
+<th style="text-align:right;">
+
+p0
+
+</th>
+
+<th style="text-align:right;">
+
+p25
+
+</th>
+
+<th style="text-align:right;">
+
+p50
+
+</th>
+
+<th style="text-align:right;">
+
+p75
+
+</th>
+
+<th style="text-align:right;">
+
+p100
+
+</th>
+
+<th style="text-align:left;">
+
+hist
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+lifeExp
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+67.01
+
+</td>
+
+<td style="text-align:right;">
+
+12.07
+
+</td>
+
+<td style="text-align:right;">
+
+39.61
+
+</td>
+
+<td style="text-align:right;">
+
+57.16
+
+</td>
+
+<td style="text-align:right;">
+
+71.94
+
+</td>
+
+<td style="text-align:right;">
+
+76.41
+
+</td>
+
+<td style="text-align:right;">
+
+82.6
+
+</td>
+
+<td style="text-align:left;">
+
+▂▃▃▆▇
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+gdpPercap
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+11680.07
+
+</td>
+
+<td style="text-align:right;">
+
+12859.94
+
+</td>
+
+<td style="text-align:right;">
+
+277.55
+
+</td>
+
+<td style="text-align:right;">
+
+1624.84
+
+</td>
+
+<td style="text-align:right;">
+
+6124.37
+
+</td>
+
+<td style="text-align:right;">
+
+18008.84
+
+</td>
+
+<td style="text-align:right;">
+
+49357.2
+
+</td>
+
+<td style="text-align:left;">
+
+▇▂▁▂▁
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ``` r
 gf_histogram(data = gapminder2007,~lifeExp)
@@ -1505,6 +2387,8 @@ gapminder2007 %>% gf_histogram(~lifeExp|continent, ylab = "Number of Countries",
 gf_boxplot(data = gapminder2007, lifeExp~continent, title = " Life Expectancy per Continent compared to Worldwide") %>% 
   gf_hline(yintercept = ~ median(gapminder2007$lifeExp),color = "blue")
 ```
+
+    ## Warning: Use of `gapminder2007$lifeExp` is discouraged. Use `lifeExp` instead.
 
 ![](ModernDive_files/figure-gfm/Gapminder%20EDA-2-2.png)<!-- -->
 
@@ -1599,7 +2483,9 @@ The model equation becomes
 \widehat{lifeExp} =
 b_0 +b_{Amer}* 1_{Amer}(x) + b_{Asia} * 1_{Asia}(y)\\
 +b_{Europe} * 1_{Europe}(z) + b_{Oceania} * 1_{Oceania}(p)
-\] \[
+\]
+
+\[
 where\\
 \pmb{b_0} = intercept\\
 \pmb{b_{Amer}} = Modelling \ Coefficient \ for \ American \ countries \ etc.\\
@@ -1653,10 +2539,10 @@ library(ISLR)
 We will use the `Credit` dataset from the book `ISLR` to demonstrate
 multiple regression with:
 
-    A numerical outcome variable y, in this case credit card `Balance`.
-    Two explanatory variables:
-    - A first numerical explanatory variable x1, in this case, their credit `Limit`.
-    - A second numerical explanatory variable x2, in this case, their `Income` (in thousands of dollars).
+A numerical outcome variable y, in this case credit card `Balance`. Two
+explanatory variables: - A first numerical explanatory variable x1, in
+this case, their credit `Limit`. - A second numerical explanatory
+variable x2, in this case, their `Income` (in thousands of dollars).
 
 ## Exploratory Data Analysis
 
@@ -1665,20 +2551,20 @@ multiple regression with:
 ISLR::Credit %>% glimpse()
 ```
 
-    ## Observations: 400
-    ## Variables: 12
-    ## $ ID        <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,…
-    ## $ Income    <dbl> 14.89, 106.03, 104.59, 148.92, 55.88, 80.18, 21.00, 71…
-    ## $ Limit     <int> 3606, 6645, 7075, 9504, 4897, 8047, 3388, 7114, 3300, …
-    ## $ Rating    <int> 283, 483, 514, 681, 357, 569, 259, 512, 266, 491, 589,…
-    ## $ Cards     <int> 2, 3, 4, 3, 2, 4, 2, 2, 5, 3, 4, 3, 1, 1, 2, 3, 3, 3, …
-    ## $ Age       <int> 34, 82, 71, 36, 68, 77, 37, 87, 66, 41, 30, 64, 57, 49…
-    ## $ Education <int> 11, 15, 11, 11, 16, 10, 12, 9, 13, 19, 14, 16, 7, 9, 1…
-    ## $ Gender    <fct>  Male, Female,  Male, Female,  Male,  Male, Female,  M…
-    ## $ Student   <fct> No, Yes, No, No, No, No, No, No, No, Yes, No, No, No, …
-    ## $ Married   <fct> Yes, Yes, No, No, Yes, No, No, No, No, Yes, Yes, No, Y…
-    ## $ Ethnicity <fct> Caucasian, Asian, Asian, Asian, Caucasian, Caucasian, …
-    ## $ Balance   <int> 333, 903, 580, 964, 331, 1151, 203, 872, 279, 1350, 14…
+    ## Rows: 400
+    ## Columns: 12
+    ## $ ID        <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, …
+    ## $ Income    <dbl> 14.89, 106.03, 104.59, 148.92, 55.88, 80.18, 21.00, 71.41, …
+    ## $ Limit     <int> 3606, 6645, 7075, 9504, 4897, 8047, 3388, 7114, 3300, 6819,…
+    ## $ Rating    <int> 283, 483, 514, 681, 357, 569, 259, 512, 266, 491, 589, 138,…
+    ## $ Cards     <int> 2, 3, 4, 3, 2, 4, 2, 2, 5, 3, 4, 3, 1, 1, 2, 3, 3, 3, 1, 2,…
+    ## $ Age       <int> 34, 82, 71, 36, 68, 77, 37, 87, 66, 41, 30, 64, 57, 49, 75,…
+    ## $ Education <int> 11, 15, 11, 11, 16, 10, 12, 9, 13, 19, 14, 16, 7, 9, 13, 15…
+    ## $ Gender    <fct>  Male, Female,  Male, Female,  Male,  Male, Female,  Male, …
+    ## $ Student   <fct> No, Yes, No, No, No, No, No, No, No, Yes, No, No, No, No, N…
+    ## $ Married   <fct> Yes, Yes, No, No, Yes, No, No, No, No, Yes, Yes, No, Yes, Y…
+    ## $ Ethnicity <fct> Caucasian, Asian, Asian, Asian, Caucasian, Caucasian, Afric…
+    ## $ Balance   <int> 333, 903, 580, 964, 331, 1151, 203, 872, 279, 1350, 1407, 0…
 
 ``` r
 Credit %>% 
@@ -1686,27 +2572,592 @@ Credit %>%
   skim()
 ```
 
-    ## Skim summary statistics
-    ##  n obs: 400 
-    ##  n variables: 5 
-    ## 
-    ## ── Variable type:integer ─────────────────────────────────────────────────────────────────
-    ##  variable missing complete   n    mean      sd  p0     p25    p50     p75
-    ##       Age       0      400 400   55.67   17.25  23   41.75   56     70   
-    ##   Balance       0      400 400  520.01  459.76   0   68.75  459.5  863   
-    ##     Limit       0      400 400 4735.6  2308.2  855 3088    4622.5 5872.75
-    ##    Rating       0      400 400  354.94  154.72  93  247.25  344    437.25
-    ##   p100     hist
-    ##     98 ▅▆▇▆▆▆▃▁
-    ##   1999 ▇▃▃▃▂▁▁▁
-    ##  13913 ▅▇▇▃▂▁▁▁
-    ##    982 ▅▇▇▅▂▁▁▁
-    ## 
-    ## ── Variable type:numeric ─────────────────────────────────────────────────────────────────
-    ##  variable missing complete   n  mean    sd    p0   p25   p50   p75   p100
-    ##    Income       0      400 400 45.22 35.24 10.35 21.01 33.12 57.47 186.63
-    ##      hist
-    ##  ▇▃▂▁▁▁▁▁
+<table style='width: auto;'
+        class='table table-condensed'>
+
+<caption>
+
+Data summary
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+Name
+
+</td>
+
+<td style="text-align:left;">
+
+Piped data
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of rows
+
+</td>
+
+<td style="text-align:left;">
+
+400
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of columns
+
+</td>
+
+<td style="text-align:left;">
+
+5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Column type frequency:
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+numeric
+
+</td>
+
+<td style="text-align:left;">
+
+5
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Group variables
+
+</td>
+
+<td style="text-align:left;">
+
+None
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: numeric**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:right;">
+
+mean
+
+</th>
+
+<th style="text-align:right;">
+
+sd
+
+</th>
+
+<th style="text-align:right;">
+
+p0
+
+</th>
+
+<th style="text-align:right;">
+
+p25
+
+</th>
+
+<th style="text-align:right;">
+
+p50
+
+</th>
+
+<th style="text-align:right;">
+
+p75
+
+</th>
+
+<th style="text-align:right;">
+
+p100
+
+</th>
+
+<th style="text-align:left;">
+
+hist
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+Balance
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+520.02
+
+</td>
+
+<td style="text-align:right;">
+
+459.76
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+68.75
+
+</td>
+
+<td style="text-align:right;">
+
+459.50
+
+</td>
+
+<td style="text-align:right;">
+
+863.00
+
+</td>
+
+<td style="text-align:right;">
+
+1999.0
+
+</td>
+
+<td style="text-align:left;">
+
+▇▅▃▂▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Limit
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+4735.60
+
+</td>
+
+<td style="text-align:right;">
+
+2308.20
+
+</td>
+
+<td style="text-align:right;">
+
+855.00
+
+</td>
+
+<td style="text-align:right;">
+
+3088.00
+
+</td>
+
+<td style="text-align:right;">
+
+4622.50
+
+</td>
+
+<td style="text-align:right;">
+
+5872.75
+
+</td>
+
+<td style="text-align:right;">
+
+13913.0
+
+</td>
+
+<td style="text-align:left;">
+
+▆▇▃▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Rating
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+354.94
+
+</td>
+
+<td style="text-align:right;">
+
+154.72
+
+</td>
+
+<td style="text-align:right;">
+
+93.00
+
+</td>
+
+<td style="text-align:right;">
+
+247.25
+
+</td>
+
+<td style="text-align:right;">
+
+344.00
+
+</td>
+
+<td style="text-align:right;">
+
+437.25
+
+</td>
+
+<td style="text-align:right;">
+
+982.0
+
+</td>
+
+<td style="text-align:left;">
+
+▆▇▃▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Age
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+55.67
+
+</td>
+
+<td style="text-align:right;">
+
+17.25
+
+</td>
+
+<td style="text-align:right;">
+
+23.00
+
+</td>
+
+<td style="text-align:right;">
+
+41.75
+
+</td>
+
+<td style="text-align:right;">
+
+56.00
+
+</td>
+
+<td style="text-align:right;">
+
+70.00
+
+</td>
+
+<td style="text-align:right;">
+
+98.0
+
+</td>
+
+<td style="text-align:left;">
+
+▆▇▇▇▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Income
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+45.22
+
+</td>
+
+<td style="text-align:right;">
+
+35.24
+
+</td>
+
+<td style="text-align:right;">
+
+10.35
+
+</td>
+
+<td style="text-align:right;">
+
+21.01
+
+</td>
+
+<td style="text-align:right;">
+
+33.12
+
+</td>
+
+<td style="text-align:right;">
+
+57.47
+
+</td>
+
+<td style="text-align:right;">
+
+186.6
+
+</td>
+
+<td style="text-align:left;">
+
+▇▂▁▁▁
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ``` r
 # Can do this simultaneously too
@@ -1726,19 +3177,15 @@ Credit %>%
 get_correlation(Balance ~ Limit, data = Credit)
 ```
 
-    ## # A tibble: 1 x 1
-    ##   correlation
-    ##         <dbl>
-    ## 1       0.862
+    ##      cor
+    ## 1 0.8617
 
 ``` r
 get_correlation(Balance ~ Income, data = Credit)
 ```
 
-    ## # A tibble: 1 x 1
-    ##   correlation
-    ##         <dbl>
-    ## 1       0.464
+    ##      cor
+    ## 1 0.4637
 
 ``` r
 # Balance vs Income
@@ -1772,11 +3219,11 @@ Credit %>%
   glimpse()
 ```
 
-    ## Observations: 400
-    ## Variables: 3
-    ## $ Balance <int> 333, 903, 580, 964, 331, 1151, 203, 872, 279, 1350, 1407…
-    ## $ Age     <int> 34, 82, 71, 36, 68, 77, 37, 87, 66, 41, 30, 64, 57, 49, …
-    ## $ Rating  <int> 283, 483, 514, 681, 357, 569, 259, 512, 266, 491, 589, 1…
+    ## Rows: 400
+    ## Columns: 3
+    ## $ Balance <int> 333, 903, 580, 964, 331, 1151, 203, 872, 279, 1350, 1407, 0, …
+    ## $ Age     <int> 34, 82, 71, 36, 68, 77, 37, 87, 66, 41, 30, 64, 57, 49, 75, 5…
+    ## $ Rating  <int> 283, 483, 514, 681, 357, 569, 259, 512, 266, 491, 589, 138, 3…
 
 ``` r
 # Summary Statistics
@@ -1785,19 +3232,452 @@ Credit %>%
   skim()
 ```
 
-    ## Skim summary statistics
-    ##  n obs: 400 
-    ##  n variables: 3 
-    ## 
-    ## ── Variable type:integer ─────────────────────────────────────────────────────────────────
-    ##  variable missing complete   n   mean     sd p0    p25   p50    p75 p100
-    ##       Age       0      400 400  55.67  17.25 23  41.75  56    70      98
-    ##   Balance       0      400 400 520.01 459.76  0  68.75 459.5 863    1999
-    ##    Rating       0      400 400 354.94 154.72 93 247.25 344   437.25  982
-    ##      hist
-    ##  ▅▆▇▆▆▆▃▁
-    ##  ▇▃▃▃▂▁▁▁
-    ##  ▅▇▇▅▂▁▁▁
+<table style='width: auto;'
+        class='table table-condensed'>
+
+<caption>
+
+Data summary
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+Name
+
+</td>
+
+<td style="text-align:left;">
+
+Piped data
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of rows
+
+</td>
+
+<td style="text-align:left;">
+
+400
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of columns
+
+</td>
+
+<td style="text-align:left;">
+
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Column type frequency:
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+numeric
+
+</td>
+
+<td style="text-align:left;">
+
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Group variables
+
+</td>
+
+<td style="text-align:left;">
+
+None
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: numeric**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:right;">
+
+mean
+
+</th>
+
+<th style="text-align:right;">
+
+sd
+
+</th>
+
+<th style="text-align:right;">
+
+p0
+
+</th>
+
+<th style="text-align:right;">
+
+p25
+
+</th>
+
+<th style="text-align:right;">
+
+p50
+
+</th>
+
+<th style="text-align:right;">
+
+p75
+
+</th>
+
+<th style="text-align:right;">
+
+p100
+
+</th>
+
+<th style="text-align:left;">
+
+hist
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+Balance
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+520.02
+
+</td>
+
+<td style="text-align:right;">
+
+459.76
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+68.75
+
+</td>
+
+<td style="text-align:right;">
+
+459.5
+
+</td>
+
+<td style="text-align:right;">
+
+863.0
+
+</td>
+
+<td style="text-align:right;">
+
+1999
+
+</td>
+
+<td style="text-align:left;">
+
+▇▅▃▂▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Age
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+55.67
+
+</td>
+
+<td style="text-align:right;">
+
+17.25
+
+</td>
+
+<td style="text-align:right;">
+
+23
+
+</td>
+
+<td style="text-align:right;">
+
+41.75
+
+</td>
+
+<td style="text-align:right;">
+
+56.0
+
+</td>
+
+<td style="text-align:right;">
+
+70.0
+
+</td>
+
+<td style="text-align:right;">
+
+98
+
+</td>
+
+<td style="text-align:left;">
+
+▆▇▇▇▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Rating
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+354.94
+
+</td>
+
+<td style="text-align:right;">
+
+154.72
+
+</td>
+
+<td style="text-align:right;">
+
+93
+
+</td>
+
+<td style="text-align:right;">
+
+247.25
+
+</td>
+
+<td style="text-align:right;">
+
+344.0
+
+</td>
+
+<td style="text-align:right;">
+
+437.2
+
+</td>
+
+<td style="text-align:right;">
+
+982
+
+</td>
+
+<td style="text-align:left;">
+
+▆▇▃▁▁
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ``` r
 Credit %>% 
@@ -1915,7 +3795,7 @@ regression_points
 
     ## # A tibble: 400 x 6
     ##       ID Balance Limit Income Balance_hat residual
-    ##    <int>   <dbl> <dbl>  <dbl>       <dbl>    <dbl>
+    ##    <int>   <int> <int>  <dbl>       <dbl>    <dbl>
     ##  1     1     333  3606   14.9        454.   -121. 
     ##  2     2     903  6645  106.         559.    344. 
     ##  3     3     580  7075  105.         683.   -103. 
@@ -1943,40 +3823,511 @@ evals_ch7 <- evals %>% select(score, gender, age)
 evals_ch7 %>% skim()
 ```
 
-    ## Skim summary statistics
-    ##  n obs: 463 
-    ##  n variables: 3 
-    ## 
-    ## ── Variable type:factor ──────────────────────────────────────────────────────────────────
-    ##  variable missing complete   n n_unique                top_counts ordered
-    ##    gender       0      463 463        2 mal: 268, fem: 195, NA: 0   FALSE
-    ## 
-    ## ── Variable type:integer ─────────────────────────────────────────────────────────────────
-    ##  variable missing complete   n  mean  sd p0 p25 p50 p75 p100     hist
-    ##       age       0      463 463 48.37 9.8 29  42  48  57   73 ▅▅▅▇▅▇▂▁
-    ## 
-    ## ── Variable type:numeric ─────────────────────────────────────────────────────────────────
-    ##  variable missing complete   n mean   sd  p0 p25 p50 p75 p100     hist
-    ##     score       0      463 463 4.17 0.54 2.3 3.8 4.3 4.6    5 ▁▁▂▃▅▇▇▆
+<table style='width: auto;'
+        class='table table-condensed'>
+
+<caption>
+
+Data summary
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+Name
+
+</td>
+
+<td style="text-align:left;">
+
+Piped data
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of rows
+
+</td>
+
+<td style="text-align:left;">
+
+463
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of columns
+
+</td>
+
+<td style="text-align:left;">
+
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Column type frequency:
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+factor
+
+</td>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+numeric
+
+</td>
+
+<td style="text-align:left;">
+
+2
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Group variables
+
+</td>
+
+<td style="text-align:left;">
+
+None
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: factor**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:left;">
+
+ordered
+
+</th>
+
+<th style="text-align:right;">
+
+n\_unique
+
+</th>
+
+<th style="text-align:left;">
+
+top\_counts
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+gender
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:right;">
+
+2
+
+</td>
+
+<td style="text-align:left;">
+
+mal: 268, fem: 195
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: numeric**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:right;">
+
+mean
+
+</th>
+
+<th style="text-align:right;">
+
+sd
+
+</th>
+
+<th style="text-align:right;">
+
+p0
+
+</th>
+
+<th style="text-align:right;">
+
+p25
+
+</th>
+
+<th style="text-align:right;">
+
+p50
+
+</th>
+
+<th style="text-align:right;">
+
+p75
+
+</th>
+
+<th style="text-align:right;">
+
+p100
+
+</th>
+
+<th style="text-align:left;">
+
+hist
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+score
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+4.17
+
+</td>
+
+<td style="text-align:right;">
+
+0.54
+
+</td>
+
+<td style="text-align:right;">
+
+2.3
+
+</td>
+
+<td style="text-align:right;">
+
+3.8
+
+</td>
+
+<td style="text-align:right;">
+
+4.3
+
+</td>
+
+<td style="text-align:right;">
+
+4.6
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+<td style="text-align:left;">
+
+▁▁▅▇▇
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+age
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+48.37
+
+</td>
+
+<td style="text-align:right;">
+
+9.80
+
+</td>
+
+<td style="text-align:right;">
+
+29.0
+
+</td>
+
+<td style="text-align:right;">
+
+42.0
+
+</td>
+
+<td style="text-align:right;">
+
+48.0
+
+</td>
+
+<td style="text-align:right;">
+
+57.0
+
+</td>
+
+<td style="text-align:right;">
+
+73
+
+</td>
+
+<td style="text-align:left;">
+
+▅▆▇▆▁
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ``` r
 evals_ch7 %>% glimpse()
 ```
 
-    ## Observations: 463
-    ## Variables: 3
-    ## $ score  <dbl> 4.7, 4.1, 3.9, 4.8, 4.6, 4.3, 2.8, 4.1, 3.4, 4.5, 3.8, 4.…
-    ## $ gender <fct> female, female, female, female, male, male, male, male, m…
-    ## $ age    <int> 36, 36, 36, 36, 59, 59, 59, 51, 51, 40, 40, 40, 40, 40, 4…
+    ## Rows: 463
+    ## Columns: 3
+    ## $ score  <dbl> 4.7, 4.1, 3.9, 4.8, 4.6, 4.3, 2.8, 4.1, 3.4, 4.5, 3.8, 4.5, 4.…
+    ## $ gender <fct> female, female, female, female, male, male, male, male, male, …
+    ## $ age    <int> 36, 36, 36, 36, 59, 59, 59, 51, 51, 40, 40, 40, 40, 40, 40, 40…
 
 ``` r
 evals_ch7 %>% get_correlation(score ~ age)
 ```
 
     ## # A tibble: 1 x 1
-    ##   correlation
-    ##         <dbl>
-    ## 1      -0.107
+    ##      cor
+    ##    <dbl>
+    ## 1 -0.107
 
 ``` r
 # evals_ch7 %>% get_correlation(score ~ gender) # does not work.
@@ -2066,7 +4417,9 @@ This gives us a model as: $$  = b\_0 + b\_{age} \* age + b\_{male} \*
 1\_{is-male}(x) +\\ b\_{age,male} \* age \* 1\_{is-male}(x)\\
 
 \= 4.883 -0.018 \* age -0.446 \* 1\_{is-male}(x)\\ + 0.014 \* age \*
-1\_{is-male}(x) $$ Hence the two models for the two genders become
+1\_{is-male}(x) $$
+
+Hence the two models for the two genders become
 
 \[
 \widehat{score_{male}}\\
@@ -2101,7 +4454,7 @@ regression_points
 
     ## # A tibble: 463 x 6
     ##       ID score   age gender score_hat residual
-    ##    <int> <dbl> <dbl> <fct>      <dbl>    <dbl>
+    ##    <int> <dbl> <int> <fct>      <dbl>    <dbl>
     ##  1     1   4.7    36 female      4.25    0.448
     ##  2     2   4.1    36 female      4.25   -0.152
     ##  3     3   3.9    36 female      4.25   -0.352
@@ -2176,6 +4529,12 @@ gf_histogram(~ Limit,binwidth = 200,data = Credit,color = "white") %>%
   gf_vline(xintercept = ~ quantile(x = Credit$Limit,probs = 0.5), color = "red", linetype = "dashed") %>% 
   gf_vline(xintercept = ~ quantile(x = Credit$Limit,probs = 0.75), color = "red", linetype = "dashed")
 ```
+
+    ## Warning: Use of `Credit$Limit` is discouraged. Use `Limit` instead.
+    
+    ## Warning: Use of `Credit$Limit` is discouraged. Use `Limit` instead.
+    
+    ## Warning: Use of `Credit$Limit` is discouraged. Use `Limit` instead.
 
 ![](ModernDive_files/figure-gfm/Analysing%20%60income%60-1.png)<!-- -->
 then we can split the income range into `low`, `medium-low`,
@@ -3013,10 +5372,10 @@ Credit
 Credit %>% filter(is.na(Credit$Type)) 
 ```
 
-    ##    ID Income Limit Rating Cards Age Education Gender Student Married
-    ## 1 324  182.7 13913    982     4  98        17   Male      No     Yes
-    ##   Ethnicity Balance Type
-    ## 1 Caucasian    1999 <NA>
+    ##    ID Income Limit Rating Cards Age Education Gender Student Married Ethnicity
+    ## 1 324  182.7 13913    982     4  98        17   Male      No     Yes Caucasian
+    ##   Balance Type
+    ## 1    1999 <NA>
 
 ``` r
 # Oops, there is atleast one datapoint that has NA for `Type`. Need to figure that out. 
@@ -3122,16 +5481,16 @@ virtual_shovel
     ## # Groups:   replicate [1]
     ##    replicate ball_ID color
     ##        <int>   <int> <chr>
-    ##  1         1     267 white
-    ##  2         1    1868 red  
-    ##  3         1     481 red  
-    ##  4         1     638 white
-    ##  5         1    1201 white
-    ##  6         1    1973 white
-    ##  7         1      87 red  
-    ##  8         1     593 white
-    ##  9         1     942 white
-    ## 10         1     105 red  
+    ##  1         1     827 red  
+    ##  2         1     983 white
+    ##  3         1     757 red  
+    ##  4         1    2262 red  
+    ##  5         1    1327 red  
+    ##  6         1     414 red  
+    ##  7         1    1109 white
+    ##  8         1     727 white
+    ##  9         1     922 white
+    ## 10         1    1680 white
     ## # … with 40 more rows
 
 ``` r
@@ -3143,7 +5502,7 @@ virtual_shovel %>%
     ## # A tibble: 1 x 2
     ##   replicate prop_red
     ##       <int>    <dbl>
-    ## 1         1     0.38
+    ## 1         1     0.36
 
 ``` r
 # Can also do
@@ -3155,7 +5514,7 @@ virtual_shovel %>%
     ## # A tibble: 1 x 3
     ##   replicate num_red prop_red
     ##       <int>   <int>    <dbl>
-    ## 1         1      19     0.38
+    ## 1         1      18     0.36
 
 ## Repeated Virtual Sampling
 
@@ -3171,20 +5530,20 @@ virtual_samples
     ## # Groups:   replicate [33]
     ##    replicate ball_ID color
     ##        <int>   <int> <chr>
-    ##  1         1    1282 white
-    ##  2         1    1386 red  
-    ##  3         1    1539 white
-    ##  4         1    1252 red  
-    ##  5         1    1793 white
-    ##  6         1    1069 red  
-    ##  7         1     371 white
-    ##  8         1      49 white
-    ##  9         1     757 red  
-    ## 10         1     717 white
+    ##  1         1    1337 white
+    ##  2         1    2390 red  
+    ##  3         1    1330 white
+    ##  4         1    1102 red  
+    ##  5         1    2251 red  
+    ##  6         1    1636 white
+    ##  7         1    1674 white
+    ##  8         1    1437 white
+    ##  9         1     175 red  
+    ## 10         1    1097 white
     ## # … with 1,640 more rows
 
 ``` r
-# Weird that it shows `20` as the max `replicate`
+# Weird that it shows `20` as the max `replicate`. However `tail(virtual_samples) shows things correctly. 
 ```
 
 > Observe that while the first `50` rows of replicate are equal to 1,
@@ -3194,10 +5553,9 @@ virtual_samples
 > pattern continues for all reps = `33` replicates and thus
 > virtual\_samples has `33 × 50 = 1650` rows.
 
-Doesn’t quite show up that way…
-
 ``` r
-virtual_prop_red <- virtual_samples %>% 
+virtual_prop_red <- 
+  virtual_samples %>% 
   group_by(replicate) %>%
   summarise(prop_red = sum(color == "red")/50)
 virtual_prop_red # OK! HERE there are 33 rows! But weird!
@@ -3207,15 +5565,15 @@ virtual_prop_red # OK! HERE there are 33 rows! But weird!
     ##    replicate prop_red
     ##        <int>    <dbl>
     ##  1         1     0.4 
-    ##  2         2     0.4 
-    ##  3         3     0.42
-    ##  4         4     0.46
+    ##  2         2     0.48
+    ##  3         3     0.4 
+    ##  4         4     0.36
     ##  5         5     0.34
     ##  6         6     0.38
-    ##  7         7     0.38
-    ##  8         8     0.32
-    ##  9         9     0.3 
-    ## 10        10     0.4 
+    ##  7         7     0.5 
+    ##  8         8     0.42
+    ##  9         9     0.44
+    ## 10        10     0.38
     ## # … with 23 more rows
 
 ``` r
@@ -3234,7 +5592,8 @@ We can do this a 1000 times:
 virtual_samples <- 
   rep_sample_n(bowl,size = 50, reps = 1000)
 
-virtual_samples %>% summarise(num_red = sum(color == "red"), n = n(), prop_red = num_red/n) %>% 
+virtual_samples %>% 
+  summarise(num_red = sum(color == "red"), n = n(), prop_red = num_red/n) %>% 
   gf_histogram(~ prop_red,color = "white",binwidth = 0.01)
 ```
 
@@ -3290,19 +5649,36 @@ sd_100 <- sd(virtual_samples_100$prop_red)
 sd_25;sd_50;sd_100
 ```
 
-    ## [1] 0.09849
+    ## [1] 0.09876
 
-    ## [1] 0.06658
+    ## [1] 0.06796
 
-    ## [1] 0.04803
+    ## [1] 0.04967
 
-Can we plot the three histograms one on top of the
-other?
+Can we plot the three histograms one on top of the other?
 
 ``` r
-gf_histogram(~ prop_red, data = virtual_samples_25,fill = "grey50",color = "white", binwidth = 0.02) %>% 
-  gf_histogram(~ prop_red, data = virtual_samples_50,fill = "salmon",color = "white",binwidth = 0.02) %>% 
-  gf_histogram(~ prop_red, data = virtual_samples_100,fill = "dodgerblue",color = "white",binwidth = 0.02)
+gf_histogram(
+  ~ prop_red,
+  data = virtual_samples_25,
+  fill = "grey50",
+  color = "white",
+  binwidth = 0.02
+) %>%
+  gf_histogram(
+    ~ prop_red,
+    data = virtual_samples_50,
+    fill = "salmon",
+    color = "white",
+    binwidth = 0.02
+  ) %>%
+  gf_histogram(
+    ~ prop_red,
+    data = virtual_samples_100,
+    fill = "dodgerblue",
+    color = "white",
+    binwidth = 0.02
+  )
 ```
 
 ![](ModernDive_files/figure-gfm/Overlaid%20histograms-1.png)<!-- -->
@@ -3355,7 +5731,7 @@ inference
 | 7        | Population Standard Deviation        | $$            | Sample Standard Deviation        | $$                      |
 
 In most cases, we don’t have the population values as we did with the
-bowl of balls. We only have a single sample of data from a larger
+bowl of balls. We only have a **single sample of data** from a larger
 population. We’d like to be able to make some reasonable guesses about
 population parameters using that single sample to create a range of
 plausible values for a population parameter. This *range* of plausible
@@ -3380,7 +5756,12 @@ pennies %>%
 
 ``` r
 # Calculate
-pennies %>% summarise(mean = mean(age_in_2011), median = median(age_in_2011),sd = sd(age_in_2011))
+pennies %>%
+  summarise(
+    mean = mean(age_in_2011),
+    median = median(age_in_2011),
+    sd = sd(age_in_2011)
+  )
 ```
 
     ## # A tibble: 1 x 3
@@ -3397,27 +5778,29 @@ When we have *only one sample*, `pennies_sample`. We wish to find the
 mean age of all pennies minted in the US, based on this one sample.
 
 ``` r
-#EDA
+pennies_sample <- sample_n(pennies, size = 50, replace = FALSE)
 pennies_sample
 ```
 
-    ## # A tibble: 40 x 2
+    ## # A tibble: 50 x 2
     ##     year age_in_2011
     ##    <int>       <int>
-    ##  1  2005           6
-    ##  2  1981          30
-    ##  3  1977          34
-    ##  4  1992          19
-    ##  5  2005           6
-    ##  6  2006           5
-    ##  7  2000          11
-    ##  8  1992          19
-    ##  9  1988          23
-    ## 10  1996          15
-    ## # … with 30 more rows
+    ##  1  2006           5
+    ##  2  1996          15
+    ##  3  2003           8
+    ##  4  2000          11
+    ##  5  2004           7
+    ##  6  1988          23
+    ##  7  1970          41
+    ##  8  1975          36
+    ##  9  1966          45
+    ## 10  2001          10
+    ## # … with 40 more rows
 
 ``` r
-gf_histogram(~age_in_2011, bins = 10,color = "white", data = pennies_sample)
+#EDA
+pennies_sample %>% 
+gf_histogram(~ age_in_2011, bins = 10,color = "white", data = pennies_sample)
 ```
 
 ![](ModernDive_files/figure-gfm/Pennies_sample-1.png)<!-- -->
@@ -3434,7 +5817,7 @@ x_bar
     ## # A tibble: 1 x 1
     ##   `mean(age_in_2011)`
     ##                 <dbl>
-    ## 1                25.1
+    ## 1                20.8
 
 **Bootstrapping** is a method of generating fresh samples from an
 existing single sample, by sampling **with replacement** . *Sample size*
@@ -3442,7 +5825,8 @@ with bootstrapping is the *same* as the that of the original sample.
 
 ``` r
 # We generate one bootstrap sample from `pennies_sample`
-bootstrap_sample1 <- pennies_sample %>% 
+bootstrap_sample1 <- 
+  pennies_sample %>%
   rep_sample_n(size = 40, replace = TRUE, reps = 1)
 bootstrap_sample1
 ```
@@ -3451,28 +5835,29 @@ bootstrap_sample1
     ## # Groups:   replicate [1]
     ##    replicate  year age_in_2011
     ##        <int> <int>       <int>
-    ##  1         1  2005           6
-    ##  2         1  2001          10
-    ##  3         1  1992          19
-    ##  4         1  1987          24
-    ##  5         1  1987          24
-    ##  6         1  1983          28
-    ##  7         1  1992          19
-    ##  8         1  1987          24
-    ##  9         1  1991          20
-    ## 10         1  1982          29
+    ##  1         1  1988          23
+    ##  2         1  1995          16
+    ##  3         1  1973          38
+    ##  4         1  1993          18
+    ##  5         1  1981          30
+    ##  6         1  1998          13
+    ##  7         1  1966          45
+    ##  8         1  1961          50
+    ##  9         1  1994          17
+    ## 10         1  1999          12
     ## # … with 30 more rows
 
 ``` r
 #Bootstrap Stat
 # We can calculate **bootstrap_statistics** for this sample.
-bootstrap_sample1 %>% summarise(stat = mean(age_in_2011))
+bootstrap_sample1 %>% 
+  summarise(stat = mean(age_in_2011))
 ```
 
     ## # A tibble: 1 x 2
     ##   replicate  stat
     ##       <int> <dbl>
-    ## 1         1  26.1
+    ## 1         1  21.8
 
 ``` r
 #Visualize this bootstrap sample
@@ -3480,6 +5865,8 @@ gf_histogram(~age_in_2011, color = "white", bins = 20, data = bootstrap_sample1)
   gf_vline(xintercept = ~ mean(bootstrap_sample1$age_in_2011), color = "red") %>% 
   gf_vline(data = pennies, xintercept = ~ mean(pennies$age_in_2011), color = "green")
 ```
+
+    ## Warning: Use of `pennies$age_in_2011` is discouraged. Use `age_in_2011` instead.
 
 ![](ModernDive_files/figure-gfm/Bootstrapping%20Pennies-1.png)<!-- -->
 
@@ -3498,7 +5885,7 @@ This is another sample, one calculated using bootstrap, that we could
 ``` r
 # More bootstrap samples
 six_bootstrap_samples <- 
-  pennies_sample %>% 
+  pennies_sample %>%
   rep_sample_n(size = 40,replace = TRUE, reps = 6)
 
 #Visualise
@@ -3509,7 +5896,9 @@ gf_histogram(~ age_in_2011 | replicate, data = six_bootstrap_samples, color = "w
   gf_vline(data = pennies, 
            xintercept = ~ mean(pennies$age_in_2011), # Note the `tilde`
            color = "green") %>% # Vline for the overall bootstrap mean
-  gf_vline(data = (six_bootstrap_samples %>% group_by(replicate) %>% summarise(mean = mean(age_in_2011))),xintercept = ~ mean, color = "purple", linetype = "dashed") 
+  gf_vline(data = (six_bootstrap_samples %>% 
+      group_by(replicate) %>% 
+      summarise(mean = mean(age_in_2011))),xintercept = ~ mean, color = "purple", linetype = "dashed") 
 ```
 
 ![](ModernDive_files/figure-gfm/bootstrap_statistics-1.png)<!-- -->
@@ -3526,6 +5915,8 @@ gf_histogram(~ age_in_2011, data = six_bootstrap_samples) %>%
            color = "green")
 ```
 
+    ## Warning: Use of `pennies$age_in_2011` is discouraged. Use `age_in_2011` instead.
+
 ![](ModernDive_files/figure-gfm/bootstrap_statistics-2.png)<!-- -->
 
 ``` r
@@ -3538,12 +5929,12 @@ six_bootstrap_samples %>%
     ## # A tibble: 6 x 2
     ##   replicate  stat
     ##       <int> <dbl>
-    ## 1         1  25.9
-    ## 2         2  27.7
-    ## 3         3  23.8
-    ## 4         4  22.9
-    ## 5         5  24.4
-    ## 6         6  25.8
+    ## 1         1  22.0
+    ## 2         2  18.3
+    ## 3         3  20.6
+    ## 4         4  19.4
+    ## 5         5  18.6
+    ## 6         6  22.0
 
 ## Using the `Infer` package
 
@@ -3573,20 +5964,20 @@ pennies_sample %>%
 ```
 
     ## Response: age_in_2011 (integer)
-    ## # A tibble: 40 x 1
+    ## # A tibble: 50 x 1
     ##    age_in_2011
     ##          <int>
-    ##  1           6
-    ##  2          30
-    ##  3          34
-    ##  4          19
-    ##  5           6
-    ##  6           5
-    ##  7          11
-    ##  8          19
-    ##  9          23
-    ## 10          15
-    ## # … with 30 more rows
+    ##  1           5
+    ##  2          15
+    ##  3           8
+    ##  4          11
+    ##  5           7
+    ##  6          23
+    ##  7          41
+    ##  8          36
+    ##  9          45
+    ## 10          10
+    ## # … with 40 more rows
 
 ``` r
 # Or using `formula` notation as with `ggformula`, `y ~ x`
@@ -3595,20 +5986,20 @@ pennies_sample %>%
 ```
 
     ## Response: age_in_2011 (integer)
-    ## # A tibble: 40 x 1
+    ## # A tibble: 50 x 1
     ##    age_in_2011
     ##          <int>
-    ##  1           6
-    ##  2          30
-    ##  3          34
-    ##  4          19
-    ##  5           6
-    ##  6           5
-    ##  7          11
-    ##  8          19
-    ##  9          23
-    ## 10          15
-    ## # … with 30 more rows
+    ##  1           5
+    ##  2          15
+    ##  3           8
+    ##  4          11
+    ##  5           7
+    ##  6          23
+    ##  7          41
+    ##  8          36
+    ##  9          45
+    ## 10          10
+    ## # … with 40 more rows
 
 ### Generate replicates using `generate()`
 
@@ -3621,21 +6012,21 @@ thousand_bootstrap_samples
 ```
 
     ## Response: age_in_2011 (integer)
-    ## # A tibble: 40,000 x 2
+    ## # A tibble: 50,000 x 2
     ## # Groups:   replicate [1,000]
     ##    replicate age_in_2011
     ##        <int>       <int>
-    ##  1         1          39
-    ##  2         1          19
-    ##  3         1          32
-    ##  4         1          26
-    ##  5         1          10
-    ##  6         1          15
-    ##  7         1          10
-    ##  8         1           7
-    ##  9         1          19
-    ## 10         1          26
-    ## # … with 39,990 more rows
+    ##  1         1           7
+    ##  2         1          10
+    ##  3         1          19
+    ##  4         1           3
+    ##  5         1          34
+    ##  6         1          10
+    ##  7         1          36
+    ##  8         1          23
+    ##  9         1          12
+    ## 10         1          16
+    ## # … with 49,990 more rows
 
 ### Calculating Sample Stats using `calculate()`
 
@@ -3643,25 +6034,27 @@ This collapses the samples to one `mean` per replicate.
 
 ``` r
 bootstrap_distribution <- pennies_sample %>% 
+  mutate(age_in_2011 = 2011 - year) %>% 
   specify(age_in_2011 ~ NULL) %>% 
   generate(size = 40, reps = 1000, type = "bootstrap") %>% 
   calculate(stat = "mean")
+
 bootstrap_distribution # A thousand rows with means
 ```
 
     ## # A tibble: 1,000 x 2
     ##    replicate  stat
     ##        <int> <dbl>
-    ##  1         1  30.1
-    ##  2         2  24.8
-    ##  3         3  20.4
-    ##  4         4  27.9
-    ##  5         5  29.4
-    ##  6         6  24.1
-    ##  7         7  24.6
-    ##  8         8  26.1
-    ##  9         9  25.5
-    ## 10        10  25.2
+    ##  1         1  20.0
+    ##  2         2  20.7
+    ##  3         3  17.6
+    ##  4         4  20.4
+    ##  5         5  19.8
+    ##  6         6  21.6
+    ##  7         7  22.1
+    ##  8         8  23.0
+    ##  9         9  21.5
+    ## 10        10  20  
     ## # … with 990 more rows
 
 ### `Visualize`
@@ -3669,6 +6062,7 @@ bootstrap_distribution # A thousand rows with means
 ``` r
 # My way
 pennies_sample %>% 
+  mutate(age_in_2011 = 2011 - year) %>% 
   specify(age_in_2011 ~ NULL) %>% 
   generate(size = 40, reps = 1000, type = "bootstrap") %>% 
   calculate(stat = "mean") %>% 
@@ -3710,7 +6104,7 @@ pennies_sample %>%
     ## # A tibble: 1 x 1
     ##   mean_of_means
     ##           <dbl>
-    ## 1          25.2
+    ## 1          20.7
 
 ``` r
 # Compare Pop_mean with Bootstrap_mean
@@ -3742,15 +6136,16 @@ pennies %>%
 
 ``` r
 # What we did earlier with `calculate()`:
-# 
+
 bootstrap_distribution <-
   pennies_sample %>%
   specify(age_in_2011 ~ NULL) %>%
   generate(size = 40, reps = 1000, type = "bootstrap") %>%
   calculate(stat = "mean")
-#   
+ 
 # Confidence Intervals - Percentile
-percentile_ci <- bootstrap_distribution %>% 
+percentile_ci <- 
+  bootstrap_distribution %>% 
   get_ci(level = 0.95,type = "percentile")
 percentile_ci
 ```
@@ -3758,7 +6153,7 @@ percentile_ci
     ## # A tibble: 1 x 2
     ##   `2.5%` `97.5%`
     ##    <dbl>   <dbl>
-    ## 1   20.9    29.4
+    ## 1   17.1    24.6
 
 ``` r
 #Visualise bootstrap percentile CIs
@@ -3781,10 +6176,15 @@ bootstrap_distribution %>%
 # Does not work. Why? `Visualise` needs a distribution to plot; `get_ci` gives two numbers. That's why. 
 ```
 
-`percentile` works with *any* sort of bootstrap
-    distribution.
+`percentile` works with *any* sort of bootstrap distribution.
 
-    If the bootstrap distribution is *close to symmetric and bell-shaped*, we can also use a shortcut formula for determining the lower and upper endpoints of the confidence interval. This is done by using the formula $\bar x ±(multiplier∗SE)$, where $\bar x$ is our original sample mean and `SE` stands for standard error and corresponds to the standard deviation of the bootstrap distribution. The value of multiplier here is the **appropriate percentile** of the **standard normal distribution**.
+If the bootstrap distribution is *close to symmetric and bell-shaped*,
+we can also use a shortcut formula for determining the lower and upper
+endpoints of the confidence interval. This is done by using the formula
+\(\bar x ±(multiplier∗SE)\), where \(\bar x\) is our original sample
+mean and `SE` stands for standard error and corresponds to the standard
+deviation of the bootstrap distribution. The value of multiplier here is
+the **appropriate percentile** of the **standard normal distribution**.
 
 ``` r
 # So we can do the same using SE
@@ -3802,7 +6202,7 @@ se_ci
     ## # A tibble: 1 x 2
     ##   lower upper
     ##   <dbl> <dbl>
-    ## 1  20.9  29.4
+    ## 1  17.0  24.6
 
 ``` r
 # Recall what we did with Calculate: `sample mean` x_bar and the bootstrap distribution
@@ -3830,7 +6230,7 @@ bootstrap_distribution %>%
 #   visualise(direction = "between")
 ```
 
-### Comparing Sampling and Boostrap means, medians
+### Comparing Sampling and Bootstrap means, medians
 
 In **sampling** we assume we have access to the **population**. With
 `bootstrap`, we have just **one** sample to work with.
@@ -3851,16 +6251,16 @@ sampling_distribution
     ## # A tibble: 1,000 x 2
     ##    replicate  stat
     ##        <int> <dbl>
-    ##  1         1  20.1
-    ##  2         2  23.5
-    ##  3         3  26.3
-    ##  4         4  19.5
-    ##  5         5  20.8
-    ##  6         6  18.1
-    ##  7         7  23.4
-    ##  8         8  22.8
-    ##  9         9  20.2
-    ## 10        10  20.1
+    ##  1         1  23.1
+    ##  2         2  21.9
+    ##  3         3  24.9
+    ##  4         4  22.6
+    ##  5         5  20.1
+    ##  6         6  19.0
+    ##  7         7  19.3
+    ##  8         8  21.3
+    ##  9         9  21.5
+    ## 10        10  21.3
     ## # … with 990 more rows
 
 ``` r
@@ -3881,9 +6281,11 @@ final_sampling_calcs
     ## # A tibble: 1 x 2
     ##    mean    se
     ##   <dbl> <dbl>
-    ## 1  21.1  1.87
+    ## 1  21.2  1.92
 
-    Note that these `sampling stat` i.e. `mean` is pretty closely matching that of the original population. This is an artifact of the **Central Limit Theorem**, of course. 
+Note that this `sampling stat` i.e. `mean` is pretty closely matching
+that of the original population. This is an artifact of the **Central
+Limit Theorem**, of course.
 
 ``` r
 # Sampling with Bootstrap
@@ -3914,8 +6316,8 @@ results
     ## # A tibble: 2 x 2
     ##    mean    se
     ##   <dbl> <dbl>
-    ## 1  21.1  1.87
-    ## 2  25.1  2.18
+    ## 1  21.2  1.92
+    ## 2  20.8  1.93
 
 While the `se` are similar, the `means` are different when comparing
 `sampling` and `bootstrap`. Since the bootstrap distribution is
@@ -3929,7 +6331,8 @@ We saw the two sets of CIs, bootstrap and Sampling:
 ``` r
 ## Bootstrap
 ## Let's try a new "single" sample:
-pennies_sample2 <- pennies %>% 
+pennies_sample2 <- 
+  pennies %>% 
   sample_n(size = 40)
 
 pennies_sample2 %>% 
@@ -3942,7 +6345,7 @@ pennies_sample2 %>%
     ## # A tibble: 1 x 2
     ##   `2.5%` `97.5%`
     ##    <dbl>   <dbl>
-    ## 1   17.5    24.4
+    ## 1   18.4    28.6
 
 This is *one set* of bootstrap\_ci, and we see that the \*\*population
 mean\* falls within these limits. We want to know if this always
@@ -3953,7 +6356,8 @@ Using the original “shovel” problem for red and white balls , we try to
 establish confidence intervals for the proportion of the red balls.
 
 ``` r
-tactile_shovel1 <- tibble(color =  c(rep("red",21), rep("white",29)))
+tactile_shovel1 <- 
+  tibble(color =  c(rep("red",21), rep("white",29)))
 tactile_shovel1
 ```
 
@@ -3974,7 +6378,8 @@ tactile_shovel1
 
 ``` r
 # Observed Statistic (see mosaic app note)
-p_hat <- tactile_shovel1 %>% 
+p_hat <- 
+  tactile_shovel1 %>% 
   specify(color ~ NULL, success = "red") %>% 
   calculate(stat = "prop")
 p_hat
@@ -3987,7 +6392,8 @@ p_hat
 
 ``` r
 # Bootstrap Samples
-bootstrap_props <- tactile_shovel1 %>% 
+bootstrap_props <- 
+  tactile_shovel1 %>% 
   specify(color ~ NULL, success = "red") %>% 
   generate(reps = 10000, type = "bootstrap") %>% 
   calculate(stat = "prop")
@@ -4004,12 +6410,8 @@ ci_bootstrap
 
 ``` r
 bootstrap_props %>% 
-  visualise() + shade_confidence_interval(bins = 25,endpoints = ci_bootstrap,direction = "between")
+  visualise() + shade_confidence_interval(endpoints = ci_bootstrap)
 ```
-
-    ## Warning: Ignoring unknown parameters: bins, direction
-    
-    ## Warning: Ignoring unknown parameters: bins, direction
 
 ![](ModernDive_files/figure-gfm/shovel%20revisited-1.png)<!-- -->
 
@@ -4018,7 +6420,8 @@ bootstrap_props %>%
 > calculation.
 
 ``` r
-std_error_ci <- bootstrap_props %>% 
+std_error_ci <- 
+  bootstrap_props %>% 
   get_ci(level = 0.95, type = "se", point_estimate = p_hat)
 std_error_ci
 ```
@@ -4030,12 +6433,12 @@ std_error_ci
 
 ``` r
 bootstrap_props %>% 
-  visualise() + shade_confidence_interval(bins = 25, endpoints = std_error_ci,endpoints_color = "green",direction = "between")
+  visualise() + shade_confidence_interval(endpoints = std_error_ci,endpoints_color = "green")
 ```
 
-    ## Warning: Ignoring unknown parameters: bins, endpoints_colour, direction
+    ## Warning: Ignoring unknown parameters: endpoints_colour
     
-    ## Warning: Ignoring unknown parameters: bins, endpoints_colour, direction
+    ## Warning: Ignoring unknown parameters: endpoints_colour
 
 ![](ModernDive_files/figure-gfm/shovel%20CI-1.png)<!-- --> \#\#\#
 Theory-based Confidence Intervals
@@ -4044,7 +6447,7 @@ Theory-based Confidence Intervals
 > true population proportion we - Collect a sample of size n  
 > \- Compute \(\hatp\)  
 > \- Compute the standard error, \(se\) - Compute `Margin of Error`
-> `MoE` as 1.96\*se, for \`95% Confidence Intervals - Use
+> `MoE` as `1.96*se`, for `95% Confidence Intervals` - Use
 > \(\hat p +/- MoE\) as estimates for our confidence intervals, provided
 > we know that the distribution is bell shaped.
 
@@ -4072,7 +6475,8 @@ tactile_prop_red
 ``` r
 # 33 replicates of 50 samples out of 2400 white+red balls.
 true_p <- 900/2400
-conf_ints <- tactile_prop_red %>%
+conf_ints <- 
+  tactile_prop_red %>%
   rename(p_hat = prop_red) %>%
   mutate(
     se = sqrt(p_hat * (1 - p_hat) / 50),
@@ -4087,18 +6491,18 @@ conf_ints
 ```
 
     ## # A tibble: 33 x 9
-    ##    group  replicate red_balls p_hat     se   MoE ci_lower ci_upper captured
-    ##    <chr>      <int>     <int> <dbl>  <dbl> <dbl>    <dbl>    <dbl> <lgl>   
-    ##  1 Ilyas…         1        21  0.42 0.0698 0.137    0.283    0.557 TRUE    
-    ##  2 Morga…         2        17  0.34 0.0670 0.131    0.209    0.471 TRUE    
-    ##  3 Marti…         3        21  0.42 0.0698 0.137    0.283    0.557 TRUE    
-    ##  4 Clark…         4        21  0.42 0.0698 0.137    0.283    0.557 TRUE    
-    ##  5 Riddh…         5        18  0.36 0.0679 0.133    0.227    0.493 TRUE    
-    ##  6 Andre…         6        19  0.38 0.0686 0.135    0.245    0.515 TRUE    
-    ##  7 Julia          7        19  0.38 0.0686 0.135    0.245    0.515 TRUE    
-    ##  8 Rache…         8        11  0.22 0.0586 0.115    0.105    0.335 FALSE   
-    ##  9 Danie…         9        15  0.3  0.0648 0.127    0.173    0.427 TRUE    
-    ## 10 Josh,…        10        17  0.34 0.0670 0.131    0.209    0.471 TRUE    
+    ##    group       replicate red_balls p_hat     se   MoE ci_lower ci_upper captured
+    ##    <chr>           <int>     <int> <dbl>  <dbl> <dbl>    <dbl>    <dbl> <lgl>   
+    ##  1 Ilyas, Yoh…         1        21  0.42 0.0698 0.137    0.283    0.557 TRUE    
+    ##  2 Morgan, Te…         2        17  0.34 0.0670 0.131    0.209    0.471 TRUE    
+    ##  3 Martin, Th…         3        21  0.42 0.0698 0.137    0.283    0.557 TRUE    
+    ##  4 Clark, Fra…         4        21  0.42 0.0698 0.137    0.283    0.557 TRUE    
+    ##  5 Riddhi, Ka…         5        18  0.36 0.0679 0.133    0.227    0.493 TRUE    
+    ##  6 Andrew, Ty…         6        19  0.38 0.0686 0.135    0.245    0.515 TRUE    
+    ##  7 Julia               7        19  0.38 0.0686 0.135    0.245    0.515 TRUE    
+    ##  8 Rachel, La…         8        11  0.22 0.0586 0.115    0.105    0.335 FALSE   
+    ##  9 Daniel, Ca…         9        15  0.3  0.0648 0.127    0.173    0.427 TRUE    
+    ## 10 Josh, Maeve        10        17  0.34 0.0670 0.131    0.209    0.471 TRUE    
     ## # … with 23 more rows
 
 ``` r
@@ -4112,7 +6516,8 @@ gf_segment(group + group ~ ci_lower + ci_upper,data = conf_ints, color = ~captur
 We can also create the `tactile_prop_red` using simulation.
 
 ``` r
-virtual_samples <- bowl %>% 
+virtual_samples <- 
+  bowl %>% 
   rep_sample_n(size = 50,reps = 100) %>% 
   group_by(replicate) %>% 
   mutate(p_hat = mean(color == "red"),
@@ -4145,6 +6550,7 @@ gf_segment(replicate + replicate ~ ci_lower + ci_upper,data = virtual_samples, c
 Is yawning contagious?
 
 ``` r
+library(janitor)
 mythbusters_yawn
 ```
 
@@ -4188,7 +6594,8 @@ mythbusters_yawn %>%
 > not.
 
 ``` r
-obs_diff <- mythbusters_yawn %>% 
+obs_diff <- 
+  mythbusters_yawn %>% 
   specify(yawn ~ group,success = "yes") %>% 
   calculate(stat = "diff in props",order = c("seed", "control"))
 obs_diff
@@ -4216,18 +6623,18 @@ bootstrap_distribution
 ```
 
     ## # A tibble: 1,000 x 2
-    ##    replicate    stat
-    ##        <int>   <dbl>
-    ##  1         1 -0.0571
-    ##  2         2  0.221 
-    ##  3         3  0.173 
-    ##  4         4  0.123 
-    ##  5         5  0.128 
-    ##  6         6  0.100 
-    ##  7         7 -0.107 
-    ##  8         8  0.0246
-    ##  9         9  0.100 
-    ## 10        10  0.175 
+    ##    replicate     stat
+    ##        <int>    <dbl>
+    ##  1         1  0.00952
+    ##  2         2 -0.0146 
+    ##  3         3  0.0395 
+    ##  4         4 -0.222  
+    ##  5         5  0.160  
+    ##  6         6  0.211  
+    ##  7         7  0.0357 
+    ##  8         8  0.0832 
+    ##  9         9  0.278  
+    ## 10        10  0.175  
     ## # … with 990 more rows
 
 ``` r
@@ -4239,16 +6646,13 @@ ci_myth
     ## # A tibble: 1 x 2
     ##   `2.5%` `97.5%`
     ##    <dbl>   <dbl>
-    ## 1 -0.235   0.316
+    ## 1 -0.216   0.294
 
 ``` r
 bootstrap_distribution %>% 
-  visualise(endpoints = ci_myth, endpoints_color = "green", direction = "between")
+  visualise() + ## ALWAYS USE PLUS SIGN HERE !
+  shade_confidence_interval(endpoints = ci_myth, fill = "green", color = "green")
 ```
-
-    ## Warning: `visualize()` shouldn't be used to plot confidence interval.
-    ## Arguments `endpoints`, `endpoints_color`, and `ci_fill` are deprecated. Use
-    ## `shade_confidence_interval()` instead.
 
 ![](ModernDive_files/figure-gfm/Analysis%20of%20Yawning-1.png)<!-- -->
 
@@ -4271,7 +6675,8 @@ Suppose we were interested in seeing if the air\_time to SFO in San
 Francisco was statistically greater than the air\_time to BOS in Boston.
 
 ``` r
-bos_sfo <- flights %>% 
+bos_sfo <- 
+  flights %>% 
   na.omit() %>% 
   filter(dest == "SFO" | dest == "BOS") %>% 
   group_by(dest) %>% 
@@ -4288,8 +6693,8 @@ bos_sfo_summary
     ## # A tibble: 2 x 4
     ##   dest  mean_time sd_time count
     ##   <chr>     <dbl>   <dbl> <int>
-    ## 1 BOS        39.3    4.08   100
-    ## 2 SFO       346.    17.5    100
+    ## 1 BOS        39.2    5.75   100
+    ## 2 SFO       347.    19.0    100
 
 ### Observations BOS vs SFO
 
@@ -4299,7 +6704,7 @@ bos_sfo_summary
 ### LC10.1
 
 If the sd(mean$time)| SFO had been say 200, we might have wanted to
-check if the time difference was really that high. And and SD of 100
+check if the time difference was really that high. And an SD of 100
 would have been just OK, but either way we would have scaled the
 difference by the sd ( which one?) and decided if the difference was
 large in z-score terms.
@@ -4346,15 +6751,16 @@ is the flow for Hypothesis Testing using `infer`.
 ### Comparing Two Means
 
 Null hypothesis : \(H_0 : \mu_1 - \mu_2 = 0\)  
-Alternative ( Research ) hypothesis: \(H_a : \mu_1 -\mu2 *0\) where `* =
-< ≠ or >`.
+Alternative ( Research ) hypothesis: \(H_a : \mu_1 -\mu2 * 0\) where `*
+= < ≠ or >`.
 
 Using `ggplot2movies` we check if `Action` movies are rated higher on
 IMDB than `Romance` movies.
 
 ``` r
 movies_trimmed <- 
-  movies %>% select(title, year, rating, Romance, Action) %>% 
+  movies %>% 
+  select(title, year, rating, Romance, Action) %>% 
 # Romance and Action are binary Yes/No variables.
   filter(!(Action == 1 & Romance == 1)) %>% 
   mutate(genre = case_when(Action == 1 ~ "Action",
@@ -4390,7 +6796,7 @@ gf_boxplot(rating~genre, data = movies_trimmed)
 
 ![](ModernDive_files/figure-gfm/EDA%20on%20the%20movies%20populatio%20-1-1.png)<!-- -->
 Ratings for `Action` movies are more spread out. The `median` score for
-`Romance` is highter, though it also has more outliers at both
+`Romance` is higher, though it also has more outliers at both
 extremes.
 
 ``` r
@@ -4401,7 +6807,7 @@ gf_histogram(~ rating | genre ~ ., binwidth = 1, data = movies_trimmed, color = 
 
 In both the `flights` and `movies` examples, we had access to the
 population. Normally we have access only to a sample and need to `infer`
-poulation parameters using sample statistics.
+population parameters using sample statistics.
 
 ### So, a sample
 
@@ -4438,7 +6844,8 @@ clear; the two genres also have different shaped distribution. Let us
 calculate the stats for the sample:
 
 ``` r
-summary_ratings <- movie_genre_sample %>% 
+summary_ratings <- 
+  movie_genre_sample %>% 
   group_by(genre) %>% 
   summarise(mean = mean(rating),
             std_dev = sd(rating),
@@ -4449,15 +6856,16 @@ summary_ratings
     ## # A tibble: 2 x 4
     ##   genre    mean std_dev     n
     ##   <chr>   <dbl>   <dbl> <int>
-    ## 1 Action   5.09    1.66    34
-    ## 2 Romance  6.02    1.14    34
+    ## 1 Action   5.01    1.47    34
+    ## 2 Romance  6.03    1.31    34
 
 ### Hypothesis
 
 \(H_0 : \mu_{Romance} - \mu_{Action} = 0 \\\)  
 \(H_a : \mu_{Romance} - \mu_{Action} ≠ 0\)
 
-Note that Hypothesis is about the **population**.
+Note that Hypothesis is about the **population**. Always. No sense
+otherwise ;-D
 
 ### Test Statistic
 
@@ -4467,7 +6875,8 @@ We look for a difference in sample means, by group
 ### Observed `Effect`
 
 ``` r
-obs_diff <- movie_genre_sample %>% 
+obs_diff <- 
+  movie_genre_sample %>% 
   specify(rating ~ genre) %>% 
   calculate(stat = "diff in means", order = c("Romance", "Action"))
 obs_diff
@@ -4476,7 +6885,7 @@ obs_diff
     ## # A tibble: 1 x 1
     ##    stat
     ##   <dbl>
-    ## 1 0.935
+    ## 1  1.02
 
 We need to now simulate and find out if such an `obs_diff` or higher
 could occur purely by chance (under \(H_0\)) with high enough
@@ -4490,26 +6899,29 @@ must also be very small. We can do this a 1000 times to check.
 This is called `permutation` or `randomization`.
 
 ``` r
-generated_samples <- movie_genre_sample %>% 
+generated_samples <- 
+  movie_genre_sample %>% 
   specify(rating ~ genre) %>% 
   hypothesize(null = "independence") %>% 
   generate(reps = 5000,type = "permute") 
 
-null_distribution_two_means <- generated_samples %>% 
+null_distribution_two_means <- 
+  generated_samples %>% 
   calculate(stat = "diff in means", order = c("Romance", "Action"))
  
 null_distribution_two_means %>%  
   visualise(obs_stat = obs_diff,direction = "both",bins = 100)
 ```
 
-    ## Warning: `visualize()` shouldn't be used to plot p-value. Arguments
-    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
-    ## deprecated. Use `shade_p_value()` instead.
+    ## Warning: `visualize()` should no longer be used to plot a p-value. Arguments
+    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are deprecated. Use
+    ## `shade_p_value()` instead.
 
 ![](ModernDive_files/figure-gfm/Permutation%20-%20Randomization-1.png)<!-- -->
 
 ``` r
-p_value <- null_distribution_two_means %>% 
+p_value <- 
+  null_distribution_two_means %>% 
   get_p_value(obs_stat = obs_diff,direction = "both")
 p_value
 ```
@@ -4517,7 +6929,7 @@ p_value
     ## # A tibble: 1 x 1
     ##   p_value
     ##     <dbl>
-    ## 1   0.008
+    ## 1  0.0028
 
 This p-value is very small and less than \(\alpha = 0.05\). This is the
 probability of obtaining the obs\_diff by chance, ASSUMING that Null
@@ -4542,10 +6954,10 @@ percentile_ci_two_means
     ## # A tibble: 1 x 2
     ##   `2.5%` `97.5%`
     ##    <dbl>   <dbl>
-    ## 1  0.276    1.61
+    ## 1  0.384    1.69
 
 Hence the difference in *mean rating* between `Romance` and `Action`
-movies is between 0.41 and 1.6 with 95% probability
+movies is between these two values with 95% probability.
 
 ### Problem LC10.14
 
@@ -4556,18 +6968,18 @@ movie_genre_sample # same sample as before
 ```
 
     ## # A tibble: 68 x 4
-    ##    title                 year rating genre 
-    ##    <chr>                <int>  <dbl> <chr> 
-    ##  1 Ultraviolet           1992    4.6 Action
-    ##  2 Raiders of the Sun    1992    2.5 Action
-    ##  3 Helix... Loaded, The  2005    2.3 Action
-    ##  4 Enemy of the State    1998    7.1 Action
-    ##  5 Mudhalvan             1999    5.3 Action
-    ##  6 Wielki szu            1983    7.2 Action
-    ##  7 Heaven & Earth        1993    6.4 Action
-    ##  8 Suspicious Agenda     1994    3   Action
-    ##  9 Man on a String       1960    5.9 Action
-    ## 10 Assault on a Queen    1966    5.4 Action
+    ##    title                        year rating genre 
+    ##    <chr>                       <int>  <dbl> <chr> 
+    ##  1 Windtalkers                  2002    5.9 Action
+    ##  2 Lady in Red, The             1979    5.4 Action
+    ##  3 Blowing Wild                 1953    5.6 Action
+    ##  4 Live and Let Die             1973    6.6 Action
+    ##  5 Vendetta: A Christmas Story  1997    1.4 Action
+    ##  6 Teenage Space Vampires       1998    2.4 Action
+    ##  7 Shu shan zheng zhuan         2001    5.9 Action
+    ##  8 Men of Means                 1999    5.7 Action
+    ##  9 Spy Sorge                    2003    6.5 Action
+    ## 10 Mean Guns                    1997    4.8 Action
     ## # … with 58 more rows
 
 ``` r
@@ -4589,7 +7001,7 @@ obs_diff
     ## # A tibble: 1 x 1
     ##    stat
     ##   <dbl>
-    ## 1   0.6
+    ## 1   0.5
 
 ``` r
 # Generate Samples
@@ -4603,12 +7015,8 @@ null_dist <- samples %>%
   calculate(stat = "diff in medians", order = c("Romance", "Action"))
 
 #Visualise
-null_dist %>% visualise(obs_stat = obs_diff,direction = "both")
+null_dist %>% visualise()
 ```
-
-    ## Warning: `visualize()` shouldn't be used to plot p-value. Arguments
-    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
-    ## deprecated. Use `shade_p_value()` instead.
 
 ![](ModernDive_files/figure-gfm/Inference%20using%20Median%20Rating-2.png)<!-- -->
 
@@ -4622,7 +7030,7 @@ p_value
     ## # A tibble: 1 x 1
     ##   p_value
     ##     <dbl>
-    ## 1   0.004
+    ## 1   0.028
 
 ``` r
 ci <- 
@@ -4635,16 +7043,16 @@ ci
 ```
 
     ## # A tibble: 1 x 2
-    ##   `2.5%` `97.5%`
-    ##    <dbl>   <dbl>
-    ## 1 0.1000     1.3
+    ##    `2.5%` `97.5%`
+    ##     <dbl>   <dbl>
+    ## 1 -0.0500    1.25
 
 The difference in medians between the two groups is between 0.5 and 2.2
 with 95% probability. The p-value is small enough for us to state that
 we can reject the null hypothesis and that there is indeed evidence for
 a difference in medians or rating between the two movie categories.
 
-# Inference for Regression
+# Inference for Regression Coefficients
 
 In regression we compute a `slope` and `intercept` for a model between
 explanatory and response variables.
@@ -4717,12 +7125,9 @@ null_slope_dist <-
   calculate(stat = "slope")
 
 null_slope_dist %>% 
-  visualise(obs_stat = obs_slope,direction = "greater")
+  visualise() + 
+  shade_p_value(obs_stat = obs_slope,direction = "greater")
 ```
-
-    ## Warning: `visualize()` shouldn't be used to plot p-value. Arguments
-    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
-    ## deprecated. Use `shade_p_value()` instead.
 
 ![](ModernDive_files/figure-gfm/simulations-1.png)<!-- -->
 
@@ -4751,12 +7156,13 @@ bootstrap_slope_dist <- evals %>%
   generate(reps = 10000, type = "bootstrap") %>% 
   calculate(stat = "slope")
 
-bootstrap_slope_dist %>% visualise(obs_stat = obs_slope)
+bootstrap_slope_dist %>% 
+  visualise(obs_stat = obs_slope)
 ```
 
-    ## Warning: `visualize()` shouldn't be used to plot p-value. Arguments
-    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
-    ## deprecated. Use `shade_p_value()` instead.
+    ## Warning: `visualize()` should no longer be used to plot a p-value. Arguments
+    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are deprecated. Use
+    ## `shade_p_value()` instead.
 
 ![](ModernDive_files/figure-gfm/Bootstrapping%20for%20Slope-1.png)<!-- -->
 
@@ -4770,7 +7176,7 @@ percentile_slope_ci
     ## # A tibble: 1 x 2
     ##   `0.5%` `99.5%`
     ##    <dbl>   <dbl>
-    ## 1 0.0225   0.112
+    ## 1 0.0229   0.110
 
 ``` r
 # Standard Error Confidence Intervals
@@ -4782,7 +7188,7 @@ se_slope_ci
     ## # A tibble: 1 x 2
     ##    lower upper
     ##    <dbl> <dbl>
-    ## 1 0.0223 0.111
+    ## 1 0.0236 0.110
 
 Since we have a large number of samples we have symmetric bell-shaped
 distributions for both bootstrap and se methods and hence the two CIs
@@ -4819,9 +7225,9 @@ null_dist_cor %>%
   visualise(obs_stat = obs_cor,direction = "greater")
 ```
 
-    ## Warning: `visualize()` shouldn't be used to plot p-value. Arguments
-    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
-    ## deprecated. Use `shade_p_value()` instead.
+    ## Warning: `visualize()` should no longer be used to plot a p-value. Arguments
+    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are deprecated. Use
+    ## `shade_p_value()` instead.
 
 ![](ModernDive_files/figure-gfm/LC11.1%20Correlation%20instead%20of%20slope-1.png)<!-- -->
 
@@ -4848,9 +7254,9 @@ bootstrap_cor_dist <-
 bootstrap_cor_dist %>% visualise(obs_stat = obs_cor)
 ```
 
-    ## Warning: `visualize()` shouldn't be used to plot p-value. Arguments
-    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are
-    ## deprecated. Use `shade_p_value()` instead.
+    ## Warning: `visualize()` should no longer be used to plot a p-value. Arguments
+    ## `obs_stat`, `obs_stat_color`, `pvalue_fill`, and `direction` are deprecated. Use
+    ## `shade_p_value()` instead.
 
 ![](ModernDive_files/figure-gfm/LC11.1%20Correlation%20instead%20of%20slope-2.png)<!-- -->
 
@@ -4864,7 +7270,7 @@ percentile_ci_cor
     ## # A tibble: 1 x 2
     ##   `0.5%` `99.5%`
     ##    <dbl>   <dbl>
-    ## 1 0.0610   0.305
+    ## 1 0.0651   0.303
 
 ``` r
 # CI with Standard Error
@@ -4877,7 +7283,7 @@ se_ci_cor
     ## # A tibble: 1 x 2
     ##    lower upper
     ##    <dbl> <dbl>
-    ## 1 0.0934 0.281
+    ## 1 0.0944 0.280
 
 ## Inference for Multiple Regression
 
@@ -4888,7 +7294,8 @@ numerical explanatory variable
 ### Refresher \!
 
 ``` r
-evals_multiple <- evals %>% 
+evals_multiple <- 
+  evals %>% 
   select(score, bty_avg, age, gender, ethnicity, language, rank)
 
 # Model with no interaction
@@ -4957,7 +7364,8 @@ on that analysis if the model we have is too simple.
 #### Teacher Scores vs Beauty
 
 ``` r
-evals_ch6 <- evals %>% 
+evals_ch6 <- 
+  evals %>% 
   select(score, bty_avg, age, gender)
 score_model <- lm(score ~ bty_avg, data = evals_ch6)
 
@@ -4972,7 +7380,8 @@ score_model %>%
     ## 2 bty_avg      0.067     0.016      4.09       0    0.035    0.099
 
 ``` r
-reg_points <- score_model %>% 
+reg_points <- 
+  score_model %>% 
   get_regression_points()
 
 # Plot residuals vs Explanatory covariate
@@ -4996,7 +7405,7 @@ mean(reg_points$residual)
 
     ## [1] 7.343e-05
 
-Note that while mean)residuals is zero, as it should be, there is a
+Note that while mean(residuals) is zero, as it should be, there is a
 negative skew to the residuals. There are many small negative residuals,
 but relatively fewer, and therefore large positive residuals. So our
 model tends to underestimate the `score` those who have high scores.
@@ -5080,13 +7489,14 @@ reg_points %>% gf_jitter(residual~continent, height = 0.1,width = 0.1)
 ``` r
 # Note the outlier in Asia, with very low Life Expectancy. 
 
-reg_points %>% gf_histogram(~residual, binwidth = 5, color = "white")
+reg_points %>% 
+  gf_histogram(~residual, binwidth = 5, color = "white")
 ```
 
 ![](ModernDive_files/figure-gfm/%60Gapminder%60%20residuals-2.png)<!-- -->
 
 ``` r
-gapminder2007 %>% filter(continent== "Asia") %>% 
+gapminder2007 %>% filter(continent == "Asia") %>% 
   arrange(lifeExp) %>% 
   gf_col(lifeExp ~ reorder(country, lifeExp),xlab = "Country", ylab = "Life Expectancy (years)") %>% 
   gf_theme(coord_flip()) %>% 
@@ -5992,7 +8402,9 @@ Credit
     ## 400            Asian     966 Medium-high
 
 ``` r
-Credit <- Credit %>%  select(Balance, Limit, Income, Rating, Age)
+Credit <- 
+  Credit %>%  
+  select(Balance, Limit, Income, Rating, Age)
 
 # Fit the model
 Balance_model <- lm(data = Credit, Balance ~ Limit + Income)
@@ -6057,7 +8469,7 @@ reg_points
 
     ## # A tibble: 400 x 6
     ##       ID Balance Rating   Age Balance_hat residual
-    ##    <int>   <dbl>  <dbl> <dbl>       <dbl>    <dbl>
+    ##    <int>   <int>  <int> <int>       <dbl>    <dbl>
     ##  1     1     333    283    34        384.    -51.4
     ##  2     2     903    483    82        790.    113. 
     ##  3     3     580    514    71        896.   -316. 
@@ -6122,7 +8534,7 @@ reg_points
 
     ## # A tibble: 463 x 6
     ##       ID score   age gender score_hat residual
-    ##    <int> <dbl> <dbl> <fct>      <dbl>    <dbl>
+    ##    <int> <dbl> <int> <fct>      <dbl>    <dbl>
     ##  1     1   4.7    36 female      4.17    0.528
     ##  2     2   4.1    36 female      4.17   -0.072
     ##  3     3   3.9    36 female      4.17   -0.272
@@ -6161,11 +8573,11 @@ Plot of residual vs age seems random enough.
 > running ?house\_prices in the console. In this case study, we’ll
 > create a model using multiple regression where: - The outcome variable
 > y is the sale `price` of houses  
-> The two explanatory/predictor variables we’ll use are : - x1 : house
+> The two explanatory/predictor variables we’ll use are : - `x1` : house
 > size `sqft_living`, as measured by square feet of living space, where
 > 1 square foot is about 0.09 square meters.  
-> \- x2: house `condition`, a categorical variable with 5 levels where 1
-> indicates “poor” and 5 indicates “excellent.”
+> \- `x2`: house `condition`, a categorical variable with 5 levels where
+> 1 indicates “poor” and 5 indicates “excellent.”
 
 ### EDA
 
@@ -6173,97 +8585,1864 @@ Plot of residual vs age seems random enough.
 house_prices %>% skim()
 ```
 
-    ## Skim summary statistics
-    ##  n obs: 21613 
-    ##  n variables: 21 
-    ## 
-    ## ── Variable type:character ───────────────────────────────────────────────────────────────
-    ##  variable missing complete     n min max empty n_unique
-    ##        id       0    21613 21613  10  10     0    21436
-    ## 
-    ## ── Variable type:factor ──────────────────────────────────────────────────────────────────
-    ##   variable missing complete     n n_unique
-    ##  condition       0    21613 21613        5
-    ##      grade       0    21613 21613       12
-    ##    zipcode       0    21613 21613       70
-    ##                              top_counts ordered
-    ##      3: 14031, 4: 5679, 5: 1701, 2: 172   FALSE
-    ##      7: 8981, 8: 6068, 9: 2615, 6: 2038   FALSE
-    ##  981: 602, 980: 590, 981: 583, 980: 574   FALSE
-    ## 
-    ## ── Variable type:integer ─────────────────────────────────────────────────────────────────
-    ##       variable missing complete     n     mean       sd   p0  p25  p50
-    ##       bedrooms       0    21613 21613     3.37     0.93    0    3    3
-    ##     sqft_above       0    21613 21613  1788.39   828.09  290 1190 1560
-    ##  sqft_basement       0    21613 21613   291.51   442.58    0    0    0
-    ##    sqft_living       0    21613 21613  2079.9    918.44  290 1427 1910
-    ##  sqft_living15       0    21613 21613  1986.55   685.39  399 1490 1840
-    ##       sqft_lot       0    21613 21613 15106.97 41420.51  520 5040 7618
-    ##     sqft_lot15       0    21613 21613 12768.46 27304.18  651 5100 7620
-    ##           view       0    21613 21613     0.23     0.77    0    0    0
-    ##       yr_built       0    21613 21613  1971.01    29.37 1900 1951 1975
-    ##   yr_renovated       0    21613 21613    84.4    401.68    0    0    0
-    ##    p75    p100     hist
-    ##      4      33 ▇▁▁▁▁▁▁▁
-    ##   2210    9410 ▇▇▂▁▁▁▁▁
-    ##    560    4820 ▇▂▁▁▁▁▁▁
-    ##   2550   13540 ▇▆▁▁▁▁▁▁
-    ##   2360    6210 ▁▇▆▂▁▁▁▁
-    ##  10688 1651359 ▇▁▁▁▁▁▁▁
-    ##  10083  871200 ▇▁▁▁▁▁▁▁
-    ##      0       4 ▇▁▁▁▁▁▁▁
-    ##   1997    2015 ▂▂▂▅▆▆▆▇
-    ##      0    2015 ▇▁▁▁▁▁▁▁
-    ## 
-    ## ── Variable type:logical ─────────────────────────────────────────────────────────────────
-    ##    variable missing complete     n   mean                       count
-    ##  waterfront       0    21613 21613 0.0075 FAL: 21450, TRU: 163, NA: 0
-    ## 
-    ## ── Variable type:numeric ─────────────────────────────────────────────────────────────────
-    ##   variable missing complete     n      mean        sd       p0       p25
-    ##  bathrooms       0    21613 21613      2.11      0.77     0         1.75
-    ##     floors       0    21613 21613      1.49      0.54     1         1   
-    ##        lat       0    21613 21613     47.56      0.14    47.16     47.47
-    ##       long       0    21613 21613   -122.21      0.14  -122.52   -122.33
-    ##      price       0    21613 21613 540088.14 367127.2  75000    321950   
-    ##        p50       p75       p100     hist
-    ##       2.25      2.5        8    ▃▆▇▂▁▁▁▁
-    ##       1.5       2          3.5  ▇▂▁▆▁▁▁▁
-    ##      47.57     47.68      47.78 ▁▂▃▃▆▆▇▆
-    ##    -122.23   -122.12    -121.31 ▂▇▆▃▁▁▁▁
-    ##  450000    645000    7700000    ▇▁▁▁▁▁▁▁
-    ## 
-    ## ── Variable type:POSIXct ─────────────────────────────────────────────────────────────────
-    ##  variable missing complete     n        min        max     median n_unique
-    ##      date       0    21613 21613 2014-05-02 2015-05-27 2014-10-16      372
+<table style='width: auto;'
+        class='table table-condensed'>
+
+<caption>
+
+Data summary
+
+</caption>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+</th>
+
+<th style="text-align:left;">
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+Name
+
+</td>
+
+<td style="text-align:left;">
+
+Piped data
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of rows
+
+</td>
+
+<td style="text-align:left;">
+
+21613
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Number of columns
+
+</td>
+
+<td style="text-align:left;">
+
+21
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Column type frequency:
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+character
+
+</td>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Date
+
+</td>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+factor
+
+</td>
+
+<td style="text-align:left;">
+
+3
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+logical
+
+</td>
+
+<td style="text-align:left;">
+
+1
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+numeric
+
+</td>
+
+<td style="text-align:left;">
+
+15
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
+
+</td>
+
+<td style="text-align:left;">
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+Group variables
+
+</td>
+
+<td style="text-align:left;">
+
+None
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: character**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:right;">
+
+min
+
+</th>
+
+<th style="text-align:right;">
+
+max
+
+</th>
+
+<th style="text-align:right;">
+
+empty
+
+</th>
+
+<th style="text-align:right;">
+
+n\_unique
+
+</th>
+
+<th style="text-align:right;">
+
+whitespace
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+id
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+10
+
+</td>
+
+<td style="text-align:right;">
+
+10
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+21436
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: Date**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:left;">
+
+min
+
+</th>
+
+<th style="text-align:left;">
+
+max
+
+</th>
+
+<th style="text-align:left;">
+
+median
+
+</th>
+
+<th style="text-align:right;">
+
+n\_unique
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+date
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+2014-05-02
+
+</td>
+
+<td style="text-align:left;">
+
+2015-05-27
+
+</td>
+
+<td style="text-align:left;">
+
+2014-10-16
+
+</td>
+
+<td style="text-align:right;">
+
+372
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: factor**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:left;">
+
+ordered
+
+</th>
+
+<th style="text-align:right;">
+
+n\_unique
+
+</th>
+
+<th style="text-align:left;">
+
+top\_counts
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+condition
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:right;">
+
+5
+
+</td>
+
+<td style="text-align:left;">
+
+3: 14031, 4: 5679, 5: 1701, 2: 172
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+grade
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:right;">
+
+12
+
+</td>
+
+<td style="text-align:left;">
+
+7: 8981, 8: 6068, 9: 2615, 6: 2038
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+zipcode
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:left;">
+
+FALSE
+
+</td>
+
+<td style="text-align:right;">
+
+70
+
+</td>
+
+<td style="text-align:left;">
+
+981: 602, 980: 590, 981: 583, 980: 574
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: logical**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:right;">
+
+mean
+
+</th>
+
+<th style="text-align:left;">
+
+count
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+waterfront
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+0.01
+
+</td>
+
+<td style="text-align:left;">
+
+FAL: 21450, TRU: 163
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+**Variable type: numeric**
+
+<table>
+
+<thead>
+
+<tr>
+
+<th style="text-align:left;">
+
+skim\_variable
+
+</th>
+
+<th style="text-align:right;">
+
+n\_missing
+
+</th>
+
+<th style="text-align:right;">
+
+complete\_rate
+
+</th>
+
+<th style="text-align:right;">
+
+mean
+
+</th>
+
+<th style="text-align:right;">
+
+sd
+
+</th>
+
+<th style="text-align:right;">
+
+p0
+
+</th>
+
+<th style="text-align:right;">
+
+p25
+
+</th>
+
+<th style="text-align:right;">
+
+p50
+
+</th>
+
+<th style="text-align:right;">
+
+p75
+
+</th>
+
+<th style="text-align:right;">
+
+p100
+
+</th>
+
+<th style="text-align:left;">
+
+hist
+
+</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+
+<td style="text-align:left;">
+
+price
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+540088.14
+
+</td>
+
+<td style="text-align:right;">
+
+367127.20
+
+</td>
+
+<td style="text-align:right;">
+
+75000.00
+
+</td>
+
+<td style="text-align:right;">
+
+321950.00
+
+</td>
+
+<td style="text-align:right;">
+
+450000.00
+
+</td>
+
+<td style="text-align:right;">
+
+645000.00
+
+</td>
+
+<td style="text-align:right;">
+
+7700000.00
+
+</td>
+
+<td style="text-align:left;">
+
+▇▁▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+bedrooms
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+3.37
+
+</td>
+
+<td style="text-align:right;">
+
+0.93
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+3.00
+
+</td>
+
+<td style="text-align:right;">
+
+3.00
+
+</td>
+
+<td style="text-align:right;">
+
+4.00
+
+</td>
+
+<td style="text-align:right;">
+
+33.00
+
+</td>
+
+<td style="text-align:left;">
+
+▇▁▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+bathrooms
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+2.11
+
+</td>
+
+<td style="text-align:right;">
+
+0.77
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+1.75
+
+</td>
+
+<td style="text-align:right;">
+
+2.25
+
+</td>
+
+<td style="text-align:right;">
+
+2.50
+
+</td>
+
+<td style="text-align:right;">
+
+8.00
+
+</td>
+
+<td style="text-align:left;">
+
+▃▇▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+sqft\_living
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+2079.90
+
+</td>
+
+<td style="text-align:right;">
+
+918.44
+
+</td>
+
+<td style="text-align:right;">
+
+290.00
+
+</td>
+
+<td style="text-align:right;">
+
+1427.00
+
+</td>
+
+<td style="text-align:right;">
+
+1910.00
+
+</td>
+
+<td style="text-align:right;">
+
+2550.00
+
+</td>
+
+<td style="text-align:right;">
+
+13540.00
+
+</td>
+
+<td style="text-align:left;">
+
+▇▂▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+sqft\_lot
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+15106.97
+
+</td>
+
+<td style="text-align:right;">
+
+41420.51
+
+</td>
+
+<td style="text-align:right;">
+
+520.00
+
+</td>
+
+<td style="text-align:right;">
+
+5040.00
+
+</td>
+
+<td style="text-align:right;">
+
+7618.00
+
+</td>
+
+<td style="text-align:right;">
+
+10688.00
+
+</td>
+
+<td style="text-align:right;">
+
+1651359.00
+
+</td>
+
+<td style="text-align:left;">
+
+▇▁▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+floors
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1.49
+
+</td>
+
+<td style="text-align:right;">
+
+0.54
+
+</td>
+
+<td style="text-align:right;">
+
+1.00
+
+</td>
+
+<td style="text-align:right;">
+
+1.00
+
+</td>
+
+<td style="text-align:right;">
+
+1.50
+
+</td>
+
+<td style="text-align:right;">
+
+2.00
+
+</td>
+
+<td style="text-align:right;">
+
+3.50
+
+</td>
+
+<td style="text-align:left;">
+
+▇▅▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+view
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+0.23
+
+</td>
+
+<td style="text-align:right;">
+
+0.77
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+4.00
+
+</td>
+
+<td style="text-align:left;">
+
+▇▁▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+sqft\_above
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1788.39
+
+</td>
+
+<td style="text-align:right;">
+
+828.09
+
+</td>
+
+<td style="text-align:right;">
+
+290.00
+
+</td>
+
+<td style="text-align:right;">
+
+1190.00
+
+</td>
+
+<td style="text-align:right;">
+
+1560.00
+
+</td>
+
+<td style="text-align:right;">
+
+2210.00
+
+</td>
+
+<td style="text-align:right;">
+
+9410.00
+
+</td>
+
+<td style="text-align:left;">
+
+▇▃▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+sqft\_basement
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+291.51
+
+</td>
+
+<td style="text-align:right;">
+
+442.58
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+560.00
+
+</td>
+
+<td style="text-align:right;">
+
+4820.00
+
+</td>
+
+<td style="text-align:left;">
+
+▇▁▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+yr\_built
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1971.01
+
+</td>
+
+<td style="text-align:right;">
+
+29.37
+
+</td>
+
+<td style="text-align:right;">
+
+1900.00
+
+</td>
+
+<td style="text-align:right;">
+
+1951.00
+
+</td>
+
+<td style="text-align:right;">
+
+1975.00
+
+</td>
+
+<td style="text-align:right;">
+
+1997.00
+
+</td>
+
+<td style="text-align:right;">
+
+2015.00
+
+</td>
+
+<td style="text-align:left;">
+
+▂▃▇▇▇
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+yr\_renovated
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+84.40
+
+</td>
+
+<td style="text-align:right;">
+
+401.68
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+0.00
+
+</td>
+
+<td style="text-align:right;">
+
+2015.00
+
+</td>
+
+<td style="text-align:left;">
+
+▇▁▁▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+lat
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+47.56
+
+</td>
+
+<td style="text-align:right;">
+
+0.14
+
+</td>
+
+<td style="text-align:right;">
+
+47.16
+
+</td>
+
+<td style="text-align:right;">
+
+47.47
+
+</td>
+
+<td style="text-align:right;">
+
+47.57
+
+</td>
+
+<td style="text-align:right;">
+
+47.68
+
+</td>
+
+<td style="text-align:right;">
+
+47.78
+
+</td>
+
+<td style="text-align:left;">
+
+▁▃▅▇▇
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+long
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+\-122.21
+
+</td>
+
+<td style="text-align:right;">
+
+0.14
+
+</td>
+
+<td style="text-align:right;">
+
+\-122.52
+
+</td>
+
+<td style="text-align:right;">
+
+\-122.33
+
+</td>
+
+<td style="text-align:right;">
+
+\-122.23
+
+</td>
+
+<td style="text-align:right;">
+
+\-122.12
+
+</td>
+
+<td style="text-align:right;">
+
+\-121.32
+
+</td>
+
+<td style="text-align:left;">
+
+▇▇▂▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+sqft\_living15
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+1986.55
+
+</td>
+
+<td style="text-align:right;">
+
+685.39
+
+</td>
+
+<td style="text-align:right;">
+
+399.00
+
+</td>
+
+<td style="text-align:right;">
+
+1490.00
+
+</td>
+
+<td style="text-align:right;">
+
+1840.00
+
+</td>
+
+<td style="text-align:right;">
+
+2360.00
+
+</td>
+
+<td style="text-align:right;">
+
+6210.00
+
+</td>
+
+<td style="text-align:left;">
+
+▅▇▂▁▁
+
+</td>
+
+</tr>
+
+<tr>
+
+<td style="text-align:left;">
+
+sqft\_lot15
+
+</td>
+
+<td style="text-align:right;">
+
+0
+
+</td>
+
+<td style="text-align:right;">
+
+1
+
+</td>
+
+<td style="text-align:right;">
+
+12768.46
+
+</td>
+
+<td style="text-align:right;">
+
+27304.18
+
+</td>
+
+<td style="text-align:right;">
+
+651.00
+
+</td>
+
+<td style="text-align:right;">
+
+5100.00
+
+</td>
+
+<td style="text-align:right;">
+
+7620.00
+
+</td>
+
+<td style="text-align:right;">
+
+10083.00
+
+</td>
+
+<td style="text-align:right;">
+
+871200.00
+
+</td>
+
+<td style="text-align:left;">
+
+▇▁▁▁▁
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
 
 ``` r
 house_prices %>% glimpse()
 ```
 
-    ## Observations: 21,613
-    ## Variables: 21
-    ## $ id            <chr> "7129300520", "6414100192", "5631500400", "2487200…
-    ## $ date          <dttm> 2014-10-13, 2014-12-09, 2015-02-25, 2014-12-09, 2…
-    ## $ price         <dbl> 221900, 538000, 180000, 604000, 510000, 1225000, 2…
-    ## $ bedrooms      <int> 3, 3, 2, 4, 3, 4, 3, 3, 3, 3, 3, 2, 3, 3, 5, 4, 3,…
-    ## $ bathrooms     <dbl> 1.00, 2.25, 1.00, 3.00, 2.00, 4.50, 2.25, 1.50, 1.…
-    ## $ sqft_living   <int> 1180, 2570, 770, 1960, 1680, 5420, 1715, 1060, 178…
-    ## $ sqft_lot      <int> 5650, 7242, 10000, 5000, 8080, 101930, 6819, 9711,…
-    ## $ floors        <dbl> 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 2.0, …
-    ## $ waterfront    <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, F…
-    ## $ view          <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0,…
-    ## $ condition     <fct> 3, 3, 3, 5, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3,…
-    ## $ grade         <fct> 7, 7, 6, 7, 8, 11, 7, 7, 7, 7, 8, 7, 7, 7, 7, 9, 7…
-    ## $ sqft_above    <int> 1180, 2170, 770, 1050, 1680, 3890, 1715, 1060, 105…
-    ## $ sqft_basement <int> 0, 400, 0, 910, 0, 1530, 0, 0, 730, 0, 1700, 300, …
-    ## $ yr_built      <int> 1955, 1951, 1933, 1965, 1987, 2001, 1995, 1963, 19…
-    ## $ yr_renovated  <int> 0, 1991, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-    ## $ zipcode       <fct> 98178, 98125, 98028, 98136, 98074, 98053, 98003, 9…
-    ## $ lat           <dbl> 47.51, 47.72, 47.74, 47.52, 47.62, 47.66, 47.31, 4…
-    ## $ long          <dbl> -122.3, -122.3, -122.2, -122.4, -122.0, -122.0, -1…
-    ## $ sqft_living15 <int> 1340, 1690, 2720, 1360, 1800, 4760, 2238, 1650, 17…
-    ## $ sqft_lot15    <int> 5650, 7639, 8062, 5000, 7503, 101930, 6819, 9711, …
+    ## Rows: 21,613
+    ## Columns: 21
+    ## $ id            <chr> "7129300520", "6414100192", "5631500400", "2487200875",…
+    ## $ date          <date> 2014-10-13, 2014-12-09, 2015-02-25, 2014-12-09, 2015-0…
+    ## $ price         <dbl> 221900, 538000, 180000, 604000, 510000, 1225000, 257500…
+    ## $ bedrooms      <int> 3, 3, 2, 4, 3, 4, 3, 3, 3, 3, 3, 2, 3, 3, 5, 4, 3, 4, 2…
+    ## $ bathrooms     <dbl> 1.00, 2.25, 1.00, 3.00, 2.00, 4.50, 2.25, 1.50, 1.00, 2…
+    ## $ sqft_living   <int> 1180, 2570, 770, 1960, 1680, 5420, 1715, 1060, 1780, 18…
+    ## $ sqft_lot      <int> 5650, 7242, 10000, 5000, 8080, 101930, 6819, 9711, 7470…
+    ## $ floors        <dbl> 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 2.0, 1.0, …
+    ## $ waterfront    <lgl> FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,…
+    ## $ view          <int> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0…
+    ## $ condition     <fct> 3, 3, 3, 5, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 3, 4, 4…
+    ## $ grade         <fct> 7, 7, 6, 7, 8, 11, 7, 7, 7, 7, 8, 7, 7, 7, 7, 9, 7, 7, …
+    ## $ sqft_above    <int> 1180, 2170, 770, 1050, 1680, 3890, 1715, 1060, 1050, 18…
+    ## $ sqft_basement <int> 0, 400, 0, 910, 0, 1530, 0, 0, 730, 0, 1700, 300, 0, 0,…
+    ## $ yr_built      <int> 1955, 1951, 1933, 1965, 1987, 2001, 1995, 1963, 1960, 2…
+    ## $ yr_renovated  <int> 0, 1991, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+    ## $ zipcode       <fct> 98178, 98125, 98028, 98136, 98074, 98053, 98003, 98198,…
+    ## $ lat           <dbl> 47.51, 47.72, 47.74, 47.52, 47.62, 47.66, 47.31, 47.41,…
+    ## $ long          <dbl> -122.3, -122.3, -122.2, -122.4, -122.0, -122.0, -122.3,…
+    ## $ sqft_living15 <int> 1340, 1690, 2720, 1360, 1800, 4760, 2238, 1650, 1780, 2…
+    ## $ sqft_lot15    <int> 5650, 7639, 8062, 5000, 7503, 101930, 6819, 9711, 8113,…
 
 ``` r
 gf_bar(~condition, data = house_prices, title ="House Condition")
@@ -6317,7 +10496,8 @@ house_prices %>%
 ``` r
 # price and sqft vs categorical variables such as condition
 
-house_prices <- house_prices %>% 
+house_prices <- 
+  house_prices %>% 
   mutate(log10price = log10(price), log10size = log10(sqft_living))
 
 gf_point(log10price~log10size, color = ~condition, alpha = 0.1,data = house_prices,title = "House Prices in Seatle", subtitle = "Linear Model with Interaction", caption = "Sleepless also..") %>% 
@@ -6329,7 +10509,7 @@ gf_point(log10price~log10size, color = ~condition, alpha = 0.1,data = house_pric
 ``` r
 # Can also look at facetted plots. Choose one of these and own it, says Chester Ismay
 
-gf_point(log10price~log10size |condition, color = ~condition, alpha = 0.1,data = house_prices,title = "House Prices in Seatle", subtitle = "Linear Model with Interaction", caption = "Sleepless also..") %>% 
+gf_point(log10price~log10size |condition, color = ~condition, alpha = 0.1,data = house_prices,title = "House Prices in Seatle", subtitle = "Linear Model with Interaction", caption = "Sleepless also...") %>% 
   gf_smooth(method = "lm")
 ```
 
@@ -6340,28 +10520,30 @@ gf_point(log10price~log10size |condition, color = ~condition, alpha = 0.1,data =
 ### Regression Modelling
 
 ``` r
-price_interation <- lm(log10price ~ log10size*condition, data = house_prices)
-price_interation %>% get_regression_table()
+price_interaction <- lm(log10price ~ log10size*condition, data = house_prices)
+price_interaction %>% get_regression_table()
 ```
 
     ## # A tibble: 10 x 7
-    ##    term              estimate std_error statistic p_value lower_ci upper_ci
-    ##    <chr>                <dbl>     <dbl>     <dbl>   <dbl>    <dbl>    <dbl>
-    ##  1 intercept            3.33      0.451     7.38    0        2.45     4.22 
-    ##  2 log10size            0.69      0.148     4.65    0        0.399    0.98 
-    ##  3 condition2           0.047     0.498     0.094   0.925   -0.93     1.02 
-    ##  4 condition3          -0.367     0.452    -0.812   0.417   -1.25     0.519
-    ##  5 condition4          -0.398     0.453    -0.879   0.38    -1.29     0.49 
-    ##  6 condition5          -0.883     0.457    -1.93    0.053   -1.78     0.013
-    ##  7 log10size:condit…   -0.024     0.163    -0.148   0.882   -0.344    0.295
-    ##  8 log10size:condit…    0.133     0.148     0.893   0.372   -0.158    0.424
-    ##  9 log10size:condit…    0.146     0.149     0.979   0.328   -0.146    0.437
-    ## 10 log10size:condit…    0.31      0.15      2.07    0.039    0.016    0.604
+    ##    term                 estimate std_error statistic p_value lower_ci upper_ci
+    ##    <chr>                   <dbl>     <dbl>     <dbl>   <dbl>    <dbl>    <dbl>
+    ##  1 intercept               3.33      0.451     7.38    0        2.45     4.22 
+    ##  2 log10size               0.69      0.148     4.65    0        0.399    0.98 
+    ##  3 condition2              0.047     0.498     0.094   0.925   -0.93     1.02 
+    ##  4 condition3             -0.367     0.452    -0.812   0.417   -1.25     0.519
+    ##  5 condition4             -0.398     0.453    -0.879   0.38    -1.29     0.49 
+    ##  6 condition5             -0.883     0.457    -1.93    0.053   -1.78     0.013
+    ##  7 log10size:condition2   -0.024     0.163    -0.148   0.882   -0.344    0.295
+    ##  8 log10size:condition3    0.133     0.148     0.893   0.372   -0.158    0.424
+    ##  9 log10size:condition4    0.146     0.149     0.979   0.328   -0.146    0.437
+    ## 10 log10size:condition5    0.31      0.15      2.07    0.039    0.016    0.604
 
 Interpreting these models we have:
 
 \[ In\ general \\
-\widehat{log10price} = \beta_0 + \beta_1*log10size
+\widehat{log10price} = \beta_0 + \beta_1*log10size + \beta_2 * condition + \\  \beta_3 * log10size * condition \\\
+where\\
+condition\, is\, a\, binary\, variable
 \] Which can be separately written for each `condition` as \[
 \begin{cases}
 \widehat{log10price} 
@@ -6369,10 +10551,13 @@ Interpreting these models we have:
  & \text{= (3.33+0.047) + (0.69--0.024)*log10size}\ { if }\ Condition =2 \\ 
  & \text{= (3.33--0.367) + (0.69+0.133)*log10size}\ { if }\ Condition=3 \\ 
  & \text{= (3.33--0.398) + (0.69+0.146)*log10size}\ { if }\ Condition=4 \\ 
- & \text{= (3.33--0.883) + (0.69 +0.31)*log10size}\ { if }\ Condition=5 
+ & \text{= (3.33--0.883) + (0.69 +0.310)*log10size}\ { if }\ Condition=5 
 \end{cases}
-\] \#\#\# Making Predictions We want to predict the price for : House:
-Condition 5; Area =
+\]
+
+### Making Predictions
+
+We want to predict the price for : House: Condition 5; Area =
 1900sqft
 
 ``` r
